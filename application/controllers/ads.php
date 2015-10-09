@@ -1,0 +1,840 @@
+<?php
+
+class Ads extends MY_Controller {
+
+	function index()
+	{
+		$role = $this->session->userdata('role');
+		$title = "AdSync";
+		$is_active = $this->session->userdata('is_active');
+		
+		$data['title'] = $title;
+		
+		//echo $role;
+		
+		if($is_active == "false")
+		{
+			$this->load->view('ads/inactive_user_view',$data);
+		}
+		else if($role == "admin" || $role == "manager" || $role == "client" || $role == "affiliate" || $role == "staff")
+		{
+			$this->load->view('ads_view',$data);
+		}
+		
+	}
+	
+	function create_ad_request()
+	{
+		$client_id = $_POST['client_id'];
+		$market_id = $_POST['market_id'];
+		$category_name = $_POST['category_name'];
+		$sub_category = $_POST['sub_category'];
+		$content_description = $_POST['content_description'];
+		$price = $_POST['price'];
+		$minimum_live_ads = $_POST['minimum_live_ads'];
+		
+		$stripped_price = preg_replace("/[^0-9,.]/", "", $price);
+		
+		$ad_request = null;
+		$ad_request['client_id'] = $client_id;
+		$ad_request['market_id'] = $market_id;
+		$ad_request['category'] = $category_name;
+		$ad_request['sub_category'] = $sub_category;
+		$ad_request['content_desc'] = $content_description;
+		$ad_request['price'] = $stripped_price;
+		$ad_request['post_expense'] = 10;
+		$ad_request['min_count'] = $minimum_live_ads;
+		
+		db_insert_ad_request($ad_request);
+		header("Location: ".base_url('/index.php/ads/'));
+		die();
+	}
+	
+	function count_array($array)
+	{
+		$count = count($array);
+		return $count;
+	}
+	
+	function delete_post()
+	{
+		$post_id = $_POST['post_id'];
+		$ad_request_id = $_POST['ad_request_id'];
+		
+		if(!empty($post_id))
+		{
+			
+			$where = null;
+			$where['id'] = $post_id;
+			
+			db_delete_post($where);
+			
+			$where = null;
+			$where['ad_request_id'] = $ad_request_id;
+			
+			$set['post_datetime'] = '';
+			
+			db_update_ad_spot($set,$where);
+			
+		}
+		
+	}
+	
+	function download_file($file_guid)
+	{
+		get_secure_ftp_file($file_guid);
+	}
+		
+	function generate_code()
+	{
+		date_default_timezone_set('America/Denver');
+		$current_datetime = date("Y-m-d H:i:s");
+		
+		$referral_id = $_POST['referral_id'];
+		
+		$characters = '0123456789';
+		$charactersLength = strlen($characters);
+		$randomString = '';
+		for ($i = 0; $i < 5; $i++) {
+			$randomString .= $characters[rand(0, $charactersLength - 1)];
+		}
+		
+		$new_secret_code = array();
+		if($referral_id!="Select")
+		{
+			$new_secret_code['referral_id'] = $referral_id;
+		}
+		$new_secret_code['secret_code'] = $randomString;
+		$new_secret_code['datetime_created'] = $current_datetime;
+		$new_secret_code['is_active'] = "true";
+		
+		db_insert_secret_code($new_secret_code);
+		
+		echo $randomString;
+	}
+		
+	function get_balance()
+	{
+		$user_id = $_POST['id'];
+		
+		$where = null;
+		$where['user_id'] = $user_id;
+		$account_entries = db_select_account_entrys($where);
+
+		$balance = 0;
+		if(!empty($account_entries))
+		{
+			foreach($account_entries as $account_entry)
+			{
+				$balance += $account_entry['amount'];
+			}
+		}
+		
+		echo number_format($balance,2);
+	}
+	
+	function load_ad_request_form()
+	{
+		$where = null;
+		$where = "1 = 1";
+		$markets  = db_select_markets($where);
+		
+		$market_options = array();
+		$market_options[] = "Select";
+		foreach($markets as $market)
+		{
+			
+			$market_options[$market['id']] = $market['name'].", ".$market['state'];
+			
+		}
+		
+		$category_options = array(
+			'Select' => 'Select',
+			'job offered' => 'job offered',
+			'gig offered' => 'gig offered',
+			'resume / job wanted' => 'resume / job wanted',
+			'housing offered' => 'housing offered',
+			'housing wanted' => 'housing wanted',
+			'for sale by owner' => 'for sale by owner',
+			'for sale by dealer' => 'for sale by dealer',
+			'wanted by owner' => 'wanted by owner',
+			'wanted by dealer' => 'wanted by dealer',
+			'service offered' => 'service offered',
+			'personal / romance' => 'personal / romance',
+			'community' => 'community',
+			'event / class' => 'event / class',
+		);
+		
+		$where = null;
+		$where = "1 = 1";
+		$clients = db_select_clients($where);
+		
+		$client_options = array();
+		$client_options[] = "Select";
+		foreach($clients as $client)
+		{
+			
+			$client_options[$client['id']] = $client['name'];
+			
+		}
+		
+		$data['client_options'] = $client_options;
+		$data['category_options'] = $category_options;
+		$data['market_options'] = $market_options;
+		$this->load->view("ads/ad_request_form",$data);
+		
+	}
+	
+	function load_faq()
+	{
+		$this->load->view("ads/faq_view");
+	}
+	
+	function load_generate_code_page()
+	{
+		$where = null;
+		$where = "1 = 1";
+		$users = db_select_users($where);
+		
+		$dropdown_users = array();
+		$dropdown_users[] = "Select";
+		foreach($users as $user)
+		{
+			$dropdown_users[$user['id']] = $user['first_name']." ".$user['last_name'];
+		}
+		
+		$data['dropdown_users'] = $dropdown_users;
+		$this->load->view("ads/generate_code_view",$data);
+	}
+	
+	function load_manage_money_page()
+	{
+		$user_id = $this->session->userdata('user_id');
+	
+		$where = null;
+		$where = "1 = 1";
+		$account_entrys = db_select_account_entrys($where,"datetime DESC");
+		
+		$where = null;
+		$where = "1 = 1";
+		$dropdown_users = db_select_users($where,"last_name ASC");
+		
+		$balance = 0;
+		if(!empty($account_entrys))
+		{
+			foreach($account_entrys as $account_entry)
+			{
+				$balance += $account_entry['amount'];
+			}
+		}
+		
+		$data['balance'] = number_format($balance,2);
+		$data['dropdown_users'] = $dropdown_users;
+		$data['account_entrys'] = $account_entrys;
+		$this->load->view("ads/manage_money_page",$data);
+	}
+	
+	function load_money_report()
+	{
+		$user_id = $this->session->userdata('user_id');
+		
+		$where = null;
+		$where['user_id'] = $user_id;
+		$account_entrys = db_select_account_entrys($where,"datetime DESC");
+		
+		$balance = 0;
+		if(!empty($account_entrys))
+		{
+			foreach($account_entrys as $account_entry)
+			{
+				$balance += $account_entry['amount'];
+			}
+		}
+		
+		$data['balance'] = number_format($balance,2);
+		$data['account_entrys'] = $account_entrys;
+		$this->load->view("ads/money_report",$data);
+	}
+	
+	function load_post_board()
+	{
+		$user_id = $this->session->userdata('user_id');
+		
+		$where = null;
+		$where['id'] = $user_id;
+		$user = db_select_user($where);
+		
+		$home_market_id = $user['home_market'];
+		$where = null;
+		$where['market_id'] = $home_market_id;
+		$related_markets = db_select_market_relationships($where);
+		//print_r($related_markets);
+		
+		$available_markets = array();
+		$available_markets[] = $home_market_id;
+		$where = null;
+		$where = "post_datetime IS NULL AND (market_id = '".$home_market_id."'";
+		if(!empty($related_markets))
+		{
+			foreach($related_markets as $related_market)
+			{
+				$where = $where." OR market_id = '".$related_market['related_market_id']."'";
+			}
+		}
+		$ad_spots = array();
+		$sql = "SELECT ad_spot.id AS id, ad_spot.ad_request_id AS ad_request_id, ad_spot.value as value, ad_spot.post_datetime as post_datetime, ad_request.market_id AS market_id FROM `ad_spot` LEFT JOIN `ad_request` ON ad_spot.ad_request_id = ad_request.id WHERE ".$where.") ORDER BY ad_spot.value ASC, ad_spot.ad_request_id ASC";
+		//echo $sql;
+		$query = $this->db->query($sql);
+		foreach($query->result() as $row)
+		{
+			$ad_spot = array();
+			$ad_spot['id'] = $row->id;
+			$ad_spot['ad_request_id'] = $row->ad_request_id;
+			$ad_spot['value'] = $row->value;
+			$ad_spot['post_datetime'] = $row->post_datetime;
+			$ad_spot['market_id'] = $row->market_id;
+			$ad_spots[] = $ad_spot;
+		}
+		
+		
+		//$ad_spots  = db_select_ad_spots($where);
+		
+		$count = $this->count_array($ad_spots);
+		
+		$data['count'] = $count;
+		$data['ad_spots'] = $ad_spots;
+		$this->load->view("ads/post_board",$data);
+	}
+	
+	function load_live_ads()
+	{
+		$user_id = $this->session->userdata('user_id');
+		
+		$where = null;
+		$where['poster_id'] = $user_id;
+		$where['result'] = "live";
+		$posts = db_select_posts($where,"post_datetime DESC");
+		
+		$count = $this->count_array($posts);
+		
+		$data['count'] = $count;
+		$data['posts'] = $posts;
+		$this->load->view("ads/live_ads",$data);
+	}
+	
+	function load_post_history()
+	{
+		$user_id = $this->session->userdata('user_id');
+		
+		$where = null;
+		$where['poster_id'] = $user_id;
+		$posts = db_select_posts($where,"post_datetime DESC");
+		
+		$count = $this->count_array($posts);
+		
+		$data['count'] = $count;
+		$data['posts'] = $posts;
+		$this->load->view("ads/post_history",$data);
+	}
+	
+	function load_post_verification_page()
+	{
+		$where = null;
+		$where['result'] = "Needs verification";
+		$posts = db_select_posts($where);
+		
+		$count = $this->count_array($posts);
+		
+		$data['count'] = $count;
+		$data['posts'] = $posts;
+		$this->load->view("ads/post_verification",$data);
+	}
+	
+	function load_referrals()
+	{
+		$user_id = $this->session->userdata('user_id');
+		
+		$where = null;
+		$where['referred_by'] = $user_id;
+		$users = db_select_users($where);
+		
+		$count = $this->count_array($users);
+		
+		$data['count'] = $count;
+		$data['users'] = $users;
+		$this->load->view("ads/referrals",$data);
+	}
+	
+	function load_renewals()
+	{
+		$user_id = $this->session->userdata('user_id');
+		
+		$where = null;
+		$where['poster_id'] = $user_id;
+		$where['renewal_datetime'] = null;
+		$posts = db_select_posts($where,"next_renewal_datetime ASC");
+		
+		
+		$count = $this->count_array($posts);
+		
+		$data['count'] = $count;
+		$data['posts'] = $posts;
+		$this->load->view("ads/renewals",$data);
+	}
+	
+	function load_user_transactions()
+	{
+		$user_id = $_POST['user_id'];
+		
+		if($user_id == "All Users")
+		{
+			$where = null;
+			$where = "1 = 1";
+			$account_entrys = db_select_account_entrys($where);
+		}
+		else
+		{
+			$where = null;
+			$where['user_id'] = $user_id;
+			$account_entrys = db_select_account_entrys($where,"datetime DESC");
+		}
+		
+		
+		$where = null;
+		$where['id'] = $user_id;
+		$user = db_select_user($where);
+		
+		$where = null;
+		$where = "1 = 1";
+		$dropdown_users = db_select_users($where);
+		
+		$data['user'] = $user;
+		$data['dropdown_users'] = $dropdown_users;
+		$data['account_entrys'] = $account_entrys;
+		$this->load->view("ads/manage_money_page_report",$data);
+	}
+	
+	function open_post_verification_dialog()
+	{
+		$post_id = $_POST['post_id'];
+		
+		$where = null;
+		$where['id'] = $post_id;
+		$post = db_select_post($where);
+		
+		$where = null;
+		$where['id'] = $post['ad_request_id'];
+		$ad_request = db_select_ad_request($where);
+		
+		$where = null;
+		$where['id'] = $ad_request['market_id'];
+		$market = db_select_market($where);
+		
+		$data['ad_request'] = $ad_request;
+		$data['market'] = $market;
+		$data['post'] = $post;
+		$this->load->view("ads/post_verification_form",$data);
+	}
+	
+	function renew_post()
+	{
+		date_default_timezone_set('America/Denver');
+		$current_datetime = strtotime(date("Y-m-d H:i:s"));
+		$post_datetime = date("Y-m-d H:i:s",$current_datetime);
+		
+		$renewal_post_id = $_POST['renewal_post_id'];
+		
+		$where = null;
+		$where['id'] = $renewal_post_id;
+		$post = db_select_post($where);
+		
+		$set = array();
+		$set['renewal_datetime'] = $post_datetime;
+		
+		db_update_post($set,$where);
+		
+		$new_post = array();
+		$new_post['post_datetime'] = $post_datetime;
+		$new_post['poster_id'] = $this->session->userdata('user_id');
+		$new_post['ad_request_id'] = $post['ad_request_id'];
+		$new_post['post_exp_datetime'] = date("Y-m-d H:i:s",strtotime($post_datetime . " +48 hours"));
+		$new_post['link'] = $post['link'];
+		$new_post['title'] = $post['title'];
+		$new_post['content'] = $post['content'];
+		$new_post['phone_number'] = $post['phone_number'];
+		$new_post['is_renewal'] = "true";
+		$new_post['next_renewal_datetime'] = date("Y-m-d H:i:s",strtotime($post_datetime . " +48 hours"));
+		$new_post['result'] = "Needs verification";
+		$new_post['amount_due'] = 1;
+		
+		db_insert_post($new_post);
+	}
+	
+	//OPENS NEW AD SUBMISSION DIALOG
+	function reserve_ad_request()
+	{
+		date_default_timezone_set('America/Denver');
+		$current_datetime = strtotime(date("Y-m-d H:i:s"));
+		$post_datetime = date("Y-m-d H:i:s",$current_datetime);
+		
+		$user_id = $this->session->userdata('user_id');
+		
+		$where = null;
+		$where['id'] = $user_id;
+		$user = db_select_user($where);
+		
+		$where = null;
+		$where['poster_id'] = $user_id;
+		$where['is_renewal'] = "false";
+		$where['result'] = "Live";
+		$total_posts = db_select_posts($where);
+		
+		$sql = "SELECT * FROM `post` WHERE poster_id = ".$user_id." AND post_datetime > '".date("Y-m-d H:i:s",strtotime($post_datetime) - (24*3600*45))."' AND is_renewal = 'false' AND result = 'Live'";
+		$query = $this->db->query($sql);
+		$posts = array();
+		foreach($query->result() as $row)
+		{
+			$post = array();
+			$post['id'] = $row->id;
+			$posts[] = $post;
+		}
+		$count = count($posts);
+		
+		$sql = "SELECT * FROM `post` WHERE poster_id = ".$user_id." AND post_datetime > '".date("Y-m-d H:i:s",strtotime($post_datetime) - (24*3600))."' AND is_renewal = 'false' AND result = 'Live'";
+		$query = $this->db->query($sql);
+		$day_posts = array();
+		foreach($query->result() as $row)
+		{
+			$day_post = array();
+			$day_post['id'] = $row->id;
+			$day_posts[] = $day_post;
+		}
+		$day_count = count($day_posts);
+		
+		if($count > 20)
+		{
+			echo "<script>alert('Sorry! Craigslist limits the number of ads one person can post. You have reached the limit. Don't worry, after 45 days, the post is deleted. For now, just focus on renewing your current ads. Thanks!');</script>";
+		}
+		else if($day_count > 5)
+		{
+			echo "<script>alert('Sorry! Craigslist limits the number of ads one person can post per day to five. You have reached the limit. For now, just focus on renewing your current ads. Come back tomorrow to post some new ads! Thanks!');</script>";
+		}
+		else
+		{
+			$id = $_POST['id'];
+			
+			$where = null;
+			$where['id'] = $id;
+			$ad_spot = db_select_ad_spot($where);
+			
+			$set = null;
+			$set['post_datetime'] = $post_datetime;
+			
+			db_update_ad_spot($set,$where);
+			
+			//CREATE POST
+			$ad_request_id = $ad_spot['ad_request_id'];
+			
+			$post = null;
+			$post['ad_request_id'] = $ad_request_id;
+			$post['post_datetime'] = $post_datetime;
+			
+			db_insert_post($post);
+			
+			$post = db_select_post($post);
+			
+			$data['post_id'] = $post['id'];
+			$data['ad_request_id'] = $ad_request_id;
+			$this->load->view("ads/ad_request_dialog",$data);
+		}
+
+	}
+	
+	function settle_balance()
+	{
+		$user_id = $_POST['user_id'];
+		
+		$where = null;
+		$where['id'] = $user_id;
+		$user = db_select_user($where);
+		
+		$where = null;
+		$where['poster_id'] = $user_id;
+		$posts = db_select_posts($where);
+		
+		
+		$balance = 0;
+		if(!empty($posts))
+		{
+			foreach($posts as $post)
+			{
+				$balance += $post['amount_due'];
+			}
+			$data['balance'] = $balance;
+			$data['user'] = $user;
+			$this->load->view('ads/settle_balance_ajax',$data);
+		}
+		
+	}
+	
+	function submit_payment()
+	{
+		date_default_timezone_set('America/Denver');
+		$current_datetime = strtotime(date("Y-m-d H:i:s"));
+		$transaction_datetime = date("Y-m-d H:i:s",$current_datetime);
+		
+		$user_id = $_POST['user_id'];
+		$amount_paid = $_POST['amount_paid'];
+		$transaction_amount = $amount_paid * -1;
+		
+		$where = null;
+		$where['id'] = $user_id;
+		$user = db_select_user($where);
+		
+		$account_entry = array();
+		$account_entry['user_id'] = $user_id;
+		$account_entry['description'] = $transaction_datetime." Payment to ".$user['first_name']." ".$user['last_name']." for $".$amount_paid;
+		$account_entry['amount'] = $transaction_amount;
+		$account_entry['datetime'] = $transaction_datetime;
+		
+		db_insert_account_entry($account_entry);
+		
+		$new_entry = db_select_account_entry($account_entry);
+		
+		$payment_name = 'payment_screenshot';
+        $file = $_FILES[$payment_name];
+        $name = str_replace(' ','_',$file["name"]);
+        $type = $file["type"];
+        $title = "screen_shot_post_".$new_entry['id'];
+        $category = "Payment Screen Shot";
+        $local_path = $file["tmp_name"];
+        $server_path = '/file_uploads/';
+        $permission = 'All';
+        $secure_file = store_secure_ftp_file($payment_name,$name,$type,$title,$category,$local_path,$server_path,$permission);
+		
+		$guid = $secure_file['file_guid'];
+		
+		$set = array();
+		$set['payment_screenshot_guid'] = $guid;
+		
+		$where = null;
+		$where['id'] = $new_entry['id'];
+		
+		db_update_account_entry($set,$where);
+		
+	}
+	
+	function submit_validation()
+	{
+		date_default_timezone_set('America/Denver');
+		$current_datetime = strtotime(date("Y-m-d H:i:s"));
+		$post_datetime = date("Y-m-d H:i:s",$current_datetime);
+		
+		$post_id = $_POST['post_id'];
+		$post_result = $_POST['post_result'];
+		
+		$post_name = 'result_screen_shot';
+        $file = $_FILES[$post_name];
+        $name = str_replace(' ','_',$file["name"]);
+        $type = $file["type"];
+        $title = "screen_shot_post_".$post_id;
+        $category = "Post Screen Shot";
+        $local_path = $file["tmp_name"];
+        $server_path = '/file_uploads/';
+        $permission = 'All';
+        $secure_file = store_secure_ftp_file($post_name,$name,$type,$title,$category,$local_path,$server_path,$permission);
+		
+		$where = null;
+		$where['id'] = $post_id;
+		
+		$set = array();
+		$set['result_datetime'] = $post_datetime;
+		$set['result'] = $post_result;
+		$set['result_screen_shot_guid'] = $secure_file['file_guid'];
+		
+		if($post_result != "Live")
+		{
+			$set['amount_due'] = 0;
+		}
+		
+		db_update_post($set,$where);
+		
+		$where = null;
+		$where['id'] = $post_id;
+		$post = db_select_post($where);
+		
+		$where = null;
+		$where['id'] = $post['poster_id'];
+		$user = db_select_user($where);
+		
+		$new_account_entry = array();
+		$new_account_entry['user_id'] = $post['poster_id'];
+		$new_account_entry['post_id'] = $post['id'];
+		$new_account_entry['amount'] = $post['amount_due'];
+		$new_account_entry['datetime'] = $post_datetime;
+		if($post_result == "Live")
+		{
+			$new_account_entry['description'] = "Post ".$post['id']." verified on ".date("m/d/Y",strtotime($post_datetime)).". User ".$user['first_name']." ".$user['last_name']." earned ".$post['amount_due'].".";
+		}
+		else
+		{
+			$new_account_entry['description'] = "Post ".$post['id']." rejected on ".date("m/d/Y",strtotime($post_datetime)).". User ".$user['first_name']." ".$user['last_name']." earned no money for this post.";
+		}
+		
+		db_insert_account_entry($new_account_entry);
+		
+		//DISPLAY UPLOAD SUCCESS MESSAGE
+		load_upload_success_view();
+	}
+	
+	//USER SUBMITS NEW POST INFO INTO THE NEW AD SUBMISSION DIALOG
+	function update_post()
+	{
+		date_default_timezone_set('America/Denver');
+		$current_datetime = strtotime(date("Y-m-d H:i:s"));
+		$post_datetime = date("Y-m-d H:i:s",$current_datetime);
+		
+		$user_id = $this->session->userdata('user_id');
+		
+		$post_id = $_POST['post_id'];
+		$ad_request_id = $_POST['ad_request_id'];
+		$post_link = $_POST['post_link'];
+		$post_title = $_POST['post_title'];
+		$post_content = $_POST['post_content'];
+		$phone_number = $_POST['post_phone_number'];
+		
+		$where = null;
+		$where['ad_request_id'] = $ad_request_id;
+		$ad_spot = db_select_ad_spot($where);
+		$amount_due = $ad_spot['value'];
+		
+		$where = null;
+		$where['poster_id'] = $user_id;
+		$posts = db_select_posts($where);
+		
+		if(empty($posts))
+		{
+			$set = array();
+			$set['first_post_datetime'] = $post_datetime;
+			
+			$where = null;
+			$where['id'] = $user_id;
+			
+			db_update_user($set,$where);
+		}
+		
+		$set = array();
+		$set['poster_id'] = $user_id;
+		$set['post_datetime'] = $post_datetime;
+		$set['post_exp_datetime'] = date("Y-m-d H:i:s",strtotime($post_datetime . " +48 hours"));
+		$set['link'] = $post_link;
+		$set['title'] = $post_title;
+		$set['content'] = $post_content;
+		$set['phone_number'] = $phone_number;
+		$set['is_renewal'] = "false";
+		$set['next_renewal_datetime'] = date("Y-m-d H:i:s",strtotime($post_datetime . " +48 hours"));
+		$set['result'] = "Needs verification";
+		$set['amount_due'] = $amount_due;
+		
+		$where = null;
+		$where['id'] = $post_id;
+		
+		db_update_post($set,$where);
+		
+		echo "Your submission has been received. In the next 24 hours, we will verify the posting. Thank you!";
+	}
+	
+	function update_balance()
+	{
+		$user_id = $this->session->userdata('user_id');
+		$user_role = $this->session->userdata('role');
+		
+
+		if($user_role != "admin")
+		{
+			$where = null;
+			$where['id'] = $user_id;
+			$user = db_select_user($where);
+
+			$where = null;
+			$where['user_id'] = $user_id;
+			$account_entries = db_select_account_entrys($where);
+			
+			$balance = 0;
+			if(!empty($account_entries))
+			{
+				foreach($account_entries as $account_entry)
+				{
+					$balance += $account_entry['amount'];
+				}
+			}
+			
+		}
+		else
+		{
+			$where = null;
+			$where = "1 = 1";
+			$account_entries = db_select_account_entrys($where);
+			
+			$balance = 0;
+			if(!empty($account_entries))
+			{
+				foreach($account_entries as $account_entry)
+				{
+					$balance += $account_entry['amount'];
+				}
+			}
+		}
+		
+		echo number_format($balance,2);
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	//ONE TIME SCRIPTS
+	function create_initial_ad_requests()
+	{
+		$where = null;
+		$where = "1 = 1";
+		$markets = db_select_markets($where);
+		
+		foreach($markets as $market)
+		{
+			$ad_request = array();
+			$ad_request['client_id'] = 1;
+			$ad_request['market_id'] = $market['id'];
+			$ad_request['category'] = "job offered";
+			$ad_request['sub_category'] = "transportation";
+			$ad_request['content_desc'] = "Explain that we have a driving program that is currently enrolling. We are searching for students from across the nation who are ready for a new career. Our training program offers individuals an opportunity to get their Commercial Drivers License with no up-front payment and receive paid on-the-road training. <br><br>The training consists of two parts: <br><br>(1) In-class Training: During this period, they will be brought to our training facility and we will provide them with a place to stay as well as all of their food. They will first undergo training to get their drivers permit for a Class A commercial drivers license. Then they will receive training in a truck to help them pass a skills test. After passing the skills test through the DOT, they will receive a paper copy of their license. In whole, this process typically takes 2-3 weeks. <br><br>(2) On the Road training: We then set them up with a trainer who will teach them the ins and outs of the trucking industry. They will haul loads, learn to fill out all paperwork, and gain the know-how to succeed as a truck driver. This portion takes 12 weeks in which the goal is to get the driver 60,000 miles of training experience. During this portion, they will receive a living stipend of $300/wk with bonuses up to an additional $300/wk. <br><br>After the training, our best trainees receive in-house offers to continue driving. Otherwise, we set them up with one of our partner carriers to drive. <br><br>Use one of the following phone numbers for the contact information: <br><br>(224) 212-9254 <br>(208) 963-5639 <br>(216) 930-4089 <br>(952) 222-3893 <br>(512) 593-7271";
+			$ad_request['price'] = 10;
+			$ad_request['post_expense'] = 10;
+			$ad_request['min_count'] = 1;
+			
+			db_insert_ad_request($ad_request);
+			echo "inserted school ad request for market ".$market['name']."<br>";
+			
+			$ad_request = array();
+			$ad_request['client_id'] = 1;
+			$ad_request['market_id'] = $market['id'];
+			$ad_request['category'] = "job offered";
+			$ad_request['sub_category'] = "transportation";
+			$ad_request['content_desc'] = "Make the following clear in the ad: <br><br>We have openings for dedicated routes, local routes, regional position, over-the-road long haul (2-6 weeks Over-the-Road), team or solo. All of these positions are for hauling dry van and refer loads. <br><br>Requirements for the job include: <br><br>current Class A CDL, no recent accidents, no recent tickets, must have recent experience driving 53' trailers, cannot currently be on parole, and must be over 21 years to be able to haul interstate loads. <br><br>Pay is weekly and most of our drivers make a minimum $800-$900 dollars per week but paychecks often exceed $1,300 for our experienced drivers. <br><br>The best way to get a hold of the company is to call the number listed in the 'Reply' section of this ad. If that's not possible, shoot the company a resume and be sure to include a call back number so we can get in touch. <br><br>Use one of the following phone numbers for the contact information: <br><br>(224) 212-9254 <br>(208) 963-5639 <br>(216) 930-4089 <br>(952) 222-3893 <br>(512) 593-7271";
+			$ad_request['price'] = 10;
+			$ad_request['post_expense'] = 10;
+			$ad_request['min_count'] = 1;
+			
+			db_insert_ad_request($ad_request);
+			echo "inserted cdl ad request for market ".$market['name']."<br>";
+			
+		}
+		
+	}
+	
+	
+}

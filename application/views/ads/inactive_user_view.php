@@ -1,0 +1,1 @@
+Please activate your account through the email you received.
