@@ -56,6 +56,15 @@ class Ads extends MY_Controller {
 		return $count;
 	}
 	
+	function delete_ad_request()
+	{
+		$id = $_POST['id'];
+		
+		$where = null;
+		$where['id'] = $id;
+		db_delete_ad_request($where);
+	}
+	
 	function delete_post()
 	{
 		$post_id = $_POST['post_id'];
@@ -84,7 +93,23 @@ class Ads extends MY_Controller {
 	{
 		get_secure_ftp_file($file_guid);
 	}
+	
+	function edit_ad_request()
+	{
+		$ad_request_id = $_POST['id'];
 		
+		$where = null;
+		$where['id'] = $ad_request_id;
+		
+		$set = array();
+		$set['market_id'] = $_POST['market_id'];
+		$set['category'] = $_POST['category'];
+		$set['sub_category'] = $_POST['sub_category'];
+		$set['price'] = $_POST['price'];
+		
+		db_update_ad_request($set,$where);
+	}
+	
 	function generate_code()
 	{
 		date_default_timezone_set('America/Denver');
@@ -133,7 +158,7 @@ class Ads extends MY_Controller {
 		echo number_format($balance,2);
 	}
 	
-	function load_ad_request_form()
+	function load_ad_requests()
 	{
 		$where = null;
 		$where = "1 = 1";
@@ -178,10 +203,18 @@ class Ads extends MY_Controller {
 			
 		}
 		
+		$where = null;
+		$where = "1 = 1";
+		$ad_requests = db_select_ad_requests($where);
+		
+		$count = $this->count_array($ad_requests);
+		
+		$data['count'] = $count;
 		$data['client_options'] = $client_options;
 		$data['category_options'] = $category_options;
 		$data['market_options'] = $market_options;
-		$this->load->view("ads/ad_request_form",$data);
+		$data['ad_requests'] = $ad_requests;
+		$this->load->view("ads/ad_requests",$data);
 		
 	}
 	
@@ -259,6 +292,7 @@ class Ads extends MY_Controller {
 	function load_post_board()
 	{
 		$user_id = $this->session->userdata('user_id');
+		$role = $this->session->userdata('role');
 		
 		$where = null;
 		$where['id'] = $user_id;
@@ -282,7 +316,14 @@ class Ads extends MY_Controller {
 			}
 		}
 		$ad_spots = array();
-		$sql = "SELECT ad_spot.id AS id, ad_spot.ad_request_id AS ad_request_id, ad_spot.value as value, ad_spot.post_datetime as post_datetime, ad_request.market_id AS market_id FROM `ad_spot` LEFT JOIN `ad_request` ON ad_spot.ad_request_id = ad_request.id WHERE ".$where.") ORDER BY ad_spot.value ASC, ad_spot.ad_request_id ASC";
+		if($role=="admin")
+		{
+			$sql = "SELECT ad_spot.id AS id, ad_spot.ad_request_id AS ad_request_id, ad_spot.value as value, ad_spot.post_datetime as post_datetime, ad_request.market_id AS market_id FROM `ad_spot` LEFT JOIN `ad_request` ON ad_spot.ad_request_id = ad_request.id ORDER BY ad_spot.value ASC, ad_spot.ad_request_id ASC";
+		}
+		else
+		{
+			$sql = "SELECT ad_spot.id AS id, ad_spot.ad_request_id AS ad_request_id, ad_spot.value as value, ad_spot.post_datetime as post_datetime, ad_request.market_id AS market_id FROM `ad_spot` LEFT JOIN `ad_request` ON ad_spot.ad_request_id = ad_request.id WHERE ".$where.") ORDER BY ad_spot.value ASC, ad_spot.ad_request_id ASC";
+		}
 		//echo $sql;
 		$query = $this->db->query($sql);
 		foreach($query->result() as $row)
@@ -309,9 +350,13 @@ class Ads extends MY_Controller {
 	function load_live_ads()
 	{
 		$user_id = $this->session->userdata('user_id');
+		$role = $this->session->userdata('role');
 		
 		$where = null;
-		$where['poster_id'] = $user_id;
+		if($role!="Admin")
+		{
+			$where['poster_id'] = $user_id;
+		}
 		$where['result'] = "live";
 		$posts = db_select_posts($where,"post_datetime DESC");
 		
@@ -325,9 +370,13 @@ class Ads extends MY_Controller {
 	function load_post_history()
 	{
 		$user_id = $this->session->userdata('user_id');
+		$role = $this->session->userdata('role');
 		
 		$where = null;
-		$where['poster_id'] = $user_id;
+		if($role!="admin")
+		{
+			$where['poster_id'] = $user_id;
+		}
 		$posts = db_select_posts($where,"post_datetime DESC");
 		
 		$count = $this->count_array($posts);
@@ -353,9 +402,13 @@ class Ads extends MY_Controller {
 	function load_referrals()
 	{
 		$user_id = $this->session->userdata('user_id');
+		$role = $this->session->userdata('role');
 		
 		$where = null;
-		$where['referred_by'] = $user_id;
+		if($role!="admin")
+		{
+			$where['referred_by'] = $user_id;
+		}
 		$users = db_select_users($where);
 		
 		$count = $this->count_array($users);
@@ -368,9 +421,13 @@ class Ads extends MY_Controller {
 	function load_renewals()
 	{
 		$user_id = $this->session->userdata('user_id');
+		$role = $this->session->userdata('role');
 		
 		$where = null;
-		$where['poster_id'] = $user_id;
+		if($role!="admin")
+		{
+			$where['poster_id'] = $user_id;
+		}
 		$where['renewal_datetime'] = null;
 		$posts = db_select_posts($where,"next_renewal_datetime ASC");
 		
@@ -562,18 +619,11 @@ class Ads extends MY_Controller {
 		$where['poster_id'] = $user_id;
 		$posts = db_select_posts($where);
 		
+		$balance = $_POST['balance_input'];
 		
-		$balance = 0;
-		if(!empty($posts))
-		{
-			foreach($posts as $post)
-			{
-				$balance += $post['amount_due'];
-			}
-			$data['balance'] = $balance;
-			$data['user'] = $user;
-			$this->load->view('ads/settle_balance_ajax',$data);
-		}
+		$data['balance'] = $balance;
+		$data['user'] = $user;
+		$this->load->view('ads/settle_balance_ajax',$data);
 		
 	}
 	

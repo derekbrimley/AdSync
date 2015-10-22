@@ -8,7 +8,7 @@
 		<div id="post_board_header">
 			<table>
 				<tr style="font-weight:bold;color:#0079C1">
-					<td style="max-width:20px;min-width:20px;">Date</td>
+					<td style="max-width:20px;min-width:20px;">User</td>
 					<td style="max-width:14px;min-width:14px;">Date</td>
 					<td style="max-width:75px;min-width:75px;">Description</td>
 					<td style="max-width:10px;min-width:10px;">Amount</td>

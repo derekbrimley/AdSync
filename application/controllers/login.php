@@ -102,24 +102,24 @@ class Login extends CI_Controller
 					window.location.replace('".base_url('/index.php/login/new_user')."');
 				</script>";
 		}
-		else if(in_array($username,$username_list))
-		{
-			echo "<script>alert('We are sorry. It appears that your username has already been used for an AdSync account. Please try again.');
-					window.location.replace('".base_url('/index.php/login/new_user')."');
-				</script>";
-		}
-		else if(in_array($ip_address,$ip_list) || in_array($geolocation,$geolocation_list))
-		{
-			echo "<script>alert('We are sorry. It appears that your computer has already been used for an AdSync account.');
-					window.location.replace('".base_url('/index.php/login/new_user')."');
-				</script>";
-		}
-		else if(!in_array($secret_code,$code_list))
-		{
-			echo "<script>alert('We are sorry. It appears that the code you entered is incorrect. Please try again.');
-					window.location.replace('".base_url('/index.php/login/new_user')."');
-				</script>";
-		}
+		// else if(in_array($username,$username_list))
+		// {
+			// echo "<script>alert('We are sorry. It appears that your username has already been used for an AdSync account. Please try again.');
+					// window.location.replace('".base_url('/index.php/login/new_user')."');
+				// </script>";
+		// }
+		// else if(in_array($ip_address,$ip_list) || in_array($geolocation,$geolocation_list))
+		// {
+			// echo "<script>alert('We are sorry. It appears that your computer has already been used for an AdSync account.');
+					// window.location.replace('".base_url('/index.php/login/new_user')."');
+				// </script>";
+		// }
+		// else if(!in_array($secret_code,$code_list))
+		// {
+			// echo "<script>alert('We are sorry. It appears that the code you entered is incorrect. Please try again.');
+					// window.location.replace('".base_url('/index.php/login/new_user')."');
+				// </script>";
+		// }
 		else
 		{
 			if(!empty($referred_by))
@@ -154,7 +154,7 @@ class Login extends CI_Controller
 			$message = "
 				Click the link below to confirm your new AdSync Account.
 				
-				http://www.adsync.nextgenmarketingsolutions.com/indes.php/login/activate?email=$full_email&hash=$hash
+				http://www.adsync.nextgenmarketingsolutions.com/index.php/login/activate?email=$full_email&hash=$hash
 			";
 			$headers = 'From: admin@nextgenmarketingsolutions.com';
 			

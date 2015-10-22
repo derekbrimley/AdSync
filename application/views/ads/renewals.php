@@ -26,8 +26,8 @@ Renewals
 				<td style="max-width:50px;min-width:50px;">Sub-Category</td>
 				<td style="max-width:20px;min-width:20px;">Value</td>
 				<td style="max-width:40px;min-width:40px;">Renewal Date</td>
-				<td style="max-width:30px;min-width:30px;">Result</td>
-				<td style="max-width:30px;min-width:30px;">Renew</td>
+				<td style="max-width:40px;min-width:40px;">Result</td>
+				<td style="max-width:20px;min-width:20px;">Renew</td>
 			</tr>
 		</table>
 	</div>

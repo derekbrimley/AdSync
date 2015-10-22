@@ -28,6 +28,9 @@
 				background-color:#4e78fc;
 			}
 		</style>
+		<script>
+			$("username").focus();
+		</script>
 	</head>
 	<body>
 		<div style="width:100%;margin:0;color:white;background-color:#0079C1;" class="slide">

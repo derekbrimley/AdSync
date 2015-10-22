@@ -168,7 +168,11 @@
 						text: "Submit",
 						click: function() 
 						{
+							
+							var $this = $(this);
 							var dataString = $("#renewal_form").serialize();
+							
+							
 							
 							//AJAX
 							if(!(report_ajax_call===undefined))
@@ -185,7 +189,8 @@
 									200: function(){
 										setTimeout(function()
 										{
-											// $( this ).dialog( "close" );
+											alert("Post Renewed. Post will be re-verified in the next 24 hours.");
+											$this.dialog( "close" );
 											load_renewals();
 										},3000);
 									},
@@ -243,6 +248,7 @@
 								cache: false,
 								statusCode: {
 									200: function(){
+										$( this ).dialog( "close" );
 									},
 									404: function(){
 										alert('Page not found');
@@ -273,6 +279,54 @@
 	});//ready
 
 	var report_ajax_call;
+	
+	function delete_request(id)
+	{
+		var r = confirm("Are you sure you want to delete this ad request?");
+		if(r==true){
+		//AJAX
+			if(!(report_ajax_call===undefined))
+			{
+				report_ajax_call.abort();
+			}
+			report_ajax_call = $.ajax({
+				
+				url: "<?=base_url("index.php/ads/delete_ad_request") ?>",
+				type: "POST",
+				data: {id:id},
+				cache: false,
+				statusCode: {
+					200: function(response){
+						alert("Ad Request deleted.");
+						load_ad_requests();
+					},
+					404: function(){
+						alert('Page not found');
+					},
+					500: function(response){
+						alert("500 error! "+response);
+					}
+				}
+			});//END AJAX
+		}else{
+			
+		}
+	}
+	
+	function edit_request(id)
+	{
+		$("#name_info_"+id).hide();
+		$("#category_info_"+id).hide();
+		$("#sub_info_"+id).hide();
+		$("#price_info_"+id).hide();
+		$("#edit_info_"+id).hide();
+		
+		$("#name_edit_"+id).show();
+		$("#category_edit_"+id).show();
+		$("#sub_edit_"+id).show();
+		$("#price_edit_"+id).show();
+		$("#save_edit_"+id).show();
+	}
 	
 	function generate_code()
 	{
@@ -308,9 +362,10 @@
 		});//END AJAX
 	}
 	
-	function load_ad_request_form()
+	function load_ad_requests()
 	{
 		$("#loading_icon").show();
+		$("#refresh_icon").hide();
 		var this_div = $("#report_container");
 		var dataString;
 		
@@ -321,7 +376,7 @@
 		}
 		report_ajax_call = $.ajax({
 			
-			url: "<?=base_url("index.php/ads/load_ad_request_form") ?>",
+			url: "<?=base_url("index.php/ads/load_ad_requests") ?>",
 			type: "POST",
 			data: dataString,
 			cache: false,
@@ -794,6 +849,36 @@
 		
 	}
 	
+	function refresh_ad_spots()
+	{
+		$("#refresh_ads_btn").hide();
+		$("#loading_icon").show();
+		//AJAX
+		if(!(report_ajax_call===undefined))
+		{
+			report_ajax_call.abort();
+		}
+		report_ajax_call = $.ajax({
+			
+			url: "<?=base_url("index.php/public_functions/refresh_post_board") ?>",
+			type: "POST",
+			cache: false,
+			statusCode: {
+				200: function(){
+					$("#refresh_ads_btn").show();
+					$("#loading_icon").hide();
+					alert("Ads Refreshed");
+				},
+				404: function(){
+					alert('Page not found');
+				},
+				500: function(response){
+					alert("500 error! "+response);
+				}
+			}
+		});//END AJAX
+	}
+	
 	function renew_post(post_id)
 	{
 		$( "#post_renewal_dialog").dialog( "open" );
@@ -829,6 +914,39 @@
 						{
 							$("#ad_submission_dialog").dialog( "close" );
 						},600000);
+				},
+				404: function(){
+					alert('Page not found');
+				},
+				500: function(response){
+					alert("500 error! "+response);
+				}
+			}
+		});//END AJAX
+		
+		
+	}
+	
+	function save_request(id)
+	{
+		$("#save_icon").hide();
+		$("#loading_icon").show();
+		var dataString = $("#ad_request_form_"+id).serialize();
+		console.log(dataString);
+		//AJAX
+		if(!(report_ajax_call===undefined))
+		{
+			report_ajax_call.abort();
+		}
+		report_ajax_call = $.ajax({
+			
+			url: "<?=base_url("index.php/ads/edit_ad_request") ?>",
+			type: "POST",
+			data: dataString,
+			cache: false,
+			statusCode: {
+				200: function(){
+					load_ad_requests();
 				},
 				404: function(){
 					alert('Page not found');

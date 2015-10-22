@@ -116,11 +116,11 @@
 							</div>
 						<?php endif ?>
 						<?php if($role == "client" || $role == "admin" || $role == "manager"): ?>
-							<div id="create_ad_request_box" class="nav_box" onClick="load_ad_request_form()">
+							<div id="create_ad_request_box" class="nav_box" onClick="load_ad_requests()">
 								<div style="height:77px;">
 									<img id="ad_requests_nav_icon" src="<?= base_url("images/ad_request_icon.png") ?>" class="nav_box_image" style="height:70px; position:relative; top:10px; left:5px;"/>
 								</div>
-								<div class="nav_box_title">Ad Request</div>
+								<div class="nav_box_title">Ad Requests</div>
 							</div>
 						<?php endif ?>
 						<?php if($role == "staff" || $role == "admin" || $role == "manager"): ?>

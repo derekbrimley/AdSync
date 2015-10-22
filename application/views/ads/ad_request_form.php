@@ -1,7 +1,20 @@
+<?php
+	$role = $this->session->userdata('role');
+?>
+
 <script>
 	$("#client_id").focus();
 </script>
-New Ad Request Form<hr><br><br>
+<?php if($role=="admin"||$role=="manager"): ?>
+	<span style="float:right">
+		<button id="refresh_ads_btn" onClick="refresh_ad_spots()" type="button" style="padding:10px;cursor:pointer;color:white;background-color:#0079C1;border:0px;font-size:20px;">Refresh Ads</button>
+		<img id="loading_icon" style="display:none;float:right;height:20px;" src="<?=base_url('images/loading.gif')?>"/>
+	</span>
+<?php endif ?>
+New Ad Request Form
+<div style="clear:both"></div>
+<hr>
+<br><br>
 <form id="create_ad_request_form" name="create_ad_request_form" style="width:500px;">
 	<table>
 		<tr>

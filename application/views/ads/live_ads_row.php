@@ -15,22 +15,22 @@
 
 <table>
 	<tr>
-		<td style="max-width:35px;min-width:35px;">
+		<td class="ellipsis" style="max-width:35px;min-width:35px;">
 			<?=date("m/d/Y",strtotime($post['post_datetime']))?>
 		</td>
-		<td style="max-width:40px;min-width:40px;">
+		<td class="ellipsis" style="max-width:40px;min-width:40px;">
 			<?=$market['name']?>
 		</td>
-		<td style="max-width:40px;min-width:40px;">
+		<td class="ellipsis" style="max-width:40px;min-width:40px;">
 			<?=$ad_request['category']?>
 		</td>
-		<td style="max-width:50px;min-width:50px;">
+		<td class="ellipsis" style="max-width:50px;min-width:50px;">
 			<?=$ad_request['sub_category']?>
 		</td>
-		<td style="max-width:30px;min-width:30px;">
+		<td class="ellipsis" style="max-width:30px;min-width:30px;">
 			$<?=number_format($ad_spot['value'],2)?>
 		</td>
-		<td style="max-width:40px;min-width:40px;">
+		<td class="ellipsis" style="max-width:40px;min-width:40px;">
 			<a target="_blank" href="<?=$post['link']?>"><?= $post['result'] ?></a>
 		</td>
 	</tr>
