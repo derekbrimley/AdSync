@@ -110,7 +110,7 @@
 							</div>
 							<div id="generate_code_box" class="nav_box" onClick="load_generate_code_page()">
 								<div style="height:77px;">
-									<img id="generate_code_nav_icon" src="<?= base_url("images/manage_money_icon.png") ?>" class="nav_box_image" style="height:83px; position:relative; right:5px;bottom:10px;"/>
+									<img id="generate_code_nav_icon" src="<?= base_url("images/code.png") ?>" class="nav_box_image" style="height:75px; position:relative; right:5px;"/>
 								</div>
 								<div class="nav_box_title">Codes</div>
 							</div>
