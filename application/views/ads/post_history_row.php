@@ -20,11 +20,11 @@
 <table>
 	<tr>
 		<?php if($role=="admin"): ?>
-			<td style="max-width:35px;min-width:35px;">
+			<td class="ellipsis" style="max-width:35px;min-width:35px;">
 				<?=$user['username'] ?>
 			</td>
 		<?php endif ?>
-		<td class="ellipsis" style="max-width:35px;min-width:35px;">
+		<td class="ellipsis" style="max-width:37px;min-width:37px;">
 			<?=date("m/d/y",strtotime($post['post_datetime']))?>
 		</td>
 		<td class="ellipsis" style="max-width:40px;min-width:40px;">

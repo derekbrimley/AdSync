@@ -4,6 +4,7 @@
 ?>
 <script>
 	$(".post_row:even").css("background-color","#eee");
+	$("#post_container").height($(window).height() - 241);
 </script>
 Post History
 <span>
@@ -24,7 +25,7 @@ Post History
 				<?php if($role == "admin"): ?>
 					<td style="max-width:35px;min-width:35px;">User</td>
 				<?php endif ?>
-				<td style="max-width:35px;min-width:35px;">Date Posted</td>
+				<td style="max-width:37px;min-width:37px;">Date Posted</td>
 				<td style="max-width:40px;min-width:40px;">Market</td>
 				<td style="max-width:40px;min-width:40px;">Category</td>
 				<td style="max-width:40px;min-width:40px;">Sub-Category</td>
@@ -37,14 +38,16 @@ Post History
 			</tr>
 		</table>
 	</div>
-	<?php foreach($posts as $post): ?>
-		<?php
-			$row++;
-		?>
-		<div id="tr_<?=$row?>" name="tr_<?=$row?>" class="post_row">
-			<?php include("post_history_row.php")?>
-		</div>
-	<?php endforeach ?>
+	<div id="post_container" class="scrollable_div" style="">
+		<?php foreach($posts as $post): ?>
+			<?php
+				$row++;
+			?>
+			<div id="tr_<?=$row?>" name="tr_<?=$row?>" class="post_row">
+				<?php include("post_history_row.php")?>
+			</div>
+		<?php endforeach ?>
+	</div>
 <?php else: ?>
 	You have not posted yet. Click on "Post Board" to get started!
 <?php endif ?>

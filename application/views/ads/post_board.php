@@ -25,6 +25,7 @@ Post Board
 				<td style="max-width:40px;min-width:40px;">Category</td>
 				<td style="max-width:75px;min-width:75px;">Sub-Category</td>
 				<td style="max-width:30px;min-width:30px;">Value</td>
+				<td style="max-width:20px;min-width:320px;">Reserve</td>
 			</tr>
 		</table>
 	</div>

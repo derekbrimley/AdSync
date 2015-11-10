@@ -1,6 +1,5 @@
 <script>
-	$(document).ready(function()
-	{
+	$(document).ready(function(){
 		$("#report_container").height($(window).height() - 179);
 		$("#navigation").height($(window).height() - 333);
 		$("#nav_container").height($(window).height() - 370);
@@ -8,8 +7,7 @@
 		load_post_board();
 		
 		//AD SUBMISSION DIALOG
-        $( "#ad_submission_dialog").dialog(
-        {
+        $( "#ad_submission_dialog").dialog({
 			autoOpen: false,
 			height: 750,
 			width: 750,
@@ -104,9 +102,92 @@
 				}
         });//end ad submission dialog
 		
+		$("#ad_request_dialog").dialog({
+			autoOpen: false,
+			height: 580,
+			width: 750,
+			modal: true,
+			buttons: 
+				[
+					{
+						text: "Submit",
+						click: function(){
+							var dataString = $("#create_ad_request_form").serialize();
+							var $this = $(this);
+							var valid = check_ad_request();
+							
+							if(valid){
+								$(":button:contains('Submit')").prop("disabled", true).addClass("ui-state-disabled");
+								$(":button:contains('Close')").prop("disabled", true).addClass("ui-state-disabled");
+							
+								$("#form_loading_icon").show();
+								//AJAX
+								if(!(report_ajax_call===undefined)){
+									report_ajax_call.abort();
+								}
+								report_ajax_call = $.ajax({
+									
+									url: "<?=base_url("index.php/ads/create_ad_request") ?>",
+									type: "POST",
+									data: dataString,
+									cache: false,
+									statusCode: {
+										200: function(){
+											alert("Ad Request created. Please wait while the ads are updated.");
+											
+											$.ajax({
+												
+												url: "<?=base_url("index.php/public_functions/refresh_post_board") ?>",
+												type: "POST",
+												cache: false,
+												statusCode: {
+													200: function(){
+														alert("Ads refreshed.");
+														$this.dialog( "close" );
+														
+														$("#form_loading_icon").hide();
+														$('#create_ad_request_form').find("input[type=text], textarea").val("");
+														$('#create_ad_request_form').find("select").val("Select");
+														
+														$(":button:contains('Submit')").removeAttr("disabled").removeClass("ui-state-disabled");
+														$(":button:contains('Close')").removeAttr("disabled").removeClass("ui-state-disabled");
+														load_ad_requests();
+													},
+													404: function(){
+														alert('Page not found');
+													},
+													500: function(response){
+														alert("500 error! "+response);
+													}
+												}
+											});//END AJAX
+										},
+										404: function(){
+											alert('Page not found');
+										},
+										500: function(response){
+											alert("500 error! "+response);
+										}
+									}
+								});//END AJAX
+							}
+						},
+					},
+					{
+						text: "Close",
+						click: function(){
+							$( this ).dialog( "close" );
+						}
+					},
+				],//end of buttons
+				open: function(){
+				},//end open function
+				close: function( event, ui){
+				}
+		});
+		
 		//AD VERIFICATION DIALOG
-        $( "#ad_verification_dialog").dialog(
-        {
+        $( "#ad_verification_dialog").dialog({
 			autoOpen: false,
 			height: 580,
 			width: 750,
@@ -131,7 +212,6 @@
 							if(is_valid)
 							{
 								form.submit();
-								$( this ).dialog( "close" );
 								setTimeout(function()
 								{
 									load_post_verification_page();
@@ -156,8 +236,7 @@
         });//end ad verification dialog
 		
 		//POST RENEWAL DIALOG
-        $( "#post_renewal_dialog").dialog(
-        {
+        $( "#post_renewal_dialog").dialog({
 			autoOpen: false,
 			height: 350,
 			width: 500,
@@ -168,15 +247,11 @@
 						text: "Submit",
 						click: function() 
 						{
-							
 							var $this = $(this);
 							var dataString = $("#renewal_form").serialize();
 							
-							
-							
 							//AJAX
-							if(!(report_ajax_call===undefined))
-							{
+							if(!(report_ajax_call===undefined)){
 								report_ajax_call.abort();
 							}
 							report_ajax_call = $.ajax({
@@ -221,8 +296,7 @@
         });//end post renewal dialog
 		
 		//SETTLE BALANCE DIALOG
-        $( "#settle_balance_dialog").dialog(
-        {
+        $( "#settle_balance_dialog").dialog({
 			autoOpen: false,
 			height: 500,
 			width: 550,
@@ -280,8 +354,7 @@
 
 	var report_ajax_call;
 	
-	function delete_request(id)
-	{
+	function delete_request(id){
 		var r = confirm("Are you sure you want to delete this ad request?");
 		if(r==true){
 		//AJAX
@@ -313,8 +386,7 @@
 		}
 	}
 	
-	function edit_request(id)
-	{
+	function edit_request(id){
 		$("#name_info_"+id).hide();
 		$("#category_info_"+id).hide();
 		$("#sub_info_"+id).hide();
@@ -328,8 +400,7 @@
 		$("#save_edit_"+id).show();
 	}
 	
-	function generate_code()
-	{
+	function generate_code(){
 		$("#refresh_icon").hide();
 		$("#loading_icon").show();
 		$("#generate_code_btn").hide();
@@ -362,8 +433,7 @@
 		});//END AJAX
 	}
 	
-	function load_ad_requests()
-	{
+	function load_ad_requests(){
 		$("#loading_icon").show();
 		$("#refresh_icon").hide();
 		var this_div = $("#report_container");
@@ -397,8 +467,7 @@
 		});//END AJAX
 	}
 	
-	function load_faq()
-	{
+	function load_faq(){
 		$("#refresh_icon").hide();
 		$("#loading_icon").show();
 		var this_div = $("#report_container");
@@ -432,8 +501,7 @@
 		});//END AJAX
 	}
 	
-	function load_generate_code_page()
-	{
+	function load_generate_code_page(){
 		$("#refresh_icon").hide();
 		$("#loading_icon").show();
 		var this_div = $("#report_container");
@@ -467,8 +535,7 @@
 		});//END AJAX
 	}
 	
-	function load_live_ads()
-	{
+	function load_live_ads(){
 		$("#refresh_icon").hide();
 		$("#loading_icon").show();
 		var this_div = $("#report_container");
@@ -502,8 +569,7 @@
 		});//END AJAX
 	}
 	
-	function load_manage_money_page()
-	{
+	function load_manage_money_page(){
 		$("#refresh_icon").hide();
 		$("#loading_icon").show();
 		var this_div = $("#report_container");
@@ -536,8 +602,7 @@
 		});//END AJAX
 	}
 	
-	function load_money_report()
-	{
+	function load_money_report(){
 		$("#refresh_icon").hide();
 		$("#loading_icon").show();
 		var this_div = $("#report_container");
@@ -571,8 +636,7 @@
 		});//END AJAX
 	}
 	
-	function load_post_board()
-	{
+	function load_post_board(){
 		$("#refresh_icon").hide();
 		$("#loading_icon").show();
 		var this_div = $("#report_container");
@@ -606,8 +670,7 @@
 		});//END AJAX
 	}
 	
-	function load_post_history()
-	{
+	function load_post_history(){
 		$("#refresh_icon").hide();
 		$("#loading_icon").show();
 		var this_div = $("#report_container");
@@ -642,8 +705,7 @@
 		});//END AJAX
 	}
 	
-	function load_post_verification_page()
-	{
+	function load_post_verification_page(){
 		$("#refresh_icon").hide();
 		$("#loading_icon").show();
 		var this_div = $("#report_container");
@@ -677,8 +739,7 @@
 		});//END AJAX
 	}
 	
-	function load_referrals()
-	{
+	function load_referrals(){
 		$("#refresh_icon").hide();
 		$("#loading_icon").show();
 		var this_div = $("#report_container");
@@ -712,8 +773,7 @@
 		});//END AJAX
 	}
 	
-	function load_renewals()
-	{
+	function load_renewals(){
 		$("#refresh_icon").hide();
 		$("#loading_icon").show();
 		var this_div = $("#report_container");
@@ -747,8 +807,7 @@
 		});//END AJAX
 	}
 	
-	function load_user_transactions()
-	{
+	function load_user_transactions(){
 		$("#refresh_icon").hide();
 		$("#loading_icon").show();
 		var this_div = $("#transactions_container");
@@ -784,8 +843,7 @@
 		});//END AJAX
 	}
 	
-	function get_balance()
-	{
+	function get_balance(){
 		var id = $("#user_id").val();
 		//AJAX
 		if(!(report_ajax_call===undefined))
@@ -815,8 +873,11 @@
 		});//END AJAX
 	}
 	
-	function open_verification_dialog(post_id)
-	{
+	function open_ad_request_dialog(){
+		$("#ad_request_dialog").dialog( "open" );
+	}
+	
+	function open_verification_dialog(post_id){
 		//AJAX
 		if(!(report_ajax_call===undefined))
 		{
@@ -849,9 +910,8 @@
 		
 	}
 	
-	function refresh_ad_spots()
-	{
-		$("#refresh_ads_btn").hide();
+	function refresh_ad_spots(){
+		$("#refresh_icon").hide();
 		$("#loading_icon").show();
 		//AJAX
 		if(!(report_ajax_call===undefined))
@@ -879,14 +939,12 @@
 		});//END AJAX
 	}
 	
-	function renew_post(post_id)
-	{
+	function renew_post(post_id){
 		$( "#post_renewal_dialog").dialog( "open" );
 		$("#renewal_post_id").val(post_id);
 	}
 	
-	function reserve_ad_request(id)
-	{
+	function reserve_ad_request(id){
 		
 		//RESERVE AD REQUEST--REMOVE FROM LIST
 		//AJAX
@@ -927,10 +985,9 @@
 		
 	}
 	
-	function save_request(id)
-	{
-		$("#save_icon").hide();
-		$("#loading_icon").show();
+	function save_request(id){
+		$("#save_edit_"+id).hide();
+		$("#loading_icon_"+id).show();
 		var dataString = $("#ad_request_form_"+id).serialize();
 		console.log(dataString);
 		//AJAX
@@ -960,8 +1017,7 @@
 		
 	}
 	
-	function settle_balance()
-	{
+	function settle_balance(){
 		var dataString = $("#user_form").serialize();
 		var is_valid = true;
 		var user_id = $("#user_id").val();
@@ -1006,8 +1062,7 @@
 		}
 	}
 	
-	function show_answer(id)
-	{
+	function show_answer(id){
 		if(id == 1)
 		{
 			if($("#site_explanation_answer").is(':visible'))
@@ -1131,8 +1186,7 @@
 		}
 	}
 	
-	function submit_ad_request()
-	{
+	function check_ad_request(){
 		var client = $("#client_id").val();
 		var market_id = $("#market_id").val();
 		var category_name = $("#category_name").val();
@@ -1143,76 +1197,40 @@
 		var is_valid = true;
 		
 		var stripped_price = price.replace(/\D/g,'');
+
+		console.log("clientid= "+client+" marketid= "+market_id+" subcategory= "+sub_category+" price= "+stripped_price);
 		
-		if(client=="")
-		{
+		if(client=="Select"){
 			alert("Please input a client");
 			is_valid = false;
-		}
-		else if(market_id=="")
-		{
+		}else if(market_id=="Select"){
 			alert("Please input a market");
 			is_valid = false;
-		}
-		else if(category_name=="")
-		{
+		}else if(category_name=="Select"){
 			alert("Please input a category");
 			is_valid = false;
-		}
-		else if(sub_category=="")
-		{
+		}else if(sub_category==""){
 			alert("Please input a sub-category");
 			is_valid = false;
-		}
-		else if(content_description=="")
-		{
+		}else if(content_description==""){
 			alert("Please input description of the content.");
 			is_valid = false;
-		}
-		else if(stripped_price=="")
-		{
+		}else if(stripped_price==""){
 			alert("Please input a valid price");
 			is_valid = false;
-		}
-		else if(minimum_live_ads=="" || isNaN(minimum_live_ads))
-		{
+		}else if(minimum_live_ads=="" || isNaN(minimum_live_ads)){
 			alert("Please input a valid minimum number of ads");
 			is_valid = false;
 		}
-		if(is_valid)
-		{
-			var dataString = $("#create_ad_request_form").serialize();
-			
-			//AJAX
-			if(!(report_ajax_call===undefined))
-			{
-				report_ajax_call.abort();
-			}
-			report_ajax_call = $.ajax({
-				
-				url: "<?=base_url("index.php/ads/create_ad_request") ?>",
-				type: "POST",
-				data: dataString,
-				cache: false,
-				statusCode: {
-					200: function(response){
-						load_ad_request_form();
-					},
-					404: function(){
-						alert('Page not found');
-					},
-					500: function(response){
-						alert("500 error! "+response);
-					}
-				}
-			});//END AJAX
+		
+		if(is_valid){
+			return true;
 			
 		}
 		
 	}
 	
-	function update_balance()
-	{
+	function update_balance(){
 		//AJAX
 		if(!(report_ajax_call===undefined))
 		{
@@ -1237,8 +1255,7 @@
 		});//END AJAX
 	}
 	
-	function change_nav_box(box_id)
-	{
+	function change_nav_box(box_id){
 		//RETURN ALL NAV BOXES BACK TO NON-SELECTED STYLE
 		$(".nav_box").removeClass("highlighted_nav_box");
 		
@@ -1301,5 +1318,5 @@
 		$(box_id).addClass("highlighted_nav_box");
 		
 	}
-	
+
 </script>

@@ -134,7 +134,7 @@
 					</div>
 				</div>
 			</div>
-			<div id="report_container" class="scrollable_div" style="padding:20px;margin-top:20px;margin-left:20px;width:757px;height:694px;float:left;border-radius:15px;border:1px solid #7f7f7f;background-color:white;">
+			<div id="report_container" style="padding:20px;margin-top:20px;margin-left:20px;width:757px;height:694px;float:left;border-radius:15px;border:1px solid #7f7f7f;background-color:white;">
 				Report
 				<hr>
 			</div>
@@ -145,7 +145,11 @@
 		<div id="ajax_container">
 		</div>
 	</div>
-	
+	<div id="ad_request_dialog" title="New Ad Request">
+		<div id="ad_request_container">
+			<?php include("ads/ad_request_form.php"); ?>
+		</div>
+	</div>
 	<div id="ad_verification_dialog" title="Ad Verification">
 		<div id="verification_ajax_container">
 			

@@ -2,12 +2,61 @@
 
 class Ads extends MY_Controller {
 
-	function index()
-	{
+	function index(){
 		$role = $this->session->userdata('role');
 		$title = "AdSync";
 		$is_active = $this->session->userdata('is_active');
 		
+		$where = null;
+		$where = "1 = 1";
+		$markets  = db_select_markets($where);
+		
+		$market_options = array();
+		$market_options["Select"] = "Select";
+		foreach($markets as $market)
+		{
+			
+			$market_options[$market['id']] = $market['name'].", ".$market['state'];
+			
+		}
+		
+		$category_options = array(
+			'Select' => 'Select',
+			'job offered' => 'job offered',
+			'gig offered' => 'gig offered',
+			'resume / job wanted' => 'resume / job wanted',
+			'housing offered' => 'housing offered',
+			'housing wanted' => 'housing wanted',
+			'for sale by owner' => 'for sale by owner',
+			'for sale by dealer' => 'for sale by dealer',
+			'wanted by owner' => 'wanted by owner',
+			'wanted by dealer' => 'wanted by dealer',
+			'service offered' => 'service offered',
+			'personal / romance' => 'personal / romance',
+			'community' => 'community',
+			'event / class' => 'event / class',
+		);
+		
+		$where = null;
+		$where = "1 = 1";
+		$clients = db_select_clients($where);
+		
+		$client_options = array();
+		$client_options["Select"] = "Select";
+		foreach($clients as $client)
+		{
+			
+			$client_options[$client['id']] = $client['name'];
+			
+		}
+		
+		$where = null;
+		$where = "1 = 1";
+		$ad_requests = db_select_ad_requests($where);
+		
+		$data['client_options'] = $client_options;
+		$data['category_options'] = $category_options;
+		$data['market_options'] = $market_options;
 		$data['title'] = $title;
 		
 		//echo $role;
@@ -23,8 +72,7 @@ class Ads extends MY_Controller {
 		
 	}
 	
-	function create_ad_request()
-	{
+	function create_ad_request(){
 		$client_id = $_POST['client_id'];
 		$market_id = $_POST['market_id'];
 		$category_name = $_POST['category_name'];
@@ -50,14 +98,13 @@ class Ads extends MY_Controller {
 		die();
 	}
 	
-	function count_array($array)
-	{
+	function count_array($array){
+
 		$count = count($array);
 		return $count;
 	}
 	
-	function delete_ad_request()
-	{
+	function delete_ad_request(){
 		$id = $_POST['id'];
 		
 		$where = null;
@@ -65,8 +112,7 @@ class Ads extends MY_Controller {
 		db_delete_ad_request($where);
 	}
 	
-	function delete_post()
-	{
+	function delete_post(){
 		$post_id = $_POST['post_id'];
 		$ad_request_id = $_POST['ad_request_id'];
 		
@@ -89,13 +135,11 @@ class Ads extends MY_Controller {
 		
 	}
 	
-	function download_file($file_guid)
-	{
+	function download_file($file_guid){
 		get_secure_ftp_file($file_guid);
 	}
 	
-	function edit_ad_request()
-	{
+	function edit_ad_request(){
 		$ad_request_id = $_POST['id'];
 		
 		$where = null;
@@ -110,8 +154,7 @@ class Ads extends MY_Controller {
 		db_update_ad_request($set,$where);
 	}
 	
-	function generate_code()
-	{
+	function generate_code(){
 		date_default_timezone_set('America/Denver');
 		$current_datetime = date("Y-m-d H:i:s");
 		
@@ -138,8 +181,7 @@ class Ads extends MY_Controller {
 		echo $randomString;
 	}
 		
-	function get_balance()
-	{
+	function get_balance(){
 		$user_id = $_POST['id'];
 		
 		$where = null;
@@ -158,8 +200,7 @@ class Ads extends MY_Controller {
 		echo number_format($balance,2);
 	}
 	
-	function load_ad_requests()
-	{
+	function load_ad_requests(){
 		$where = null;
 		$where = "1 = 1";
 		$markets  = db_select_markets($where);
@@ -192,25 +233,11 @@ class Ads extends MY_Controller {
 		
 		$where = null;
 		$where = "1 = 1";
-		$clients = db_select_clients($where);
-		
-		$client_options = array();
-		$client_options[] = "Select";
-		foreach($clients as $client)
-		{
-			
-			$client_options[$client['id']] = $client['name'];
-			
-		}
-		
-		$where = null;
-		$where = "1 = 1";
-		$ad_requests = db_select_ad_requests($where);
+		$ad_requests = db_select_ad_requests($where,"id DESC");
 		
 		$count = $this->count_array($ad_requests);
 		
 		$data['count'] = $count;
-		$data['client_options'] = $client_options;
 		$data['category_options'] = $category_options;
 		$data['market_options'] = $market_options;
 		$data['ad_requests'] = $ad_requests;
@@ -218,13 +245,11 @@ class Ads extends MY_Controller {
 		
 	}
 	
-	function load_faq()
-	{
+	function load_faq(){
 		$this->load->view("ads/faq_view");
 	}
 	
-	function load_generate_code_page()
-	{
+	function load_generate_code_page(){
 		$where = null;
 		$where = "1 = 1";
 		$users = db_select_users($where);
@@ -240,8 +265,7 @@ class Ads extends MY_Controller {
 		$this->load->view("ads/generate_code_view",$data);
 	}
 	
-	function load_manage_money_page()
-	{
+	function load_manage_money_page(){
 		$user_id = $this->session->userdata('user_id');
 	
 		$where = null;
@@ -267,8 +291,7 @@ class Ads extends MY_Controller {
 		$this->load->view("ads/manage_money_page",$data);
 	}
 	
-	function load_money_report()
-	{
+	function load_money_report(){
 		$user_id = $this->session->userdata('user_id');
 		
 		$where = null;
@@ -289,8 +312,7 @@ class Ads extends MY_Controller {
 		$this->load->view("ads/money_report",$data);
 	}
 	
-	function load_post_board()
-	{
+	function load_post_board(){
 		$user_id = $this->session->userdata('user_id');
 		$role = $this->session->userdata('role');
 		
@@ -347,8 +369,7 @@ class Ads extends MY_Controller {
 		$this->load->view("ads/post_board",$data);
 	}
 	
-	function load_live_ads()
-	{
+	function load_live_ads(){
 		$user_id = $this->session->userdata('user_id');
 		$role = $this->session->userdata('role');
 		
@@ -367,8 +388,7 @@ class Ads extends MY_Controller {
 		$this->load->view("ads/live_ads",$data);
 	}
 	
-	function load_post_history()
-	{
+	function load_post_history(){
 		$user_id = $this->session->userdata('user_id');
 		$role = $this->session->userdata('role');
 		
@@ -386,8 +406,7 @@ class Ads extends MY_Controller {
 		$this->load->view("ads/post_history",$data);
 	}
 	
-	function load_post_verification_page()
-	{
+	function load_post_verification_page(){
 		$where = null;
 		$where['result'] = "Needs verification";
 		$posts = db_select_posts($where);
@@ -399,8 +418,7 @@ class Ads extends MY_Controller {
 		$this->load->view("ads/post_verification",$data);
 	}
 	
-	function load_referrals()
-	{
+	function load_referrals(){
 		$user_id = $this->session->userdata('user_id');
 		$role = $this->session->userdata('role');
 		
@@ -418,8 +436,7 @@ class Ads extends MY_Controller {
 		$this->load->view("ads/referrals",$data);
 	}
 	
-	function load_renewals()
-	{
+	function load_renewals(){
 		$user_id = $this->session->userdata('user_id');
 		$role = $this->session->userdata('role');
 		
@@ -439,8 +456,7 @@ class Ads extends MY_Controller {
 		$this->load->view("ads/renewals",$data);
 	}
 	
-	function load_user_transactions()
-	{
+	function load_user_transactions(){
 		$user_id = $_POST['user_id'];
 		
 		if($user_id == "All Users")
@@ -471,8 +487,8 @@ class Ads extends MY_Controller {
 		$this->load->view("ads/manage_money_page_report",$data);
 	}
 	
-	function open_post_verification_dialog()
-	{
+	
+	function open_post_verification_dialog(){
 		$post_id = $_POST['post_id'];
 		
 		$where = null;
@@ -493,8 +509,7 @@ class Ads extends MY_Controller {
 		$this->load->view("ads/post_verification_form",$data);
 	}
 	
-	function renew_post()
-	{
+	function renew_post(){
 		date_default_timezone_set('America/Denver');
 		$current_datetime = strtotime(date("Y-m-d H:i:s"));
 		$post_datetime = date("Y-m-d H:i:s",$current_datetime);
@@ -528,8 +543,7 @@ class Ads extends MY_Controller {
 	}
 	
 	//OPENS NEW AD SUBMISSION DIALOG
-	function reserve_ad_request()
-	{
+	function reserve_ad_request(){
 		date_default_timezone_set('America/Denver');
 		$current_datetime = strtotime(date("Y-m-d H:i:s"));
 		$post_datetime = date("Y-m-d H:i:s",$current_datetime);
@@ -607,8 +621,7 @@ class Ads extends MY_Controller {
 
 	}
 	
-	function settle_balance()
-	{
+	function settle_balance(){
 		$user_id = $_POST['user_id'];
 		
 		$where = null;
@@ -627,8 +640,7 @@ class Ads extends MY_Controller {
 		
 	}
 	
-	function submit_payment()
-	{
+	function submit_payment(){
 		date_default_timezone_set('America/Denver');
 		$current_datetime = strtotime(date("Y-m-d H:i:s"));
 		$transaction_datetime = date("Y-m-d H:i:s",$current_datetime);
@@ -674,8 +686,7 @@ class Ads extends MY_Controller {
 		
 	}
 	
-	function submit_validation()
-	{
+	function submit_validation(){
 		date_default_timezone_set('America/Denver');
 		$current_datetime = strtotime(date("Y-m-d H:i:s"));
 		$post_datetime = date("Y-m-d H:i:s",$current_datetime);
@@ -738,8 +749,7 @@ class Ads extends MY_Controller {
 	}
 	
 	//USER SUBMITS NEW POST INFO INTO THE NEW AD SUBMISSION DIALOG
-	function update_post()
-	{
+	function update_post(){
 		date_default_timezone_set('America/Denver');
 		$current_datetime = strtotime(date("Y-m-d H:i:s"));
 		$post_datetime = date("Y-m-d H:i:s",$current_datetime);
@@ -794,8 +804,7 @@ class Ads extends MY_Controller {
 		echo "Your submission has been received. In the next 24 hours, we will verify the posting. Thank you!";
 	}
 	
-	function update_balance()
-	{
+	function update_balance(){
 		$user_id = $this->session->userdata('user_id');
 		$user_role = $this->session->userdata('role');
 		
@@ -848,8 +857,7 @@ class Ads extends MY_Controller {
 	
 	
 	//ONE TIME SCRIPTS
-	function create_initial_ad_requests()
-	{
+	function create_initial_ad_requests(){
 		$where = null;
 		$where = "1 = 1";
 		$markets = db_select_markets($where);

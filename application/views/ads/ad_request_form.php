@@ -5,13 +5,10 @@
 <script>
 	$("#client_id").focus();
 </script>
-<?php if($role=="admin"||$role=="manager"): ?>
-	<span style="float:right">
-		<button id="refresh_ads_btn" onClick="refresh_ad_spots()" type="button" style="padding:10px;cursor:pointer;color:white;background-color:#0079C1;border:0px;font-size:20px;">Refresh Ads</button>
-		<img id="loading_icon" style="display:none;float:right;height:20px;" src="<?=base_url('images/loading.gif')?>"/>
-	</span>
-<?php endif ?>
 New Ad Request Form
+<span>
+	<img id="form_loading_icon" style="display:none;float:right;height:20px;" src="<?=base_url('images/loading.gif')?>"/>
+</span>
 <div style="clear:both"></div>
 <hr>
 <br><br>
@@ -44,10 +41,6 @@ New Ad Request Form
 		<tr>
 			<td>Minimum Live Ads</td>
 			<td><input id="minimum_live_ads" name="minimum_live_ads" class="request_form_input" type="text"/></td>
-		</tr>
-		<tr>
-			<td></td>
-			<td><button type="button" class="request_btn" value="Submit" onClick="submit_ad_request()">Submit</button>
 		</tr>
 	</table>
 	

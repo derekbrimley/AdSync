@@ -35,16 +35,16 @@
 			</td>
 			<td style="max-width:30px;min-width:30px;">
 				<span id="edit_info_<?=$ad_request['id']?>" onClick="edit_request(<?=$ad_request['id']?>)" style="color:#0079C1;cursor:pointer;">
-					<img id="save_icon" style="height:20px;" src="<?=base_url('images/edit.png')?>"/>
+					<img id="edit_icon" style="height:20px;" src="<?=base_url('images/edit.png')?>"/>
 				</span>
 				<span id="save_edit_<?=$ad_request['id']?>" onClick="save_request(<?=$ad_request['id']?>)" style="display:none;color:#0079C1;cursor:pointer;">
 					<img id="save_icon" style="height:20px;" src="<?=base_url('images/save_icon_360.png')?>"/>
 				</span>
-				<span id="loading_icon" style="color:#0079C1;display:none;">
+				<span id="loading_icon_<?=$ad_request['id']?>" style="color:#0079C1;display:none;">
 					<img id="loading_icon" style="height:20px;" src="<?=base_url('images/loading.gif')?>"/>
 				</span>
 				<span onClick="delete_request(<?=$ad_request['id']?>)" style="color:#0079C1;cursor:pointer;">
-					<img id="save_icon" style="height:20px;" src="<?=base_url('images/trash.png')?>"/>
+					<img id="trash_icon" style="height:20px;" src="<?=base_url('images/trash.png')?>"/>
 				</span>
 			</td>
 		</tr>
