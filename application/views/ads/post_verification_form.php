@@ -12,8 +12,10 @@
 		<td><?=$market['name']?></td>
 	</tr>
 </table>
-<?php $attributes = array('name'=>'post_verification_form','id'=>'post_verification_form','target'=>'_blank','style'=>'margin:0 auto;width:600px;')?>
-<?=form_open_multipart('ads/submit_validation',$attributes);?>
+<?php
+	$attributes = array('id' => 'post_verification_form', 'name' => 'post_verification_form', 'target' => '_blank', 'style' => 'margin:0 auto;width:600px;');
+?>
+<?php echo form_open_multipart('ads/submit_validation',$attributes);?>
 	<input id="post_id" name="post_id" type="hidden" value="<?=$post['id']?>" />
 	<table>
 		<tr>
@@ -36,7 +38,7 @@
 		<tr>
 			<td style="max-width:125px;min-width:125px;">Post Screenshot</td>
 			<td>
-				<input type="file" id="result_screen_shot" name="result_screen_shot" ></textarea>
+				<input type="file" id="result_screen_shot" name="result_screen_shot" />
 			</td>
 		</tr>
 		<tr>

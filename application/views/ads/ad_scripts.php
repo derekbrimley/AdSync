@@ -198,25 +198,20 @@
 						text: "Submit",
 						click: function() 
 						{
-							var form = $("#post_verification_form");
-							//console.log(dataString);
-							var post_result = $("post_result").val();
-							var result_notes = $("result_notes").val();
+							var $this = $(this);
 							var is_valid = true;
-							
-							if(post_result=="Select")
-							{
-								is_valid = false;
-								alert("Please select a status");
-							}
-							if(is_valid)
-							{
+							var form = $('#post_verification_form');
+								
+							if(is_valid){
 								form.submit();
-								setTimeout(function()
-								{
-									load_post_verification_page();
-								},3000);
 							}
+							
+							
+							
+							setTimeout(function(){
+								$this.dialog( "close" );
+								load_post_verification_page();
+							},3000);
 						},
 					},
 					{
@@ -230,7 +225,7 @@
 				open: function()
 				{
 				},//end open function
-				close: function( event, ui) 
+				close: function( event, ui)
 				{
 				}
         });//end ad verification dialog
@@ -247,6 +242,9 @@
 						text: "Submit",
 						click: function() 
 						{
+							$(":button:contains('Submit')").prop("disabled", true).addClass("ui-state-disabled");
+							$(":button:contains('Close')").prop("disabled", true).addClass("ui-state-disabled");
+								
 							var $this = $(this);
 							var dataString = $("#renewal_form").serialize();
 							
@@ -262,12 +260,12 @@
 								cache: false,
 								statusCode: {
 									200: function(){
-										setTimeout(function()
-										{
-											alert("Post Renewed. Post will be re-verified in the next 24 hours.");
-											$this.dialog( "close" );
-											load_renewals();
-										},3000);
+										alert("Post Renewed. Post will be re-verified in the next 24 hours.");
+										$this.dialog( "close" );
+										load_renewals();
+										
+										$(":button:contains('Submit')").removeAttr("disabled").removeClass("ui-state-disabled");
+										$(":button:contains('Close')").removeAttr("disabled").removeClass("ui-state-disabled");
 									},
 									404: function(){
 										alert('Page not found');
@@ -1270,48 +1268,31 @@
 		$("#manage_money_nav_icon").attr("src",'<?=base_url('images/manage_money_icon.png')?>');
 		$("#ad_requests_nav_icon").attr("src",'<?=base_url('images/ad_request_icon.png')?>');
 		$("#verify_posts_nav_icon").attr("src",'<?=base_url('images/verify_posts_icon.png')?>');
-		
+		$("#generate_code_nav_icon").attr("src",'<?=base_url('images/code.png')?>');
 		
 		//CHANGE THE ICON IMAGE TO THE SELECTED STYLE IMAGE
-		if(box_id == '#post_board_box')
-		{
+		if(box_id == '#post_board_box'){
 			$("#post_board_nav_icon").attr("src", '<?=base_url('images/post_board_icon_white.png')?>');
-		}
-		else if(box_id == '#post_history_box')
-		{
+		}else if(box_id == '#post_history_box'){
 			$("#post_history_nav_icon").attr("src", '<?=base_url('images/hour_glass_white.png')?>');
-		}
-		else if(box_id == '#renewals_box')
-		{
+		}else if(box_id == '#renewals_box'){
 			$("#renewals_nav_icon").attr("src", '<?=base_url('images/renewals_icon_white.png')?>');
-		}
-		else if(box_id == '#live_ads_box')
-		{
+		}else if(box_id == '#live_ads_box'){
 			$("#live_ads_nav_icon").attr("src", '<?=base_url('images/live_ads_icon_white.png')?>');
-		}
-		else if(box_id == '#referrals_box')
-		{
+		}else if(box_id == '#referrals_box'){
 			$("#referrals_nav_icon").attr("src", '<?=base_url('images/referals_icon_white.png')?>');
-		}
-		else if(box_id == '#money_box')
-		{
+		}else if(box_id == '#money_box'){
 			$("#money_nav_icon").attr("src", '<?=base_url('images/money_icon_white.png')?>');
-		}
-		else if(box_id == '#faq_box')
-		{
+		}else if(box_id == '#faq_box'){
 			$("#faq_nav_icon").attr("src", '<?=base_url('images/question_mark_white.png')?>');
-		}
-		else if(box_id == '#manage_money_box')
-		{
+		}else if(box_id == '#manage_money_box'){
 			$("#manage_money_nav_icon").attr("src", '<?=base_url('images/manage_money_icon_white.png')?>');
-		}
-		else if(box_id == '#create_ad_request_box')
-		{
+		}else if(box_id == '#create_ad_request_box'){
 			$("#ad_requests_nav_icon").attr("src", '<?=base_url('images/ad_request_icon_white.png')?>');
-		}
-		else if(box_id == '#verify_posts_box')
-		{
+		}else if(box_id == '#verify_posts_box'){
 			$("#verify_posts_nav_icon").attr("src", '<?=base_url('images/verify_posts_icon_white.png')?>');
+		}else if(box_id == '#generate_code_box'){
+			$("#generate_code_nav_icon").attr("src", '<?=base_url('images/white_code_icon.png')?>');
 		}
 		
 		//CHANGE THE STYLE OF THE SELECTED BOX

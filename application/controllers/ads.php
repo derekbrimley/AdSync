@@ -746,6 +746,7 @@ class Ads extends MY_Controller {
 		
 		//DISPLAY UPLOAD SUCCESS MESSAGE
 		load_upload_success_view();
+		
 	}
 	
 	//USER SUBMITS NEW POST INFO INTO THE NEW AD SUBMISSION DIALOG
@@ -783,25 +784,38 @@ class Ads extends MY_Controller {
 			db_update_user($set,$where);
 		}
 		
-		$set = array();
-		$set['poster_id'] = $user_id;
-		$set['post_datetime'] = $post_datetime;
-		$set['post_exp_datetime'] = date("Y-m-d H:i:s",strtotime($post_datetime . " +48 hours"));
-		$set['link'] = $post_link;
-		$set['title'] = $post_title;
-		$set['content'] = $post_content;
-		$set['phone_number'] = $phone_number;
-		$set['is_renewal'] = "false";
-		$set['next_renewal_datetime'] = date("Y-m-d H:i:s",strtotime($post_datetime . " +48 hours"));
-		$set['result'] = "Needs verification";
-		$set['amount_due'] = $amount_due;
-		
 		$where = null;
-		$where['id'] = $post_id;
+		$where = "1 = 1";
+		$old_posts = db_select_posts($where);
 		
-		db_update_post($set,$where);
+		$unique_link = '';
+		foreach($old_posts as $old_post){
+			if($old_post['link']==$post_link){
+				$unique_link = true;
+			}
+		}
 		
-		echo "Your submission has been received. In the next 24 hours, we will verify the posting. Thank you!";
+		if($unique_link){
+			$set = array();
+			$set['poster_id'] = $user_id;
+			$set['post_datetime'] = $post_datetime;
+			$set['post_exp_datetime'] = date("Y-m-d H:i:s",strtotime($post_datetime . " +48 hours"));
+			$set['link'] = $post_link;
+			$set['title'] = $post_title;
+			$set['content'] = $post_content;
+			$set['phone_number'] = $phone_number;
+			$set['is_renewal'] = "false";
+			$set['next_renewal_datetime'] = date("Y-m-d H:i:s",strtotime($post_datetime . " +48 hours"));
+			$set['result'] = "Needs verification";
+			$set['amount_due'] = $amount_due;
+			
+			$where = null;
+			$where['id'] = $post_id;
+			
+			db_update_post($set,$where);
+			
+			echo "Your submission has been received. In the next 24 hours, we will verify the posting. Thank you!";
+		}
 	}
 	
 	function update_balance(){

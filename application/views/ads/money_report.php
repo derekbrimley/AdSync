@@ -3,6 +3,7 @@
 ?>
 <script>
 	$(".post_row:even").css("background-color","#eee");
+	$("#money_container").height($(window).height() - 256);
 </script>
 Transactions
 <span>
@@ -26,14 +27,16 @@ Transactions
 			</tr>
 		</table>
 	</div>
-	<?php foreach($account_entrys as $account_entry): ?>
-		<?php
-			$row++;
-		?>
-		<div id="tr_<?=$row?>" name="tr_<?=$row?>" class="post_row">
-			<?php include("money_report_row.php")?>
-		</div>
-	<?php endforeach ?>
+	<div id="money_container" class="scrollable_div">
+		<?php foreach($account_entrys as $account_entry): ?>
+			<?php
+				$row++;
+			?>
+			<div id="tr_<?=$row?>" name="tr_<?=$row?>" class="post_row">
+				<?php include("money_report_row.php")?>
+			</div>
+		<?php endforeach ?>
+	</div>
 <?php else: ?>
 	You don't have any transactions yet.
 <?php endif ?>

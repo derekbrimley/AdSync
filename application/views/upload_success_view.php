@@ -1,8 +1,4 @@
 <html>
-	<!-- 	TODO: 								!-->
-	<!-- 	SEARCH FUNCTION 					!-->
-	<!-- 	ACTIVE/INACTIVE FILTER BOX			!-->
-	<!-- 	FLEET MANAGER FILTER BOX			!-->
 	<head>
 		<title><?php echo $title;?></title>
 		<link rel="shortcut icon" href="<?php echo base_url("favicon.ico");?>" />
@@ -29,5 +25,9 @@
 </html>
 
 <script>
-	setInterval(function(){close()},1000);
+	setInterval(
+		function(){
+			close();
+		},1000
+	);
 </script>

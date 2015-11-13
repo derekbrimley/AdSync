@@ -3,6 +3,7 @@
 ?>
 <script>
 	$(".post_row:even").css("background-color","#eee");
+	$("#renewal_container").height($(window).height() - 256);
 </script>
 Renewals
 <span>
@@ -31,14 +32,16 @@ Renewals
 			</tr>
 		</table>
 	</div>
-	<?php foreach($posts as $post): ?>
-		<?php
-			$row++;
-		?>
-		<div id="tr_<?=$row?>" name="tr_<?=$row?>" class="post_row">
-			<?php include("renewals_row.php")?>
-		</div>
-	<?php endforeach ?>
+	<div id="renewal_container" class="scrollable_div">
+		<?php foreach($posts as $post): ?>
+			<?php
+				$row++;
+			?>
+			<div id="tr_<?=$row?>" name="tr_<?=$row?>" class="post_row">
+				<?php include("renewals_row.php")?>
+			</div>
+		<?php endforeach ?>
+	</div>
 <?php else: ?>
 	No renewable posts right now. Try back later.
 <?php endif ?>

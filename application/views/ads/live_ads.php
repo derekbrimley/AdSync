@@ -3,6 +3,7 @@
 ?>
 <script>
 	$(".post_row:even").css("background-color","#eee");
+	$("#live_ads_container").height($(window).height() - 256);
 </script>
 Live Ads
 <span>
@@ -29,14 +30,16 @@ Live Ads
 			</tr>
 		</table>
 	</div>
-	<?php foreach($posts as $post): ?>
-		<?php
-			$row++;
-		?>
-		<div id="tr_<?=$row?>" name="tr_<?=$row?>" class="post_row">
-			<?php include("live_ads_row.php")?>
-		</div>
-	<?php endforeach ?>
+	<div id="live_ads_container" class="scrollable_div">
+		<?php foreach($posts as $post): ?>
+			<?php
+				$row++;
+			?>
+			<div id="tr_<?=$row?>" name="tr_<?=$row?>" class="post_row">
+				<?php include("live_ads_row.php")?>
+			</div>
+		<?php endforeach ?>
+	</div>
 <?php else: ?>
 	You have not posted yet. Click on "Post Board" to get started!
 <?php endif ?>

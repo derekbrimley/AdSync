@@ -3,6 +3,7 @@
 ?>
 <script>
 	$(".post_row:even").css("background-color","#eee");
+	$("#verification_container").height($(window).height() - 256);
 </script>
 Post Verification
 <span>
@@ -28,6 +29,8 @@ Post Verification
 				<td style="max-width:20px;min-width:20px;text-align:center;">Verify</td>
 			</tr>
 		</table>
+	</div>
+	<div id="verification_container" class="scrollable_div">
 	</div>
 	<?php foreach($posts as $post): ?>
 		<?php
