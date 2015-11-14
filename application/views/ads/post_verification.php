@@ -31,15 +31,15 @@ Post Verification
 		</table>
 	</div>
 	<div id="verification_container" class="scrollable_div">
+		<?php foreach($posts as $post): ?>
+			<?php
+				$row++;
+			?>
+			<div id="tr_<?=$row?>" name="tr_<?=$row?>" class="post_row">
+				<?php include("post_verification_row.php")?>
+			</div>
+		<?php endforeach ?>
 	</div>
-	<?php foreach($posts as $post): ?>
-		<?php
-			$row++;
-		?>
-		<div id="tr_<?=$row?>" name="tr_<?=$row?>" class="post_row">
-			<?php include("post_verification_row.php")?>
-		</div>
-	<?php endforeach ?>
 <?php else: ?>
 	You have not posted yet. Click on "Post Board" to get started!
 <?php endif ?>

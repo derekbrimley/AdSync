@@ -374,10 +374,10 @@ class Ads extends MY_Controller {
 		$role = $this->session->userdata('role');
 		
 		$where = null;
-		if($role!="Admin")
-		{
+		if($role!="admin"){
 			$where['poster_id'] = $user_id;
 		}
+		
 		$where['result'] = "live";
 		$posts = db_select_posts($where,"post_datetime DESC");
 		

@@ -824,6 +824,7 @@
 			$ad_request['price'] = $row->price;
 			$ad_request['post_expense'] = $row->post_expense;
 			$ad_request['min_count'] = $row->min_count;
+			$ad_request['status'] = $row->status;
 			
 			$ad_requests[] = $ad_request;
 			
