@@ -1,5 +1,11 @@
 <?php
-	$row = 0
+	$row = 0;
+	
+	$where = null;
+	$where['id'] = $this->session->userdata('user_id');
+	$this_user = db_select_user($where);
+	
+	$role = $this->session->userdata('role');
 ?>
 <script>
 	$(".post_row:even").css("background-color","#eee");
@@ -20,8 +26,11 @@ Referrals
 	<div id="post_board_header">
 		<table>
 			<tr style="font-weight:bold;color:#0079C1">
-				<td style="max-width:35px;min-width:35px;">Name</td>
-				<td style="max-width:40px;min-width:40px;">Date Referred</td>
+				<?php if($role == "admin"): ?>
+					<td style="max-width:35px;min-width:35px;">User</td>
+				<?php endif ?>
+				<td style="max-width:35px;min-width:35px;">Referred User</td>
+				<td style="max-width:40px;min-width:40px;">Date Joined</td>
 				<td style="max-width:30px;min-width:30px;">Value</td>
 			</tr>
 		</table>

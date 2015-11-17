@@ -49,10 +49,5 @@
 		<td class="ellipsis" style="max-width:20px;min-width:20px;">
 			$<?= $post['amount_due'] ?>
 		</td>
-		<?php if($role=="admin"): ?>
-			<td style="max-width:35px;min-width:35px;">
-				Edit | Delete
-			</td>
-		<?php endif ?>
 	</tr>
 </table>

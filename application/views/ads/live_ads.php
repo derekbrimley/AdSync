@@ -1,5 +1,6 @@
 <?php
-	$row = 0
+	$row = 0;
+	$role = $this->session->userdata('role');
 ?>
 <script>
 	$(".post_row:even").css("background-color","#eee");
@@ -21,6 +22,9 @@ Live Ads
 	<div id="post_board_header">
 		<table>
 			<tr style="font-weight:bold;color:#0079C1">
+				<?php if($role == "admin"): ?>
+					<td style="max-width:35px;min-width:35px;">User</td>
+				<?php endif ?>
 				<td style="max-width:35px;min-width:35px;">Date Posted</td>
 				<td style="max-width:40px;min-width:40px;">Market</td>
 				<td style="max-width:40px;min-width:40px;">Category</td>

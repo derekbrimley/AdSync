@@ -11,10 +11,19 @@
 	$where = null;
 	$where['id'] = $ad_request['market_id'];
 	$market = db_select_market($where);
+	
+	$where = null;
+	$where['id'] = $post['poster_id'];
+	$user = db_select_user($where);
 ?>
 
 <table>
 	<tr>
+		<?php if($role=="admin"): ?>
+			<td class="ellipsis" style="max-width:35px;min-width:35px;">
+				<?=$user['username'] ?>
+			</td>
+		<?php endif ?>
 		<td class="ellipsis" style="max-width:35px;min-width:35px;">
 			<?=date("m/d/Y",strtotime($post['post_datetime']))?>
 		</td>

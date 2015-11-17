@@ -4,14 +4,12 @@
 class Login extends CI_Controller 
 {
 
-	function index()
-	{
+	function index(){
 		$data['title'] = "Login";
 		$this->load->view('adsync_login_view',$data);
 	}
 	
-	function activate()
-	{
+	function activate(){
 		$email = $_GET['email'];
 		$hash = $_GET['hash'];
 		
@@ -23,8 +21,7 @@ class Login extends CI_Controller
 		// echo trim($hash)."<br>";
 		// echo trim($user['hash']);
 		//echo "Hash: ".$hash." User hash: ".$user['hash'];
-		if(trim($hash) == trim($user['hash']))
-		{
+		if(trim($hash) == trim($user['hash'])){
 			//echo "Hash: ".$hash." User hash: ".$user['hash'];
 			$set = array();
 			$set['is_active'] = "true";
@@ -40,8 +37,7 @@ class Login extends CI_Controller
 		}
 	}
 	
-	function create_new_user()
-	{
+	function create_new_user(){
 		date_default_timezone_set('America/Denver');
 		$current_datetime = date("Y-m-d H:i:s");
 		
@@ -52,8 +48,7 @@ class Login extends CI_Controller
 		$email = $_POST['email'];
 		$secret_code = $_POST['secret_code'];
 		
-		if(strpos($email,"@"))
-		{
+		if(strpos($email,"@")){
 			$email = substr($email, 0, strpos($email,"@"));
 		}
 		
@@ -61,7 +56,7 @@ class Login extends CI_Controller
 		
 		$role = "affiliate";
 		$home_market_id = $_POST['market_id'];
-		$referred_by = $_POST['secret_code'];
+		$secret_code = $_POST['secret_code'];
 		$ip_address = $_SERVER['REMOTE_ADDR'];
 		$latitude = $_POST['latitude'];
 		$longitude = $_POST['longitude'];
@@ -78,8 +73,7 @@ class Login extends CI_Controller
 		$geolocation_list = array();
 		$username_list = array();
 		$email_list = array();
-		foreach($current_users as $current_user)
-		{
+		foreach($current_users as $current_user){
 			$ip_list[] = $current_user['ip_address'];
 			$geolocation_list[] = $current_user['geolocation'];
 			$username_list[] = $current_user['username'];
@@ -91,13 +85,11 @@ class Login extends CI_Controller
 		$codes = db_select_secret_codes($where);
 		//print_r($codes);
 		$code_list = array();
-		foreach($codes as $code)
-		{
+		foreach($codes as $code){
 			$code_list[] = $code['secret_code'];
 		}
 		
-		if(in_array($full_email,$email_list))
-		{
+		if(in_array($full_email,$email_list)){
 			echo "<script>alert('We are sorry. It appears that your email has already been used for an AdSync account. Please try again.');
 					window.location.replace('".base_url('/index.php/login/new_user')."');
 				</script>";
@@ -120,22 +112,22 @@ class Login extends CI_Controller
 					// window.location.replace('".base_url('/index.php/login/new_user')."');
 				// </script>";
 		// }
-		else
-		{
-			if(!empty($referred_by))
-			{
-				$where = null;
-				$where['referral_id'] = $referred_by;
-				$referred_by_user = db_select_user($where);
-				$referred_by_user_id = $referred_by_user['id'];
-				$new_user['referred_by'] = $referred_by_user_id;
+		else{
+			$where = null;
+			$where['secret_code'] = $secret_code;
+			$referral_code = db_select_secret_code($where);
+			if($referral_code['referral_id']){
+				$referred_by_user_id = $referral_code['referral_id'];
 			}
 			
+			$new_user['referred_by'] = $referred_by_user_id;
+			
+			$hashed_password = password_hash($password,PASSWORD_BCRYPT );
 			
 			$new_user['first_name'] = $first_name;
 			$new_user['last_name'] = $last_name;
 			$new_user['username'] = $username;
-			$new_user['password'] = $password;
+			$new_user['password'] = $hashed_password;
 			$new_user['email'] = $full_email;
 			$new_user['role'] = $role;
 			$new_user['home_market'] = $home_market_id;
@@ -181,20 +173,17 @@ class Login extends CI_Controller
 		}
 	}
 	
-	function leadsync_login()
-	{
+	function leadsync_login(){
 		$data['title'] = "LeadSync Login";
 		$this->load->view('leadsync_login_view',$data);
 	}
 	
-	function adsync_login()
-	{
+	function adsync_login(){
 		$data['title'] = "AdSync Login";
 		$this->load->view('adsync_login_view',$data);
 	}
 	
-	function adsync_authenticate()
-	{
+	function adsync_authenticate(){
 		$username = $_POST['username'];
 		$password = $_POST['password'];
 		
@@ -203,12 +192,10 @@ class Login extends CI_Controller
 		
 		$role = $user['role'];
 		//echo $role;
-		if (empty($user['password']))
-		{
+		if (empty($user['password'])){
 			echo "Invalid credentials";
 		}
-		elseif ($user['password'] == $password)
-		{
+		elseif (password_verify($password,$user['password'])){
 			$this->session->set_userdata('user_id', $user['id']);
 			$this->session->set_userdata('first_name', $user["first_name"]);
 			$this->session->set_userdata('last_name', $user["last_name"]);
@@ -217,62 +204,57 @@ class Login extends CI_Controller
 			$this->session->set_userdata('is_active', $user['is_active']);
 			$this->session->set_userdata('referral_id', $user['referral_id']);
 				
-			if($role == "admin" || $role == "affiliate" || $role == "manager")
-			{
+			if($role == "admin" || $role == "affiliate" || $role == "manager"){
 				redirect("ads");
-			}
-			else
-			{
+			}else{
 				redirect("leads");
 			}
-		}
-		else
-		{
+		}else{
 			echo "Invalid credentials";
 		}
 	}
 	
-	function authenticate()
-	{
-		$username = $_POST['username'];
-		$password = $_POST['password'];
+	// function authenticate(){
+		// $username = $_POST['username'];
+		// $password = $_POST['password'];
 		
-		//$sql = "SELECT * FROM people WHERE Username = ?";
-		//$query = $this->db->query($sql,array($username));
+		// //$sql = "SELECT * FROM people WHERE Username = ?";
+		// //$query = $this->db->query($sql,array($username));
 		
-		$user_where['username'] = $username;
-		@$user = db_select_user($user_where);
+		// $user_where['username'] = $username;
+		// @$user = db_select_user($user_where);
+		// $hashed_password = password_hash($password,PASSWORD_DEFAULT);
+		// echo $hashed_password;
+		// $role = $user['role'];
 		
-		$role = $user['role'];
-		
-		if (empty($user['password']))
-		{
-			echo "Invalid credentials";
-		}
-		elseif ($user['password'] == $password)
-		{
-			$this->session->set_userdata('user_id', $user['id']);
-			$this->session->set_userdata('first_name', $user["first_name"]);
-			$this->session->set_userdata('last_name', $user["last_name"]);
-			$this->session->set_userdata('username', $username);
-			$this->session->set_userdata('role', $user['role']);
-			$this->session->set_userdata('is_active', $user['is_active']);
-			$this->session->set_userdata('referral_id', $user['referral_id']);
+		// if (empty($user['password']))
+		// {
+			// echo "Invalid credentials";
+		// }
+		// elseif ($user['password'] == $hashed_password)
+		// {
+			// $this->session->set_userdata('user_id', $user['id']);
+			// $this->session->set_userdata('first_name', $user["first_name"]);
+			// $this->session->set_userdata('last_name', $user["last_name"]);
+			// $this->session->set_userdata('username', $username);
+			// $this->session->set_userdata('role', $user['role']);
+			// $this->session->set_userdata('is_active', $user['is_active']);
+			// $this->session->set_userdata('referral_id', $user['referral_id']);
 				
-			if($role == "admin" || $role == "recruiter" || $role == "caller" || $role == "manager")
-			{
-				redirect("leads");
-			}
-			else
-			{
-				redirect("ads");
-			}
-		}
-		else
-		{
-			echo "Invalid credentials";
-		}
-	}
+			// if($role == "admin" || $role == "recruiter" || $role == "caller" || $role == "manager")
+			// {
+				// redirect("leads");
+			// }
+			// else
+			// {
+				// redirect("ads");
+			// }
+		// }
+		// else
+		// {
+			// echo "Invalid credentials";
+		// }
+	// }
 	
 	function logout()
 	{

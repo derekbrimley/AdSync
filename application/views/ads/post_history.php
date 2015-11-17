@@ -32,9 +32,6 @@ Post History
 				<td style="max-width:20px;min-width:20px;">Value</td>
 				<td style="max-width:30px;min-width:30px;">Result</td>
 				<td style="max-width:20px;min-width:20px;">Earned</td>
-				<?php if($role == "admin"): ?>
-					<td style="max-width:35px;min-width:35px;">Action</td>
-				<?php endif ?>
 			</tr>
 		</table>
 	</div>

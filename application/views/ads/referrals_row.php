@@ -1,5 +1,10 @@
 <table>
 	<tr>
+		<?php if($role == "admin"): ?>
+			<td style="max-width:35px;min-width:35px;">
+				<?=$this_user['username'];?>
+			</td>
+		<?php endif ?>
 		<td style="max-width:35px;min-width:35px;">
 			<?=$user['first_name']." ".$user['last_name']?>
 		</td>
