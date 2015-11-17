@@ -50,7 +50,7 @@ class Public_functions extends CI_Controller
 		}
 		
 		$where = null;
-		$where = "1 = 1";
+		$where['status'] = "active";
 		$ad_requests = db_select_ad_requests($where);
 		
 		

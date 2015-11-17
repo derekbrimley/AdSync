@@ -370,6 +370,7 @@
 					200: function(response){
 						alert("Ad Request deleted.");
 						load_ad_requests();
+						refresh_ad_spots();
 					},
 					404: function(){
 						alert('Page not found');
@@ -1002,6 +1003,7 @@
 			statusCode: {
 				200: function(){
 					load_ad_requests();
+					refresh_ad_spots();
 				},
 				404: function(){
 					alert('Page not found');

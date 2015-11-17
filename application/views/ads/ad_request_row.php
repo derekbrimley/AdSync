@@ -4,10 +4,16 @@
 	$market = db_select_market($where);
 	
 	$market_name = $market['name'];
+	
+	if($ad_request['status'] == 'inactive'){
+		$text_color = 'red';
+	}else{
+		$text_color = 'black';
+	}
 ?>
 <form id="ad_request_form_<?=$ad_request['id']?>">
 	<input id="id" name="id" type="hidden" value="<?=$ad_request['id']?>" />
-	<table>
+	<table style="color:<?=$text_color?>">
 		<tr>
 			<td style="max-width:70px;min-width:70px;">
 				<div id="name_info_<?=$ad_request['id']?>"><?=$market_name?></div>
@@ -34,18 +40,20 @@
 				</div>
 			</td>
 			<td style="max-width:30px;min-width:30px;">
-				<span id="edit_info_<?=$ad_request['id']?>" onClick="edit_request(<?=$ad_request['id']?>)" style="color:#0079C1;cursor:pointer;">
-					<img id="edit_icon" style="height:20px;" src="<?=base_url('images/edit.png')?>"/>
-				</span>
-				<span id="save_edit_<?=$ad_request['id']?>" onClick="save_request(<?=$ad_request['id']?>)" style="display:none;color:#0079C1;cursor:pointer;">
-					<img id="save_icon" style="height:20px;" src="<?=base_url('images/save_icon_360.png')?>"/>
-				</span>
-				<span id="loading_icon_<?=$ad_request['id']?>" style="color:#0079C1;display:none;">
-					<img id="loading_icon" style="height:20px;" src="<?=base_url('images/loading.gif')?>"/>
-				</span>
-				<span onClick="delete_request(<?=$ad_request['id']?>)" style="color:#0079C1;cursor:pointer;">
-					<img id="trash_icon" style="height:20px;" src="<?=base_url('images/trash.png')?>"/>
-				</span>
+				<?php if($ad_request['status']=='active'): ?>
+					<span id="edit_info_<?=$ad_request['id']?>" onClick="edit_request(<?=$ad_request['id']?>)" style="color:#0079C1;cursor:pointer;">
+						<img id="edit_icon" style="height:20px;" src="<?=base_url('images/edit.png')?>"/>
+					</span>
+					<span id="save_edit_<?=$ad_request['id']?>" onClick="save_request(<?=$ad_request['id']?>)" style="display:none;color:#0079C1;cursor:pointer;">
+						<img id="save_icon" style="height:20px;" src="<?=base_url('images/save_icon_360.png')?>"/>
+					</span>
+					<span id="loading_icon_<?=$ad_request['id']?>" style="color:#0079C1;display:none;">
+						<img id="loading_icon" style="height:20px;" src="<?=base_url('images/loading.gif')?>"/>
+					</span>
+					<span onClick="delete_request(<?=$ad_request['id']?>)" style="color:#0079C1;cursor:pointer;">
+						<img id="trash_icon" style="height:20px;" src="<?=base_url('images/trash.png')?>"/>
+					</span>
+				<?php endif ?>
 			</td>
 		</tr>
 	</table>
