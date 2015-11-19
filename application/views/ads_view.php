@@ -131,6 +131,12 @@
 								<div class="nav_box_title">Verify Posts</div>
 							</div>
 						<?php endif ?>
+						<div id="account_info_box" class="nav_box" onClick="load_account_info()">
+							<div style="height:77px;">
+								<img id="account_info_nav_icon" src="<?= base_url("images/account_info.png") ?>" class="nav_box_image" style="height:75px; position:relative;"/>
+							</div>
+							<div class="nav_box_title">Account Info</div>
+						</div>
 					</div>
 				</div>
 			</div>

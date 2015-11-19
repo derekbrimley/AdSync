@@ -204,6 +204,19 @@ class Ads extends MY_Controller {
 		echo number_format($balance,2);
 	}
 	
+	function load_account_info(){
+		$user_id = $this->session->userdata('user_id');
+		
+		$where = null;
+		$where['id'] = $user_id;
+		$user = db_select_user($where);
+		
+		$data['user'] = $user;
+		
+		$this->load->view("ads/account_info",$data);
+		
+	}
+	
 	function load_ad_requests(){
 		$where = null;
 		$where = "1 = 1";

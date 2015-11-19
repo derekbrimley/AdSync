@@ -432,6 +432,40 @@
 		});//END AJAX
 	}
 	
+	function load_account_info(){
+		$("#loading_icon").show();
+		$("#refresh_icon").hide();
+		var this_div = $("#report_container");
+		var dataString;
+		
+		//AJAX
+		if(!(report_ajax_call===undefined))
+		{
+			report_ajax_call.abort();
+		}
+		report_ajax_call = $.ajax({
+			
+			url: "<?=base_url("index.php/ads/load_account_info") ?>",
+			type: "POST",
+			data: dataString,
+			cache: false,
+			context: this_div,
+			statusCode: {
+				200: function(response){
+					this_div.html(response);
+					update_balance();
+					change_nav_box('#account_info_box');
+				},
+				404: function(){
+					alert('Page not found');
+				},
+				500: function(response){
+					alert("500 error! "+response);
+				}
+			}
+		});//END AJAX
+	}
+	
 	function load_ad_requests(){
 		$("#loading_icon").show();
 		$("#refresh_icon").hide();
@@ -1271,6 +1305,7 @@
 		$("#ad_requests_nav_icon").attr("src",'<?=base_url('images/ad_request_icon.png')?>');
 		$("#verify_posts_nav_icon").attr("src",'<?=base_url('images/verify_posts_icon.png')?>');
 		$("#generate_code_nav_icon").attr("src",'<?=base_url('images/code.png')?>');
+		$("#account_info_nav_icon").attr("src",'<?=base_url('images/account_info.png')?>');
 		
 		//CHANGE THE ICON IMAGE TO THE SELECTED STYLE IMAGE
 		if(box_id == '#post_board_box'){
@@ -1295,6 +1330,8 @@
 			$("#verify_posts_nav_icon").attr("src", '<?=base_url('images/verify_posts_icon_white.png')?>');
 		}else if(box_id == '#generate_code_box'){
 			$("#generate_code_nav_icon").attr("src", '<?=base_url('images/white_code_icon.png')?>');
+		}else if(box_id == '#account_info_box'){
+			$("#account_info_nav_icon").attr("src", '<?=base_url('images/white_account_info.png')?>');
 		}
 		
 		//CHANGE THE STYLE OF THE SELECTED BOX
