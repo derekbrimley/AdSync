@@ -38,17 +38,18 @@ class Login extends CI_Controller
 	}
 	
 	function change_password(){
-		$email = $_POST['email'];
-		$token = $_POST['token'];
+		$email = $_GET['email'];
+		$token = $_GET['token'];
 		
 		$where = null;
 		$where['email'] = $email;
 		$user = db_select_user($where);
 		
-		$user_token = $user['token'];
+		$user_token = $user['reset_token'];
 		
 		if($token==$user_token){
-			$this->load->view("change_password.php");
+			$data['email'] = $email;
+			$this->load->view("change_password.php",$data);
 		}else{
 			$this->load->view("password_error.php");
 		}
@@ -261,32 +262,55 @@ class Login extends CI_Controller
 		$where['username'] = $username;
 		$user = db_select_user($where);
 		
-		$user_email = $user['email'];
+		if(!empty($user)){
+			$user_email = $user['email'];
+			
+			$token = md5($timestamp);
+			
+			$where = null;
+			$where['id'] = $user['id'];
+			
+			$set = null;
+			$set['reset_token'] = $token;
+			
+			db_update_user($set,$where);
+			
+			$to = $user_email;
+			$subject = "AdSync Password Reset";
+			$message = "
+				You're receiving this email because you requested a password reset. 
+				Please follow the following link to choose a new password:
+				http://www.adsync.nextgenmarketingsolutions.com/index.php/login/change_password?email=$user_email&token=$token
+			";
+			$headers = 'From: admin@nextgenmarketingsolutions.com';
+			
+			mail($to,$subject,$message,$headers);
+			
+		}
 		
-		$token = md5($timestamp);
-		
-		$where = null;
-		$where['id'] = $user['id'];
-		
-		$set = null;
-		$set['reset_token'] = $token;
-		
-		db_update_user($set,$where);
-		
-		$to = $user_email;
-		$subject = "AdSync Password Reset";
-		$message = "
-			You're receiving this email because you requested a password reset. 
-			Please follow the following link to choose a new password:
-			http://www.adsync.nextgenmarketingsolutions.com/index.php/login/change_password?email=$user_email&token=$token/
-		";
-		$headers = 'From: admin@nextgenmarketingsolutions.com';
-		
-		mail($to,$subject,$message,$headers);
-		
-		
-		
+		$this->load->view("sent_email_view");
 	}
 	
+	function update_password(){
+		$new_password = $_POST['password1'];
+		$email = $_POST['email'];
+		
+		$hashed_password = password_hash($new_password,PASSWORD_BCRYPT );
+		
+		$where = null;
+		$where['email'] = $email;
+		$user = db_select_user($where);
+		if(!empty($user)){
+			$set = null;
+			$set['password'] = $hashed_password;
+			
+			db_update_user($set,$where);
+			
+			$set = null;
+			$set['reset_token'] = 0;
+			
+			db_update_user($set,$where);
+		}
+	}
 }
 ?>
