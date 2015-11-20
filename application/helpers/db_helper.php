@@ -2728,6 +2728,7 @@
 			$user["ip_address"] = $row->ip_address;
 			$user["geolocation"] = $row->geolocation;
 			$user["hash"] = $row->hash;
+			$user["reset_token"] = $row->reset_token;
 			
 			$users[] = $user;
 			//echo "hello world ";

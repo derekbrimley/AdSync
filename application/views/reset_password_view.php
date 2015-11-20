@@ -45,18 +45,15 @@
 			</table>
 		</div>
 		<div class="login_form slide" style="margin:0 auto;padding:20px;margin-top:150px;width:400px;">
-			<div style="text-align:center;padding-bottom:10px;padding-top:10px;font-size:53px;">Sign In</div>
+			<div style="text-align:center;padding-bottom:10px;padding-top:10px;font-size:53px;">Reset Password</div>
 			<?php $attributes = array('name'=>'login_form','id'=>'login_form','style'=>'margin-bottom:50px;' )?>
-			<?=form_open_multipart(base_url('index.php/login/adsync_authenticate/'),$attributes);?>
+			<?=form_open_multipart(base_url('index.php/login/reset_password/'),$attributes);?>
 				<table>
 					<tr>
 						<td><input placeholder="Username" style="margin-left:80px;margin-bottom:15px;width:240px;height:40px;border-radius:3px;border:border: solid 1px #c9c9c9;" type="text" id="username" name="username"/></td>
 					</tr>
 					<tr>
-						<td><input placeholder="Password" style="margin-left:80px;width:240px;height:40px;border-radius:3px;border:border: solid 1px #c9c9c9;" type="password" id="password" name="password"/></td>
-					</tr>
-					<tr>
-						<td><input class="login_btn" id="login_btn" type="submit" value="Sign In"></td>
+						<td><input class="login_btn" id="login_btn" type="submit" value="Reset Password"></td>
 					</tr>
 					<br>
 					<br>
@@ -65,10 +62,6 @@
 		</div>
 		<div style="margin:0 auto;width:400px;padding:20px;text-align:center;">
 			<a href="<?=base_url('/index.php/login/new_user/')?>">Create Account</a>
-		</div>
-		<div style="margin:0 auto;width:400px;padding:20px;text-align:center;">
-			
-			<a href="<?=base_url('/index.php/login/load_reset_password_view/')?>">Forgot Password?</button>
 		</div>
 	</body>
 </html>

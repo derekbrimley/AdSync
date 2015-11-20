@@ -211,6 +211,16 @@ class Ads extends MY_Controller {
 		$where['id'] = $user_id;
 		$user = db_select_user($where);
 		
+		$where = null;
+		$where['id'] = $user['home_market'];
+		$market = db_select_market($where);
+		
+		$where = null;
+		$where['id'] = $user['referred_by'];
+		$referred_by_user = db_select_user($where);
+		
+		$data['referred_by_user'] = $referred_by_user;
+		$data['market'] = $market;
 		$data['user'] = $user;
 		
 		$this->load->view("ads/account_info",$data);
@@ -637,6 +647,29 @@ class Ads extends MY_Controller {
 			$this->load->view("ads/ad_request_dialog",$data);
 		}
 
+	}
+	
+	function reset_password(){
+		$user_id = $_POST['user_id'];
+		
+		
+	}
+	
+	function save_user_information(){
+		$user_id = $_POST['user_id'];
+		$first_name = $_POST['first_name'];
+		$last_name = $_POST['last_name'];
+		
+		$where = null;
+		$where['id'] = $user_id;
+		
+		$set = null;
+		$set['first_name'] = $first_name;
+		$set['last_name'] = $last_name;
+		
+		db_update_user($set,$where);
+		
+		$this->load_account_info();
 	}
 	
 	function settle_balance(){

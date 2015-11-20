@@ -9,6 +9,7 @@
 ?>
 <script>
 	$(".post_row:even").css("background-color","#eee");
+	$("#referral_container").height($(window).height() - 241);
 </script>
 Referrals
 <span>
@@ -35,14 +36,16 @@ Referrals
 			</tr>
 		</table>
 	</div>
-	<?php foreach($users as $user): ?>
-		<?php
-			$row++;
-		?>
-		<div id="tr_<?=$row?>" name="tr_<?=$row?>" class="post_row">
-			<?php include("referrals_row.php")?>
-		</div>
-	<?php endforeach ?>
+	<div id="referral_container" name="referral_container" class="scrollable_div">
+		<?php foreach($users as $user): ?>
+			<?php
+				$row++;
+			?>
+			<div id="tr_<?=$row?>" name="tr_<?=$row?>" class="post_row">
+				<?php include("referrals_row.php")?>
+			</div>
+		<?php endforeach ?>
+	</div>
 <?php else: ?>
 	You haven't referred anyone yet.
 <?php endif ?>

@@ -37,6 +37,23 @@ class Login extends CI_Controller
 		}
 	}
 	
+	function change_password(){
+		$email = $_POST['email'];
+		$token = $_POST['token'];
+		
+		$where = null;
+		$where['email'] = $email;
+		$user = db_select_user($where);
+		
+		$user_token = $user['token'];
+		
+		if($token==$user_token){
+			$this->load->view("change_password.php");
+		}else{
+			$this->load->view("password_error.php");
+		}
+	}
+	
 	function create_new_user(){
 		date_default_timezone_set('America/Denver');
 		$current_datetime = date("Y-m-d H:i:s");
@@ -214,56 +231,12 @@ class Login extends CI_Controller
 		}
 	}
 	
-	// function authenticate(){
-		// $username = $_POST['username'];
-		// $password = $_POST['password'];
-		
-		// //$sql = "SELECT * FROM people WHERE Username = ?";
-		// //$query = $this->db->query($sql,array($username));
-		
-		// $user_where['username'] = $username;
-		// @$user = db_select_user($user_where);
-		// $hashed_password = password_hash($password,PASSWORD_DEFAULT);
-		// echo $hashed_password;
-		// $role = $user['role'];
-		
-		// if (empty($user['password']))
-		// {
-			// echo "Invalid credentials";
-		// }
-		// elseif ($user['password'] == $hashed_password)
-		// {
-			// $this->session->set_userdata('user_id', $user['id']);
-			// $this->session->set_userdata('first_name', $user["first_name"]);
-			// $this->session->set_userdata('last_name', $user["last_name"]);
-			// $this->session->set_userdata('username', $username);
-			// $this->session->set_userdata('role', $user['role']);
-			// $this->session->set_userdata('is_active', $user['is_active']);
-			// $this->session->set_userdata('referral_id', $user['referral_id']);
-				
-			// if($role == "admin" || $role == "recruiter" || $role == "caller" || $role == "manager")
-			// {
-				// redirect("leads");
-			// }
-			// else
-			// {
-				// redirect("ads");
-			// }
-		// }
-		// else
-		// {
-			// echo "Invalid credentials";
-		// }
-	// }
-	
-	function logout()
-	{
+	function logout(){
 		$this->session->sess_destroy();
         redirect(base_url("index.php/login"));
 	}
 	
-	function new_user()
-	{
+	function new_user(){
 		$where = null;
 		$where = "1 = 1";
 		$markets = db_select_markets($where,"name ASC");
@@ -271,6 +244,48 @@ class Login extends CI_Controller
 		$data['markets'] = $markets;
 		$data['title'] = "New User";
 		$this->load->view('new_user_view',$data);
+	}
+	
+	function load_reset_password_view(){
+		$data['title'] = "Reset Password";
+		$this->load->view('reset_password_view',$data);
+	}
+	
+	function reset_password(){
+		date_default_timezone_set('America/Denver');
+		$timestamp = date("Y-m-d H:i:s");
+		
+		$username = $_POST['username'];
+		
+		$where = null;
+		$where['username'] = $username;
+		$user = db_select_user($where);
+		
+		$user_email = $user['email'];
+		
+		$token = md5($timestamp);
+		
+		$where = null;
+		$where['id'] = $user['id'];
+		
+		$set = null;
+		$set['reset_token'] = $token;
+		
+		db_update_user($set,$where);
+		
+		$to = $user_email;
+		$subject = "AdSync Password Reset";
+		$message = "
+			You're receiving this email because you requested a password reset. 
+			Please follow the following link to choose a new password:
+			http://www.adsync.nextgenmarketingsolutions.com/index.php/login/change_password?email=$user_email&token=$token/
+		";
+		$headers = 'From: admin@nextgenmarketingsolutions.com';
+		
+		mail($to,$subject,$message,$headers);
+		
+		
+		
 	}
 	
 }

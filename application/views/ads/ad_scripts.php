@@ -399,6 +399,14 @@
 		$("#save_edit_"+id).show();
 	}
 	
+	function edit_user_information(){
+		$("#edit_information_btn").hide();
+		$("#save_information_btn").show();
+		
+		$(".info").hide();
+		$(".input").show();
+	}
+	
 	function generate_code(){
 		$("#refresh_icon").hide();
 		$("#loading_icon").show();
@@ -1018,6 +1026,32 @@
 		
 	}
 	
+	function reset_password(user_id){
+		//AJAX
+		if(!(report_ajax_call===undefined))
+		{
+			report_ajax_call.abort();
+		}
+		report_ajax_call = $.ajax({
+			
+			url: "<?=base_url("index.php/ads/reset_password") ?>",
+			type: "POST",
+			data: {user_id:user_id},
+			cache: false,
+			statusCode: {
+				200: function(){
+					alert("We just sent an email that you can use to reset your password.");
+					},
+				404: function(){
+					alert('Page not found');
+				},
+				500: function(response){
+					alert("500 error! "+response);
+				}
+			}
+		});//END AJAX
+	}
+	
 	function save_request(id){
 		$("#save_edit_"+id).hide();
 		$("#loading_icon_"+id).show();
@@ -1048,6 +1082,38 @@
 			}
 		});//END AJAX
 		
+		
+	}
+	
+	function save_user_information(user_id){
+		$("#save_information_btn").hide();
+		$("#loading_icon").show();
+		
+		var dataString = $("#account_info_form").serialize();
+		
+		//AJAX
+		if(!(report_ajax_call===undefined))
+		{
+			report_ajax_call.abort();
+		}
+		report_ajax_call = $.ajax({
+			
+			url: "<?=base_url("index.php/ads/save_user_information") ?>",
+			type: "POST",
+			data: dataString,
+			cache: false,
+			statusCode: {
+				200: function(response){
+					$("#report_container").html(response);
+					},
+				404: function(){
+					alert('Page not found');
+				},
+				500: function(response){
+					alert("500 error! "+response);
+				}
+			}
+		});//END AJAX
 		
 	}
 	
