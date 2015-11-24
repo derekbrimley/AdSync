@@ -43,7 +43,7 @@
 		//error_log("clean_name ".$clean_name." ext ".$ext." | LINE ".__LINE__." ".__FILE__);
 		
 		//SET SERVER PATH ACCORDING TO ENVIRONMENT
-		$server_path = $server_path.ENVIRONMENT."/";
+		$server_path = $server_path.ENVIRONMENT;
 		
 		$file_guid = get_random_string(5);
 	
@@ -78,7 +78,7 @@
 		$new_secure_file = db_select_secure_file($where);
 		
 		$full_path = $server_path."/".$new_secure_file["name"];
-		
+
 		//SET UP CONNECTION TO FTP SERVER
 		$CI->load->library('ftp');
 		$config['hostname'] = 'sheep.arvixe.com';
@@ -112,7 +112,7 @@
 				//echo $file["full_path"];
 			
 				//MOVE FILE FROM PUBLIC UPLOADS FOLDER TO SECURE LOCATION
-				$CI->ftp->move('/public_html/uploads'.'/'.$file["file_name"], $full_path);
+				$CI->ftp->move('/public_html_adsync/uploads'.'/'.$file["file_name"], $full_path);
 				
 				//echo '<br>success';
 			}

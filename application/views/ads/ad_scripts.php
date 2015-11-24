@@ -404,7 +404,6 @@
 	function generate_code(){
 		$("#refresh_icon").hide();
 		$("#loading_icon").show();
-		$("#generate_code_btn").hide();
 		
 		var dataString = $("#generate_code_form").serialize();
 		console.log(dataString);
@@ -421,8 +420,11 @@
 			cache: false,
 			statusCode: {
 				200: function(response){
+					$("#generate_code_btn").hide();
 					$("#code_box").html(response);
 					$("#code_box").show();
+					$("#refresh_btn").show();
+					$("#referral_id").prop("readonly", true);
 				},
 				404: function(){
 					alert('Page not found');
@@ -500,6 +502,48 @@
 				}
 			}
 		});//END AJAX
+	}
+	
+	function check_ad_request(){
+		var client = $("#client_id").val();
+		var market_id = $("#market_id").val();
+		var category_name = $("#category_name").val();
+		var sub_category = $("#sub_category").val();
+		var content_description = $("#content_description").val();
+		var price = $("#price").val();
+		var minimum_live_ads = $("#minimum_live_ads").val();
+		var is_valid = true;
+		
+		var stripped_price = price.replace(/\D/g,'');
+
+		console.log("clientid= "+client+" marketid= "+market_id+" subcategory= "+sub_category+" price= "+stripped_price);
+		
+		if(client=="Select"){
+			alert("Please input a client");
+			is_valid = false;
+		}else if(market_id=="Select"){
+			alert("Please input a market");
+			is_valid = false;
+		}else if(category_name=="Select"){
+			alert("Please input a category");
+			is_valid = false;
+		}else if(sub_category==""){
+			alert("Please input a sub-category");
+			is_valid = false;
+		}else if(content_description==""){
+			alert("Please input description of the content.");
+			is_valid = false;
+		}else if(stripped_price==""){
+			alert("Please input a valid price");
+			is_valid = false;
+		}else if(minimum_live_ads=="" || isNaN(minimum_live_ads)){
+			alert("Please input a valid minimum number of ads");
+			is_valid = false;
+		}
+		
+		if(is_valid){
+			return true;
+		}
 	}
 	
 	function load_faq(){
@@ -951,6 +995,16 @@
 		
 	}
 	
+	function referrer_selected(){
+		var referrer = $("#referral_id").val();
+		if(referrer=="Select"){
+			$("#generate_code_btn").hide();
+		}else{
+			console.log(referrer)
+			$("#generate_code_btn").show();
+		}
+	}
+	
 	function refresh_ad_spots(){
 		$("#refresh_icon").hide();
 		$("#loading_icon").show();
@@ -1286,51 +1340,9 @@
 			}
 		}
 	}
-	
-	function check_ad_request(){
-		var client = $("#client_id").val();
-		var market_id = $("#market_id").val();
-		var category_name = $("#category_name").val();
-		var sub_category = $("#sub_category").val();
-		var content_description = $("#content_description").val();
-		var price = $("#price").val();
-		var minimum_live_ads = $("#minimum_live_ads").val();
-		var is_valid = true;
-		
-		var stripped_price = price.replace(/\D/g,'');
 
-		console.log("clientid= "+client+" marketid= "+market_id+" subcategory= "+sub_category+" price= "+stripped_price);
-		
-		if(client=="Select"){
-			alert("Please input a client");
-			is_valid = false;
-		}else if(market_id=="Select"){
-			alert("Please input a market");
-			is_valid = false;
-		}else if(category_name=="Select"){
-			alert("Please input a category");
-			is_valid = false;
-		}else if(sub_category==""){
-			alert("Please input a sub-category");
-			is_valid = false;
-		}else if(content_description==""){
-			alert("Please input description of the content.");
-			is_valid = false;
-		}else if(stripped_price==""){
-			alert("Please input a valid price");
-			is_valid = false;
-		}else if(minimum_live_ads=="" || isNaN(minimum_live_ads)){
-			alert("Please input a valid minimum number of ads");
-			is_valid = false;
-		}
-		
-		if(is_valid){
-			return true;
-			
-		}
-		
-	}
-	
+
+
 	function update_balance(){
 		//AJAX
 		if(!(report_ajax_call===undefined))

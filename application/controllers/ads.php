@@ -282,7 +282,8 @@ class Ads extends MY_Controller {
 		$users = db_select_users($where);
 		
 		$dropdown_users = array();
-		$dropdown_users[] = "Select";
+		$dropdown_users["Select"] = "Select";
+		$dropdown_users["No Referrer"] = "No Referrer";
 		foreach($users as $user)
 		{
 			$dropdown_users[$user['id']] = $user['first_name']." ".$user['last_name'];
