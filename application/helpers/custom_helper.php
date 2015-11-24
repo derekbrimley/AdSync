@@ -1,7 +1,6 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-	function get_random_string($length, $valid_chars = "abcdefghijklmnopqrstuvwxyz0123456789")
-	{
+	function get_random_string($length, $valid_chars = "abcdefghijklmnopqrstuvwxyz0123456789"){
 		// start with an empty random string
 		$random_string = "";
 
@@ -9,8 +8,7 @@
 		$num_valid_chars = strlen($valid_chars);
 
 		// repeat the steps until we've created a string of the right length
-		for ($i = 0; $i < $length; $i++)
-		{
+		for ($i = 0; $i < $length; $i++){
 			// pick a random number from 1 up to the number of valid chars
 			$random_pick = mt_rand(1, $num_valid_chars);
 
@@ -27,15 +25,13 @@
 	}
 		
 	//STORE FILE TO FTP SERVER - INPUT NAME (POST NAME), GIVEN PATH, OFFICE_PERMISSION, AND DRIVER_PERMISSION - RETURNS SECURE_FILE
-	function store_secure_ftp_file($input_name,$name,$type,$title,$category,$local_path,$server_path,$permission)
-	{
+	function store_secure_ftp_file($input_name,$name,$type,$title,$category,$local_path,$server_path,$permission){
 		$CI =& get_instance();
 		
 		//echo '<br>'/ENVIRONMENT;
 		
 		//DEFAULT TITLE
-		if(empty($title))
-		{
+		if(empty($title)){
 			$title = "File";
 		}
 		
@@ -93,13 +89,11 @@
 				
 		error_log("Local path: ".$local_path." Full Path: ".$full_path." | LINE ".__LINE__." ".__FILE__);
 		//GETS FILES TO SECURE FTP LOCATION DIFFERENTLY BASED ON ENVIRONMENT
-		if(ENVIRONMENT == 'development')
-		{
+		if(ENVIRONMENT == 'development'){
 			//UPLOAD FILE TO FTP SERVER
 			$CI->ftp->upload($local_path,$full_path, 'auto', 0775);
 		}
-		else if(ENVIRONMENT == 'production')
-		{
+		else if(ENVIRONMENT == 'production'){
 			//LOAD UPLOAD LIBRARY
 			$config = null;
 			$config['upload_path'] = './uploads/';
@@ -109,12 +103,10 @@
 			$CI->load->library('upload', $config);
 			
 			//UPLOAD FILE TO PUBLIC UPLOADS FOLDER AND CHECK FOR ERRORS
-			if ( ! $CI->upload->do_upload($input_name))
-			{
+			if ( ! $CI->upload->do_upload($input_name)){
 				echo $CI->upload->display_errors($input_name);
-			}
-			else //IF UPLOAD WAS A SUCCESS
-			{
+			}else{
+				//IF UPLOAD WAS A SUCCESS
 				//GET FILE DATA
 				$file = $CI->upload->data($input_name);
 				//echo $file["full_path"];

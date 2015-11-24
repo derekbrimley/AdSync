@@ -41,5 +41,5 @@ Post Verification
 		<?php endforeach ?>
 	</div>
 <?php else: ?>
-	You have not posted yet. Click on "Post Board" to get started!
+	No posts to verify!
 <?php endif ?>

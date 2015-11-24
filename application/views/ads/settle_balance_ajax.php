@@ -11,7 +11,7 @@
 			<td>$<?=$balance?></td>
 		</tr>
 	</table>
-	<form id="settle_balance_form" style="width:300px;">
+	<form enctype="multipart/form-data" action="<?=base_url("index.php/ads/submit_payment") ?>" target="_blank" method="POST" id="settle_balance_form" style="width:300px;">
 		<input id="user_id" name="user_id" type="hidden" value="<?=$user['id']?>" />
 		<table>
 			<tr>

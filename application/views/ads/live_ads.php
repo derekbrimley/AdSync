@@ -45,5 +45,5 @@ Live Ads
 		<?php endforeach ?>
 	</div>
 <?php else: ?>
-	You have not posted yet. Click on "Post Board" to get started!
+	No live ads yet. Click on "Post Board" to get started!
 <?php endif ?>

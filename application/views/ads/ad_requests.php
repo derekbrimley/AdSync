@@ -7,8 +7,8 @@
 </script>
 Ad Requests
 <span>
-	<button id="new_ad_request_btn" name="new_ad_request_btn" onClick="open_ad_request_dialog();" type="button" style="position:relative;bottom:4px;left:370px;padding:8px;cursor:pointer;color:white;background-color:#0079C1;border:0px;font-size:16px;">New Ad Request</button>
-	<button id="refresh_ads_btn" onClick="refresh_ad_spots()" type="button" style="position:relative;bottom:4px;left:380px;padding:8px;cursor:pointer;color:white;background-color:#0079C1;border:0px;font-size:16px;margin-right:20px;">Refresh Ads</button>
+	<button id="new_ad_request_btn" name="new_ad_request_btn" onClick="open_ad_request_dialog();" type="button" style="position:relative;bottom:4px;left:330px;padding:8px;cursor:pointer;color:white;background-color:#0079C1;border:0px;font-size:16px;">New Ad Request</button>
+	<button id="refresh_ads_btn" onClick="refresh_ad_spots()" type="button" style="position:relative;bottom:4px;left:340px;padding:8px;cursor:pointer;color:white;background-color:#0079C1;border:0px;font-size:16px;margin-right:20px;">Refresh Ads</button>
 	<img id="loading_icon" style="display:none;float:right;height:20px;" src="<?=base_url('images/loading.gif')?>"/>
 </span>
 <span>

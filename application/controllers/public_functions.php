@@ -111,7 +111,7 @@ class Public_functions extends CI_Controller
 							$post_expense = $post_expense * $over_month_setting['setting_value'];
 							// echo "more than month";
 						}
-						echo $post_expense."<br>";
+						// echo $post_expense."<br>";
 					}
 				}
 				

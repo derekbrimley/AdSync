@@ -206,8 +206,6 @@
 								form.submit();
 							}
 							
-							
-							
 							setTimeout(function(){
 								$this.dialog( "close" );
 								load_post_verification_page();
@@ -305,31 +303,27 @@
 						text: "Submit",
 						click: function() 
 						{
-							var dataString = $("#settle_balance_form").serialize();
-							console.log(dataString);
-							//AJAX
-							if(!(report_ajax_call===undefined))
-							{
-								report_ajax_call.abort();
+							var $this = $(this);
+							var is_valid = true;
+							var form = $('#settle_balance_form');
+							var amount = $("#amount_paid").val();
+							
+							if(amount=='' || isNaN(amount)){
+								is_valid = false;
+								alert("Please enter a valid amount.");
+							}else if($('#payment_screenshot').get(0).files.length === 0){
+								is_valid = false;
+								alert("Please attach the screenshot of the payment.");
 							}
-							report_ajax_call = $.ajax({
+							if(is_valid){
+								form.submit();
 								
-								url: "<?=base_url("index.php/ads/submit_payment") ?>",
-								type: "POST",
-								data: dataString,
-								cache: false,
-								statusCode: {
-									200: function(){
-										$( this ).dialog( "close" );
-									},
-									404: function(){
-										alert('Page not found');
-									},
-									500: function(response){
-										alert("500 error! "+response);
-									}
-								}
-							});//END AJAX
+								setTimeout(function(){
+									$this.dialog( "close" );
+									load_manage_money_page();
+								},2000);
+							}
+							
 						},
 					},
 					{
@@ -853,6 +847,8 @@
 		$("#loading_icon").show();
 		var this_div = $("#transactions_container");
 		var dataString = $("#user_form").serialize();
+		var user_id = $("#user_id").val();
+		
 		
 		//AJAX
 		if(!(report_ajax_call===undefined))
@@ -871,8 +867,12 @@
 					console.log(dataString);
 					this_div.html(response);
 					$("#user_id").val();
+					$("#settle_btn").show();
 					update_balance();
 					get_balance();
+					if(user_id=="All Users"){
+						$("#settle_btn").hide();
+					}
 				},
 				404: function(){
 					alert('Page not found');
@@ -966,7 +966,7 @@
 			cache: false,
 			statusCode: {
 				200: function(){
-					$("#refresh_ads_btn").show();
+					$("#refresh_icon").show();
 					$("#loading_icon").hide();
 					alert("Ads Refreshed");
 				},
@@ -1160,6 +1160,7 @@
 				}
 			});//END AJAX
 		}
+		
 	}
 	
 	function show_answer(id){

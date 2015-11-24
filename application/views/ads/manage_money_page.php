@@ -28,7 +28,7 @@ Transactions
 		</select>
 	</form>
 </span>
-<span style="float:right;margin-right:20px;position:relative;bottom:6px;">
+<span id="settle_btn" style="display:none;float:right;margin-right:20px;position:relative;bottom:6px;">
 	<button onClick="settle_balance()" style="border:0px;background-color:#0079C1;color:white;cursor:pointer;width:100px;height:27px;">Settle</button>
 </span>
 <br>

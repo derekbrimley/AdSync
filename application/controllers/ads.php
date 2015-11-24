@@ -492,7 +492,7 @@ class Ads extends MY_Controller {
 		{
 			$where = null;
 			$where = "1 = 1";
-			$account_entrys = db_select_account_entrys($where);
+			$account_entrys = db_select_account_entrys($where,"datetime DESC");
 		}
 		else
 		{
@@ -735,6 +735,8 @@ class Ads extends MY_Controller {
 		
 		db_update_account_entry($set,$where);
 		
+		//DISPLAY UPLOAD SUCCESS MESSAGE
+		load_upload_success_view();
 	}
 	
 	function submit_validation(){
@@ -922,6 +924,7 @@ class Ads extends MY_Controller {
 	
 	
 	//ONE TIME SCRIPTS
+	
 	// function hash_passwords(){
 		// $where = null;
 		// $where = "1 = 1";
@@ -945,55 +948,55 @@ class Ads extends MY_Controller {
 		
 	// }
 	
-	function create_initial_ad_requests(){
-		$where = null;
-		$where = "1 = 1";
-		$markets = db_select_markets($where);
+	// function create_initial_ad_requests(){
+		// $where = null;
+		// $where = "1 = 1";
+		// $markets = db_select_markets($where);
 		
-		foreach($markets as $market){
-			$ad_request = array();
-			$ad_request['client_id'] = 1;
-			$ad_request['market_id'] = $market['id'];
-			$ad_request['category'] = "job offered";
-			$ad_request['sub_category'] = "transportation";
-			$ad_request['content_desc'] = "Explain that we have a driving program that is currently enrolling. We are searching for students from across the nation who are ready for a new career. Our training program offers individuals an opportunity to get their Commercial Drivers License with no up-front payment and receive paid on-the-road training. <br><br>The training consists of two parts: <br><br>(1) In-class Training: During this period, they will be brought to our training facility and we will provide them with a place to stay as well as all of their food. They will first undergo training to get their drivers permit for a Class A commercial drivers license. Then they will receive training in a truck to help them pass a skills test. After passing the skills test through the DOT, they will receive a paper copy of their license. In whole, this process typically takes 2-3 weeks. <br><br>(2) On the Road training: We then set them up with a trainer who will teach them the ins and outs of the trucking industry. They will haul loads, learn to fill out all paperwork, and gain the know-how to succeed as a truck driver. This portion takes 12 weeks in which the goal is to get the driver 60,000 miles of training experience. During this portion, they will receive a living stipend of $300/wk with bonuses up to an additional $300/wk. <br><br>After the training, our best trainees receive in-house offers to continue driving. Otherwise, we set them up with one of our partner carriers to drive. <br><br>Use one of the following phone numbers for the contact information: <br><br>(224) 212-9254 <br>(208) 963-5639 <br>(216) 930-4089 <br>(952) 222-3893 <br>(512) 593-7271";
-			$ad_request['price'] = 10;
-			$ad_request['post_expense'] = 10;
-			$ad_request['min_count'] = 1;
+		// foreach($markets as $market){
+			// $ad_request = array();
+			// $ad_request['client_id'] = 1;
+			// $ad_request['market_id'] = $market['id'];
+			// $ad_request['category'] = "job offered";
+			// $ad_request['sub_category'] = "transportation";
+			// $ad_request['content_desc'] = "Explain that we have a driving program that is currently enrolling. We are searching for students from across the nation who are ready for a new career. Our training program offers individuals an opportunity to get their Commercial Drivers License with no up-front payment and receive paid on-the-road training. <br><br>The training consists of two parts: <br><br>(1) In-class Training: During this period, they will be brought to our training facility and we will provide them with a place to stay as well as all of their food. They will first undergo training to get their drivers permit for a Class A commercial drivers license. Then they will receive training in a truck to help them pass a skills test. After passing the skills test through the DOT, they will receive a paper copy of their license. In whole, this process typically takes 2-3 weeks. <br><br>(2) On the Road training: We then set them up with a trainer who will teach them the ins and outs of the trucking industry. They will haul loads, learn to fill out all paperwork, and gain the know-how to succeed as a truck driver. This portion takes 12 weeks in which the goal is to get the driver 60,000 miles of training experience. During this portion, they will receive a living stipend of $300/wk with bonuses up to an additional $300/wk. <br><br>After the training, our best trainees receive in-house offers to continue driving. Otherwise, we set them up with one of our partner carriers to drive. <br><br>Use one of the following phone numbers for the contact information: <br><br>(224) 212-9254 <br>(208) 963-5639 <br>(216) 930-4089 <br>(952) 222-3893 <br>(512) 593-7271";
+			// $ad_request['price'] = 10;
+			// $ad_request['post_expense'] = 10;
+			// $ad_request['min_count'] = 1;
 			
-			db_insert_ad_request($ad_request);
-			echo "inserted school ad request for market ".$market['name']."<br>";
+			// db_insert_ad_request($ad_request);
+			// echo "inserted school ad request for market ".$market['name']."<br>";
 			
-			$ad_request = array();
-			$ad_request['client_id'] = 1;
-			$ad_request['market_id'] = $market['id'];
-			$ad_request['category'] = "job offered";
-			$ad_request['sub_category'] = "transportation";
-			$ad_request['content_desc'] = "Make the following clear in the ad: <br><br>We have openings for dedicated routes, local routes, regional position, over-the-road long haul (2-6 weeks Over-the-Road), team or solo. All of these positions are for hauling dry van and refer loads. <br><br>Requirements for the job include: <br><br>current Class A CDL, no recent accidents, no recent tickets, must have recent experience driving 53' trailers, cannot currently be on parole, and must be over 21 years to be able to haul interstate loads. <br><br>Pay is weekly and most of our drivers make a minimum $800-$900 dollars per week but paychecks often exceed $1,300 for our experienced drivers. <br><br>The best way to get a hold of the company is to call the number listed in the 'Reply' section of this ad. If that's not possible, shoot the company a resume and be sure to include a call back number so we can get in touch. <br><br>Use one of the following phone numbers for the contact information: <br><br>(224) 212-9254 <br>(208) 963-5639 <br>(216) 930-4089 <br>(952) 222-3893 <br>(512) 593-7271";
-			$ad_request['price'] = 10;
-			$ad_request['post_expense'] = 10;
-			$ad_request['min_count'] = 1;
+			// $ad_request = array();
+			// $ad_request['client_id'] = 1;
+			// $ad_request['market_id'] = $market['id'];
+			// $ad_request['category'] = "job offered";
+			// $ad_request['sub_category'] = "transportation";
+			// $ad_request['content_desc'] = "Make the following clear in the ad: <br><br>We have openings for dedicated routes, local routes, regional position, over-the-road long haul (2-6 weeks Over-the-Road), team or solo. All of these positions are for hauling dry van and refer loads. <br><br>Requirements for the job include: <br><br>current Class A CDL, no recent accidents, no recent tickets, must have recent experience driving 53' trailers, cannot currently be on parole, and must be over 21 years to be able to haul interstate loads. <br><br>Pay is weekly and most of our drivers make a minimum $800-$900 dollars per week but paychecks often exceed $1,300 for our experienced drivers. <br><br>The best way to get a hold of the company is to call the number listed in the 'Reply' section of this ad. If that's not possible, shoot the company a resume and be sure to include a call back number so we can get in touch. <br><br>Use one of the following phone numbers for the contact information: <br><br>(224) 212-9254 <br>(208) 963-5639 <br>(216) 930-4089 <br>(952) 222-3893 <br>(512) 593-7271";
+			// $ad_request['price'] = 10;
+			// $ad_request['post_expense'] = 10;
+			// $ad_request['min_count'] = 1;
 			
-			db_insert_ad_request($ad_request);
-			echo "inserted cdl ad request for market ".$market['name']."<br>";
+			// db_insert_ad_request($ad_request);
+			// echo "inserted cdl ad request for market ".$market['name']."<br>";
 			
-		}
+		// }
 		
-	}
+	// }
 	
-	function add_status_ad_requests(){
-		$where = null;
-		$where = "1 = 1";
-		$ad_requests = db_select_ad_requests($where);
+	// function add_status_ad_requests(){
+		// $where = null;
+		// $where = "1 = 1";
+		// $ad_requests = db_select_ad_requests($where);
 		
-		foreach($ad_requests as $ad_request){
-			$where = null;
-			$where['id'] = $ad_request['id'];
+		// foreach($ad_requests as $ad_request){
+			// $where = null;
+			// $where['id'] = $ad_request['id'];
 			
-			$set = null;
-			$set['status'] = 'active';
+			// $set = null;
+			// $set['status'] = 'active';
 			
-			db_update_ad_request($set,$where);
-		}
-	}
+			// db_update_ad_request($set,$where);
+		// }
+	// }
 }
