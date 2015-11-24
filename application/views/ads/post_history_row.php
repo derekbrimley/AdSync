@@ -41,7 +41,7 @@
 		</td>
 		<td class="ellipsis" style="max-width:30px;min-width:30px;">
 		<?php if(!empty($post["result_screen_shot_guid"])): ?>
-			<a target="_blank" href="<?=base_url('/index.php/ads/download_file')."/".$post["result_screen_shot_guid"]?>" onclick=""><?= $post['result'] ?></a>
+			<a target="_blank" href="<?=base_url('/index.php/ads/download_file')."/".$post["result_screen_shot_guid"]?>"><?= $post['result'] ?></a>
 		<?php else: ?>
 			<?= $post['result'] ?>
 		<?php endif ?>

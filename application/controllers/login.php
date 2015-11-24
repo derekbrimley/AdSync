@@ -295,7 +295,7 @@ class Login extends CI_Controller
 		$new_password = $_POST['password1'];
 		$email = $_POST['email'];
 		
-		$hashed_password = password_hash($new_password,PASSWORD_BCRYPT );
+		$hashed_password = password_hash($new_password,PASSWORD_BCRYPT);
 		
 		$where = null;
 		$where['email'] = $email;

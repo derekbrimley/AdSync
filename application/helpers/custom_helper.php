@@ -146,7 +146,7 @@
 		//GET LIST OF FILE IN THE PUBLIC FOLDER
 		$public_folder = "/public_html_adsync/temp_files_for_download/".ENVIRONMENT;
 		$files = $CI->ftp->list_files($public_folder);
-		
+		// echo $public_folder."<br>";
 		//MOVE ANY LEFT OVER FILES IN THE PUBLIC FOLDER BACK TO THE PRIVATE FOLDER
 		foreach($files as $file)
 		{
@@ -182,6 +182,8 @@
 			//***** EVEN IN THE DEV ENVIRONMENT THIS ACTUALLY USES THE LIVE SERVER TO UPLOAD AND DOWNLOAD FILES
 			
 			//MOVE FILE FROM NON ACCESSIBLE FOLDER TO PUBLICLY ACCESSABLE FOLDER
+			// echo '/public_html_adsync/temp_files_for_download'.'/'.ENVIRONMENT.'/'.$secure_file["name"]."<br>";
+			// echo $full_path;
 			$CI->ftp->move($full_path, '/public_html_adsync/temp_files_for_download'.'/'.ENVIRONMENT.'/'.$secure_file["name"]);
 			//$CI->ftp->move('/public_html/temp_files_for_download/temp_tester.pdf', '/edocuments/tester.pdf');
 			
@@ -194,13 +196,13 @@
 			
 			header("Content-Description: File Transfer");
 			header('Content-type: '.$secure_file["type"]);
-			header('Content-Disposition: inline; filename="'.$secure_file["title"].$ext.'"');
+			header('Content-Dispositi	on: inline; filename="'.$secure_file["title"].$ext.'"');
 			header("Cache-Control: no-cache, must-revalidate");
 			readfile($url);
 			
-			//header("Location: ".'http://fleetsmarts.net/temp_files_for_download'.'/'.ENVIRONMENT.'/'.$secure_file["name"]);
-			//MOVE FILE BACK FROM PUBLICLY ACCESSIBLE FOLDER TO NON ACCESSABLE FOLDER
-			$CI->ftp->move('/public_html_adsync/temp_files_for_download'.'/'.ENVIRONMENT.'/'.$secure_file["name"], $full_path);
+			header("Location: ".'http://fleetsmarts.net/temp_files_for_download'.'/'.ENVIRONMENT.'/'.$secure_file["name"]);
+			// MOVE FILE BACK FROM PUBLICLY ACCESSIBLE FOLDER TO NON ACCESSABLE FOLDER
+			// $CI->ftp->move('/public_html_adsync/temp_files_for_download'.'/'.ENVIRONMENT.'/'.$secure_file["name"], $full_path);
 			
 			$CI->ftp->close();
 		}
