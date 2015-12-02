@@ -276,6 +276,32 @@ class Ads extends MY_Controller {
 		$this->load->view("ads/faq_view");
 	}
 	
+	function load_filtered_post_history(){
+		$selected_user_id = $_POST['user_id'];
+		$user_id = $this->session->userdata('user_id');
+		$role = $this->session->userdata('role');
+		
+		$where = null;
+		if($selected_user_id=="All Users"){
+			$where = "1 = 1";
+		}else{
+			$where['poster_id'] = $selected_user_id;
+		}
+		$posts = db_select_posts($where,"post_datetime DESC");
+		
+		$where = null;
+		$where = "1 = 1";
+		$users = db_select_users($where);
+		
+		$count = $this->count_array($posts);
+		
+		$data['role'] = $role;
+		$data['users'] = $users;
+		$data['count'] = $count;
+		$data['posts'] = $posts;
+		$this->load->view("ads/filtered_post_history",$data);
+	}
+	
 	function load_generate_code_page(){
 		$where = null;
 		$where = "1 = 1";
@@ -421,14 +447,19 @@ class Ads extends MY_Controller {
 		$role = $this->session->userdata('role');
 		
 		$where = null;
-		if($role!="admin")
-		{
+		if($role!="admin"){
 			$where['poster_id'] = $user_id;
 		}
 		$posts = db_select_posts($where,"post_datetime DESC");
 		
+		$where = null;
+		$where = "1 = 1";
+		$users = db_select_users($where);
+		
 		$count = $this->count_array($posts);
 		
+		$data['role'] = $role;
+		$data['users'] = $users;
 		$data['count'] = $count;
 		$data['posts'] = $posts;
 		$this->load->view("ads/post_history",$data);
@@ -918,7 +949,9 @@ class Ads extends MY_Controller {
 	}
 	
 	
-	
+	function test(){
+		$this->load->view('test_view');
+	}
 	
 	
 	

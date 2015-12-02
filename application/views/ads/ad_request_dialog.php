@@ -3,7 +3,22 @@
 	$where['id'] = $ad_request_id;
 	$ad_request = db_select_ad_request($where);
 ?>
-
+<script>
+	function warning(){
+		if(true){
+			var dataString = $("#ad_submission_form").serialize();
+			
+			$.ajax({
+				url: "<?=base_url("index.php/ads/delete_post") ?>",
+				type: "POST",
+				data: dataString,
+				async: false,
+				cache: false,
+			})
+		}
+	}
+	window.onbeforeunload = warning;
+</script>
 <div style="margin:0 auto; width:600px; text-align:center; margin-bottom:10px;">
 	You have this ad reserved for the next <span id="minutes">9</span>:<span id="seconds">56</span>.
 </div>

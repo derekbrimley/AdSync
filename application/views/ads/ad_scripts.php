@@ -66,6 +66,7 @@
 						click: function() 
 						{
 							$( this ).dialog( "close" );
+							$(this).dialog('destroy').remove();
 						}
 					},
 				],//end of buttons
@@ -399,6 +400,28 @@
 		
 		$(".info").hide();
 		$(".input").show();
+	}
+	
+	function filter_user(){
+		var user_id = $("#selected_user").val();
+		console.log(user_id);
+		$.ajax({
+			url: "<?=base_url("index.php/ads/load_filtered_post_history") ?>",
+			type: "POST",
+			data: {user_id:user_id},
+			cache: false,
+			statusCode: {
+				200: function(response){
+					$("#post_container").html(response);
+				},
+				404: function(){
+					alert('Page not found');
+				},
+				500: function(response){
+					alert("500 error! "+response);
+				}
+			}
+		});//END AJAX
 	}
 	
 	function generate_code(){
