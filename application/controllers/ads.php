@@ -852,7 +852,7 @@ class Ads extends MY_Controller {
 		$where = null;
 		$where['ad_request_id'] = $ad_request_id;
 		$ad_spot = db_select_ad_spot($where);
-		$amount_due = $ad_spot['value'];
+		$amount_due = round($ad_spot['value'],2);
 		
 		$where = null;
 		$where['poster_id'] = $user_id;
@@ -878,6 +878,7 @@ class Ads extends MY_Controller {
 		foreach($old_posts as $old_post){
 			$old_links[] = $old_post['link'];
 		}
+		
 		if(in_array($post_link,$old_links)){
 			$unique_link = false;
 		}else{
