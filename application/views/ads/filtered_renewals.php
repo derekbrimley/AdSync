@@ -3,7 +3,7 @@
 ?>
 <script>
 	$(".post_row:even").css("background-color","#eee");
-	$("#post_container").height($(window).height() - 241);
+	$("#renewal_container").height($(window).height() - 256);
 </script>
 <?php if(!empty($posts)): ?>
 	<?php foreach($posts as $post): ?>
@@ -11,9 +11,9 @@
 			$row++;
 		?>
 		<div id="tr_<?=$row?>" name="tr_<?=$row?>" class="post_row">
-			<?php include("post_history_row.php")?>
+			<?php include("renewals_row.php")?>
 		</div>
 	<?php endforeach ?>
 <?php else: ?>
-	<div style="margin-left:300px;">User has no posts.</div>
+	<div style="margin-left:300px;">User has no available renewals.</div>
 <?php endif ?>

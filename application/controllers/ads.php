@@ -278,7 +278,6 @@ class Ads extends MY_Controller {
 	
 	function load_filtered_post_history(){
 		$selected_user_id = $_POST['user_id'];
-		$user_id = $this->session->userdata('user_id');
 		$role = $this->session->userdata('role');
 		
 		$where = null;
@@ -300,6 +299,31 @@ class Ads extends MY_Controller {
 		$data['count'] = $count;
 		$data['posts'] = $posts;
 		$this->load->view("ads/filtered_post_history",$data);
+	}
+	
+	function load_filtered_renewals(){
+		$selected_user_id = $_POST['user_id'];
+		$role = $this->session->userdata('role');
+		
+		$where = null;
+		if($selected_user_id=="All Users"){
+		}else{
+			$where['poster_id'] = $selected_user_id;
+		}
+		$where['renewal_datetime'] = null;
+		$posts = db_select_posts($where,"next_renewal_datetime ASC");
+		
+		$where = null;
+		$where = "1 = 1";
+		$users = db_select_users($where);
+		
+		$count = $this->count_array($posts);
+		
+		$data['role'] = $role;
+		$data['users'] = $users;
+		$data['count'] = $count;
+		$data['posts'] = $posts;
+		$this->load->view("ads/filtered_renewals",$data);
 	}
 	
 	function load_generate_code_page(){
@@ -509,9 +533,13 @@ class Ads extends MY_Controller {
 		$where['renewal_datetime'] = null;
 		$posts = db_select_posts($where,"next_renewal_datetime ASC");
 		
+		$where = null;
+		$where = "1 = 1";
+		$users = db_select_users($where);
 		
 		$count = $this->count_array($posts);
 		
+		$data['users'] = $users;
 		$data['count'] = $count;
 		$data['posts'] = $posts;
 		$this->load->view("ads/renewals",$data);

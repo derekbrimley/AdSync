@@ -402,7 +402,7 @@
 		$(".input").show();
 	}
 	
-	function filter_user(){
+	function filter_user_post_history(){
 		$("refresh_icon").hide();
 		$("loading_icon").show();
 		var user_id = $("#selected_user").val();
@@ -415,6 +415,32 @@
 			statusCode: {
 				200: function(response){
 					$("#post_container").html(response);
+					$("refresh_icon").show();
+					$("loading_icon").hide();
+				},
+				404: function(){
+					alert('Page not found');
+				},
+				500: function(response){
+					alert("500 error! "+response);
+				}
+			}
+		});//END AJAX
+	}
+	
+	function filter_user_renewals(){
+		$("refresh_icon").hide();
+		$("loading_icon").show();
+		var user_id = $("#selected_user").val();
+		console.log(user_id);
+		$.ajax({
+			url: "<?=base_url("index.php/ads/load_filtered_renewals") ?>",
+			type: "POST",
+			data: {user_id:user_id},
+			cache: false,
+			statusCode: {
+				200: function(response){
+					$("#renewal_container").html(response);
 					$("refresh_icon").show();
 					$("loading_icon").hide();
 				},

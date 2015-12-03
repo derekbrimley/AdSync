@@ -18,7 +18,7 @@ Post History
 </span>
 <?php if($role=="admin"): ?>
 	<span style="float:right;margin-right:20px;">
-		<select id="selected_user" onChange="filter_user()">
+		<select id="selected_user" onChange="filter_user_post_history()">
 			<option>All Users</option>
 			<?php foreach($users as $user):?>
 				<option value="<?=$user['id']?>"><?=$user['first_name']." ".$user['last_name']?></option>
