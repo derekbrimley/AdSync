@@ -1,5 +1,11 @@
 <?php
-	$row = 0
+	$row = 0;
+	
+	$where = null;
+	$where['id'] = $this->session->userdata('user_id');
+	$this_user = db_select_user($where);
+	
+	$role = $this->session->userdata('role');
 ?>
 <script>
 	$(".post_row:even").css("background-color","#eee");
@@ -21,13 +27,16 @@ Renewals
 	<div id="post_board_header">
 		<table>
 			<tr style="font-weight:bold;color:#0079C1">
-				<td style="max-width:35px;min-width:35px;">Date Posted</td>
-				<td style="max-width:40px;min-width:40px;">Market</td>
+				<?php if($role == "admin"): ?>
+					<td style="max-width:35px;min-width:35px;">User</td>
+				<?php endif ?>
+				<td style="max-width:40px;min-width:40px;">Date Posted</td>
+				<td style="max-width:35px;min-width:35px;">Market</td>
 				<td style="max-width:40px;min-width:40px;">Category</td>
 				<td style="max-width:50px;min-width:50px;">Sub-Category</td>
-				<td style="max-width:20px;min-width:20px;">Value</td>
-				<td style="max-width:40px;min-width:40px;">Renewal Date</td>
-				<td style="max-width:40px;min-width:40px;">Result</td>
+				<td style="max-width:25px;min-width:25px;">Value</td>
+				<td style="max-width:45px;min-width:45px;">Renewal Date</td>
+				<td style="max-width:35px;min-width:35px;">Result</td>
 				<td style="max-width:20px;min-width:20px;">Renew</td>
 			</tr>
 		</table>

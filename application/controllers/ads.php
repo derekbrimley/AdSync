@@ -798,8 +798,7 @@ class Ads extends MY_Controller {
 		$set['result'] = $post_result;
 		$set['result_screen_shot_guid'] = $secure_file['file_guid'];
 		
-		if($post_result != "Live")
-		{
+		if($post_result != "Live"){
 			$set['amount_due'] = 0;
 		}
 		
@@ -818,12 +817,9 @@ class Ads extends MY_Controller {
 		$new_account_entry['post_id'] = $post['id'];
 		$new_account_entry['amount'] = $post['amount_due'];
 		$new_account_entry['datetime'] = $post_datetime;
-		if($post_result == "Live")
-		{
+		if($post_result == "Live"){
 			$new_account_entry['description'] = "Post ".$post['id']." verified on ".date("m/d/Y",strtotime($post_datetime)).". User ".$user['first_name']." ".$user['last_name']." earned ".$post['amount_due'].".";
-		}
-		else
-		{
+		}else{
 			$new_account_entry['description'] = "Post ".$post['id']." rejected on ".date("m/d/Y",strtotime($post_datetime)).". User ".$user['first_name']." ".$user['last_name']." earned no money for this post.";
 		}
 		
@@ -852,14 +848,13 @@ class Ads extends MY_Controller {
 		$where = null;
 		$where['ad_request_id'] = $ad_request_id;
 		$ad_spot = db_select_ad_spot($where);
-		$amount_due = round($ad_spot['value'],2);
+		$amount_due = number_format(round($ad_spot['value'],2),2);
 		
 		$where = null;
 		$where['poster_id'] = $user_id;
 		$posts = db_select_posts($where);
 		
-		if(empty($posts))
-		{
+		if(empty($posts)){
 			$set = array();
 			$set['first_post_datetime'] = $post_datetime;
 			
@@ -920,8 +915,7 @@ class Ads extends MY_Controller {
 		$user_role = $this->session->userdata('role');
 		
 
-		if($user_role != "admin")
-		{
+		if($user_role != "admin"){
 			$where = null;
 			$where['id'] = $user_id;
 			$user = db_select_user($where);
@@ -931,8 +925,7 @@ class Ads extends MY_Controller {
 			$account_entries = db_select_account_entrys($where);
 			
 			$balance = 0;
-			if(!empty($account_entries))
-			{
+			if(!empty($account_entries)){
 				foreach($account_entries as $account_entry)
 				{
 					$balance += $account_entry['amount'];
@@ -940,8 +933,7 @@ class Ads extends MY_Controller {
 			}
 			
 		}
-		else
-		{
+		else{
 			$where = null;
 			$where = "1 = 1";
 			$account_entries = db_select_account_entrys($where);

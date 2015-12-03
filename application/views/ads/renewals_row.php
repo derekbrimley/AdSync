@@ -33,10 +33,15 @@
 ?>
 <table>
 	<tr style="<?=$color?>">
-		<td class="ellipsis" style="max-width:35px;min-width:35px;">
+		<?php if($role == "admin"): ?>
+			<td class="ellipsis" title="<?=$this_user['username']?>"style="max-width:35px;min-width:35px;">
+				<?=$this_user['username']?>
+			</td>
+		<?php endif ?>
+		<td class="ellipsis" style="max-width:40px;min-width:40px;">
 			<?=date("m/d/Y",strtotime($post['post_datetime']))?>
 		</td>
-		<td class="ellipsis" title="<?=$market['name']?>" style="max-width:40px;min-width:40px;">
+		<td class="ellipsis" title="<?=$market['name']?>" style="max-width:35px;min-width:35px;">
 			<?=$market['name']?>
 		</td>
 		<td class="ellipsis" title="<?=$ad_request['category']?>" style="max-width:40px;min-width:40px;">
@@ -45,13 +50,13 @@
 		<td class="ellipsis" title="<?=$ad_request['sub_category']?>" style="max-width:50px;min-width:50px;">
 			<?=$ad_request['sub_category']?>
 		</td>
-		<td class="ellipsis" title="$<?=number_format($ad_spot['value'],2)?>" style="max-width:20px;min-width:20px;">
+		<td class="ellipsis" title="$<?=number_format($ad_spot['value'],2)?>" style="max-width:25px;min-width:25px;">
 			$<?=number_format($ad_spot['value'],2)?>
 		</td>
-		<td class="ellipsis" title="<?= date("m/d/Y",strtotime($next_renewal)) ?>" style="max-width:40px;min-width:40px;">
+		<td class="ellipsis" title="<?= date("m/d/Y",strtotime($next_renewal)) ?>" style="max-width:45px;min-width:45px;">
 			<?= date("m/d/Y",strtotime($next_renewal)) ?>
 		</td>
-		<td class="ellipsis" title="<?= $post['result'] ?>" style="max-width:40px;min-width:40px;">
+		<td class="ellipsis" title="<?= $post['result'] ?>" style="max-width:35px;min-width:35px;">
 			<?= $post['result'] ?>
 		</td>
 		<td class="ellipsis" style="max-width:20px;min-width:20px;">
