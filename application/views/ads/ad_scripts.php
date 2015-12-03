@@ -39,7 +39,6 @@
 									report_ajax_call.abort();
 								}
 								report_ajax_call = $.ajax({
-									
 									url: "<?=base_url("index.php/ads/update_post") ?>",
 									type: "POST",
 									data: dataString,
@@ -66,7 +65,6 @@
 						click: function() 
 						{
 							$( this ).dialog( "close" );
-							$(this).dialog('destroy').remove();
 						}
 					},
 				],//end of buttons
@@ -405,6 +403,8 @@
 	}
 	
 	function filter_user(){
+		$("refresh_icon").hide();
+		$("loading_icon").show();
 		var user_id = $("#selected_user").val();
 		console.log(user_id);
 		$.ajax({
@@ -415,6 +415,8 @@
 			statusCode: {
 				200: function(response){
 					$("#post_container").html(response);
+					$("refresh_icon").show();
+					$("loading_icon").hide();
 				},
 				404: function(){
 					alert('Page not found');

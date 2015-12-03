@@ -874,10 +874,14 @@ class Ads extends MY_Controller {
 		$old_posts = db_select_posts($where);
 		
 		$unique_link = '';
+		$old_links = array();
 		foreach($old_posts as $old_post){
-			if($old_post['link']==$post_link){
-				$unique_link = true;
-			}
+			$old_links[] = $old_post['link'];
+		}
+		if(in_array($post_link,$old_links)){
+			$unique_link = false;
+		}else{
+			$unique_link = true;
 		}
 		
 		if($unique_link){
@@ -900,6 +904,13 @@ class Ads extends MY_Controller {
 			db_update_post($set,$where);
 			
 			echo "Your submission has been received. In the next 24 hours, we will verify the posting. Thank you!";
+		}else{
+
+			$where = null;
+			$where['id'] = $post_id;
+			db_delete_post($where);
+			
+			echo "Link not unique. Post has been deleted. Please provide a unique link.";
 		}
 	}
 	
