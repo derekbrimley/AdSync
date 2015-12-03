@@ -59,10 +59,12 @@
 		<td class="ellipsis" title="<?= $post['result'] ?>" style="max-width:35px;min-width:35px;">
 			<?= $post['result'] ?>
 		</td>
-		<td class="ellipsis" style="max-width:20px;min-width:20px;">
-			<?php if($current_datetime>=$next_renewal && $post['result']!="Needs verification"): ?>
-				<img title="Click to verify renewal" src="<?= base_url("images/renewals_icon.png") ?>" style="margin-left:15px;width:20px;cursor:pointer;" onClick="renew_post(<?=$post['id']?>)"/>
-			<?php endif ?>
-		</td>
+		<?php if($role == "affiliate"): ?>
+			<td class="ellipsis" style="max-width:20px;min-width:20px;">
+				<?php if($current_datetime>=$next_renewal && $post['result']!="Needs verification"): ?>
+					<img title="Click to verify renewal" src="<?= base_url("images/renewals_icon.png") ?>" style="margin-left:15px;width:20px;cursor:pointer;" onClick="renew_post(<?=$post['id']?>)"/>
+				<?php endif ?>
+			</td>
+		<?php endif ?>
 	</tr>
 </table>

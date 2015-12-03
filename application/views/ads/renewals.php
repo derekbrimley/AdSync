@@ -37,7 +37,9 @@ Renewals
 				<td style="max-width:25px;min-width:25px;">Value</td>
 				<td style="max-width:45px;min-width:45px;">Renewal Date</td>
 				<td style="max-width:35px;min-width:35px;">Result</td>
-				<td style="max-width:20px;min-width:20px;">Renew</td>
+				<?php if($role == "affiliate"): ?>
+					<td style="max-width:20px;min-width:20px;">Renew</td>
+				<?php endif ?>
 			</tr>
 		</table>
 	</div>
