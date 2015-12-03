@@ -381,17 +381,19 @@
 	}
 	
 	function edit_request(id){
-		$("#name_info_"+id).hide();
-		$("#category_info_"+id).hide();
-		$("#sub_info_"+id).hide();
-		$("#price_info_"+id).hide();
-		$("#edit_info_"+id).hide();
+		// $("#name_info_"+id).hide();
+		// $("#category_info_"+id).hide();
+		// $("#sub_info_"+id).hide();
+		// $("#price_info_"+id).hide();
 		
-		$("#name_edit_"+id).show();
-		$("#category_edit_"+id).show();
-		$("#sub_edit_"+id).show();
-		$("#price_edit_"+id).show();
+		// $("#name_edit_"+id).show();
+		// $("#category_edit_"+id).show();
+		// $("#sub_edit_"+id).show();
+		// $("#price_edit_"+id).show();
+		$("#edit_info_"+id).hide();
 		$("#save_edit_"+id).show();
+		$(".non_editable_"+id).hide();
+		$(".editable_"+id).show();
 	}
 	
 	function edit_user_information(){
@@ -1149,6 +1151,10 @@
 				200: function(){
 					load_ad_requests();
 					refresh_ad_spots();
+					$("#loading_icon_"+id).hide();
+					$("#edit_info_"+id).show();
+					$(".editable_"+id).hide();
+					$(".non_editable_"+id).show();
 				},
 				404: function(){
 					alert('Page not found');

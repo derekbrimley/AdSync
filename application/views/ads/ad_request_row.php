@@ -16,26 +16,26 @@
 	<table style="color:<?=$text_color?>">
 		<tr>
 			<td style="max-width:70px;min-width:70px;">
-				<div id="name_info_<?=$ad_request['id']?>"><?=$market_name?></div>
-				<div id="name_edit_<?=$ad_request['id']?>" style="display:none">
+				<div class="non_editable_<?=$ad_request['id']?>" id="name_info_<?=$ad_request['id']?>"><?=$market_name?></div>
+				<div class="editable_<?=$ad_request['id']?>" id="name_edit_<?=$ad_request['id']?>" style="display:none">
 					<?php echo form_dropdown('market_id', $market_options,$market['id'],"id='market_id' style='width:100%'"); ?>
 				</div>
 			</td>
 			<td style="max-width:40px;min-width:40px;">
-				<div id="category_info_<?=$ad_request['id']?>"><?=$ad_request['category']?></div>
-				<div id="category_edit_<?=$ad_request['id']?>" style="display:none">
+				<div class="non_editable_<?=$ad_request['id']?>" id="category_info_<?=$ad_request['id']?>"><?=$ad_request['category']?></div>
+				<div class="editable_<?=$ad_request['id']?>" id="category_edit_<?=$ad_request['id']?>" style="display:none">
 					<?php echo form_dropdown('category', $category_options,$ad_request['category'],"id='category' style='width:100%'"); ?>
 				</div>
 			</td>
 			<td style="max-width:75px;min-width:75px;">
-				<div id="sub_info_<?=$ad_request['id']?>"><?=$ad_request['sub_category']?></div>
-				<div id="sub_edit_<?=$ad_request['id']?>" style="display:none">
+				<div class="non_editable_<?=$ad_request['id']?>" id="sub_info_<?=$ad_request['id']?>"><?=$ad_request['sub_category']?></div>
+				<div class="editable_<?=$ad_request['id']?>" id="sub_edit_<?=$ad_request['id']?>" style="display:none">
 					<input name="sub_category" id="sub_category" style="width:100%" type="text" value="<?=$ad_request['sub_category']?>"/>
 				</div>
 			</td>
 			<td style="max-width:30px;min-width:30px;">
-				<div id="price_info_<?=$ad_request['id']?>">$<?=number_format($ad_request['price'],2)?></div>
-				<div id="price_edit_<?=$ad_request['id']?>" style="display:none">
+				<div class="non_editable_<?=$ad_request['id']?>" id="price_info_<?=$ad_request['id']?>">$<?=number_format($ad_request['price'],2)?></div>
+				<div class="editable_<?=$ad_request['id']?>" id="price_edit_<?=$ad_request['id']?>" style="display:none">
 					<input name="price" id="price" style="width:100%" type="text" value="<?=$ad_request['price']?>"/>
 				</div>
 			</td>

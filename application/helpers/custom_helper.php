@@ -121,8 +121,7 @@
 	}
 	
 	//GET FILE FROM FTP SERVER - GIVEN FILE GUID, RETURNS READ_FILE HEADERS TO CLIENT BROWSER
-	function get_secure_ftp_file($file_guid)
-	{
+	function get_secure_ftp_file($file_guid){
 		$CI =& get_instance();
 	
 		//SET UP CONNECTION TO FTP SERVER
@@ -205,8 +204,7 @@
 	}
 	
 	//DETERMINE IS USER HAS FILE ACCESS
-	function user_has_file_access($secure_file)
-	{
+	function user_has_file_access($secure_file){
 		$CI =& get_instance();
 		
 		//GET USER AND ROLE
@@ -236,8 +234,7 @@
 	}	
 	
 	//LOAD SUCCESS VIEW	
-	function load_upload_success_view()
-	{
+	function load_upload_success_view(){
 		$CI =& get_instance();
 		
 		$data["title"] = "Upload Success";
