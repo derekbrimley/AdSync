@@ -15,6 +15,10 @@
 	$where['id'] = $ad_request['market_id'];
 	$market = db_select_market($where);
 	
+	$where = null;
+	$where['id'] = $post['poster_id'];
+	$this_user = db_select_user($where);
+	
 	$next_renewal = date("m/d/y H:i:s",strtotime($post['next_renewal_datetime']));
 	// echo strtotime($next_renewal);
 	if($current_datetime>=date("Y-m-d H:i:s",strtotime($next_renewal)) && $post['result'] != "Needs verification")

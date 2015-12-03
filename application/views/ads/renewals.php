@@ -1,10 +1,6 @@
 <?php
 	$row = 0;
 	
-	$where = null;
-	$where['id'] = $this->session->userdata('user_id');
-	$this_user = db_select_user($where);
-	
 	$role = $this->session->userdata('role');
 ?>
 <script>
