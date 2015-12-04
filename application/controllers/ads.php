@@ -332,27 +332,26 @@ class Ads extends MY_Controller {
 		$role = $this->session->userdata('role');
 		
 		$where = null;
-		if($selected_user_id=="All Users"){
-			$where = "1 = 1";
-		}else{
-			$where['id'] = $selected_user_id;
-		}
-		$referred_users = db_select_users($where);
-		
-		$where = null;
 		$where = "1 = 1";
 		$users = db_select_users($where);
 		
+		$referred_users = array();
+		foreach($users as $user){
+			if(!empty($user['referred_by'])){
+				if($selected_user_id!="All Users"){
+					if($user['referred_by'] == $selected_user_id){
+						$referred_users[] = $user;
+					}
+				}else{
+					$referred_users[] = $user;
+				}
+			}
+		}
+		
 		$count = $this->count_array($referred_users);
 		
-		$where = null;
-		$where['id'] = $this->session->userdata('user_id');
-		$this_user = db_select_user($where);
-	
-		$data['this_user'] = $this_user;
-		$data['role'] = $role;
-		$data['users'] = $users;
 		$data['count'] = $count;
+		$data['users'] = $users;
 		$data['referred_users'] = $referred_users;
 		$this->load->view("ads/filtered_referrals",$data);
 	}
@@ -568,19 +567,23 @@ class Ads extends MY_Controller {
 		$role = $this->session->userdata('role');
 		
 		$where = null;
-		if($role!="admin")
-		{
-			$where['referred_by'] = $user_id;
-		}else{
-			$where = '1 = 1';
-		}
-		$referred_users = db_select_users($where);
-		
-		$where = null;
 		$where = "1 = 1";
 		$users = db_select_users($where);
 		
-		$count = $this->count_array($users);
+		$referred_users = array();
+		foreach($users as $user){
+			if(!empty($user['referred_by'])){
+				if($role!="admin"){
+					if($user['referred_by']==$user_id){
+						$referred_users[] = $user;
+					}
+				}else{
+					$referred_users[] = $user;
+				}
+			}
+		}
+		
+		$count = $this->count_array($referred_users);
 		
 		$data['count'] = $count;
 		$data['users'] = $users;

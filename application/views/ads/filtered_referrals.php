@@ -1,5 +1,6 @@
 <?php
 	$row = 0;
+	$role = $this->session->userdata('role');
 ?>
 <script>
 	$(".post_row:even").css("background-color","#eee");

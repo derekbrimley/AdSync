@@ -1,8 +1,13 @@
+<?php
+	$where = null;
+	$where['id'] = $referred_user['referred_by'];
+	$referral_user = db_select_user($where);
+?>
 <table>
 	<tr>
 		<?php if($role == "admin"): ?>
 			<td style="max-width:35px;min-width:35px;">
-				<?=$this_user['username'];?>
+				<?=$referral_user['username'];?>
 			</td>
 		<?php endif ?>
 		<td style="max-width:35px;min-width:35px;">
