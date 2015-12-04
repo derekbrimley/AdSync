@@ -327,6 +327,36 @@ class Ads extends MY_Controller {
 		$this->load->view("ads/filtered_post_history",$data);
 	}
 	
+	function load_filtered_referrals(){
+		$selected_user_id = $_POST['user_id'];
+		$role = $this->session->userdata('role');
+		
+		$where = null;
+		if($selected_user_id=="All Users"){
+			$where = "1 = 1";
+		}else{
+			$where['id'] = $selected_user_id;
+		}
+		$referred_users = db_select_users($where);
+		
+		$where = null;
+		$where = "1 = 1";
+		$users = db_select_users($where);
+		
+		$count = $this->count_array($referred_users);
+		
+		$where = null;
+		$where['id'] = $this->session->userdata('user_id');
+		$this_user = db_select_user($where);
+	
+		$data['this_user'] = $this_user;
+		$data['role'] = $role;
+		$data['users'] = $users;
+		$data['count'] = $count;
+		$data['referred_users'] = $referred_users;
+		$this->load->view("ads/filtered_referrals",$data);
+	}
+	
 	function load_filtered_renewals(){
 		$selected_user_id = $_POST['user_id'];
 		$role = $this->session->userdata('role');
@@ -544,12 +574,17 @@ class Ads extends MY_Controller {
 		}else{
 			$where = '1 = 1';
 		}
+		$referred_users = db_select_users($where);
+		
+		$where = null;
+		$where = "1 = 1";
 		$users = db_select_users($where);
 		
 		$count = $this->count_array($users);
 		
 		$data['count'] = $count;
 		$data['users'] = $users;
+		$data['referred_users'] = $referred_users;
 		$this->load->view("ads/referrals",$data);
 	}
 	

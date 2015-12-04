@@ -454,6 +454,32 @@
 		});//END AJAX
 	}
 	
+	function filter_user_referrals(){
+		$("#refresh_icon").hide();
+		$("#loading_icon").show();
+		var user_id = $("#selected_user").val();
+		console.log(user_id);
+		$.ajax({
+			url: "<?=base_url("index.php/ads/load_filtered_referrals") ?>",
+			type: "POST",
+			data: {user_id:user_id},
+			cache: false,
+			statusCode: {
+				200: function(response){
+					$("#referral_container").html(response);
+					$("#refresh_icon").show();
+					$("#loading_icon").hide();
+				},
+				404: function(){
+					alert('Page not found');
+				},
+				500: function(response){
+					alert("500 error! "+response);
+				}
+			}
+		});//END AJAX
+	}
+	
 	function filter_user_renewals(){
 		$("#refresh_icon").hide();
 		$("#loading_icon").show();
