@@ -93,7 +93,7 @@
 								<div class="nav_box_title">FAQ</div>
 							</div>
 						<?php endif ?>
-						<?php if($role == "affiliate" || $role == "admin"): ?>
+						<?php if($role == "affiliate"): ?>
 							<div id="money_box" class="nav_box" onClick="load_money_report()">
 								<div style="height:77px;">
 									<img id="money_nav_icon" src="<?= base_url("images/money_icon.png") ?>" class="nav_box_image" style="height:113px; position:relative; right:25px; bottom:29px;"/>
