@@ -9,7 +9,7 @@
 		<td class="ellipsis" style="max-width:12px;min-width:12px;">
 			<?=date("m/d/Y",strtotime($account_entry['datetime']))?>
 		</td>
-		<td class="ellipsis" style="max-width:80px;min-width:80px;">
+		<td class="ellipsis" title="<?=$account_entry['description']?>" style="max-width:80px;min-width:80px;">
 			<?=$account_entry['description']?>
 		</td>
 		<?php if($account_entry['amount']<0): ?>

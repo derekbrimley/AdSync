@@ -158,6 +158,18 @@ class Ads extends MY_Controller {
 		db_update_ad_request($set,$where);
 	}
 	
+	function edit_user(){
+		$user_id = $_POST['user_id'];
+		$status = $_POST['status'];
+		$where = null;
+		$where['id'] = $user_id;
+		
+		$set = array();
+		$set['is_active'] = $status;
+		
+		db_update_user($set,$where);
+	}
+	
 	function generate_code(){
 		date_default_timezone_set('America/Denver');
 		$current_datetime = date("Y-m-d H:i:s");
@@ -232,6 +244,9 @@ class Ads extends MY_Controller {
 		$where = "1 = 1";
 		$users = db_select_users($where);
 		
+		$count = $this->count_array($users);
+		
+		$data['count'] = $count;
 		$data['users'] = $users;
 		$this->load->view("ads/accounts",$data);
 	}

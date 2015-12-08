@@ -394,6 +394,13 @@
 		$(".editable_"+id).show();
 	}
 	
+	function edit_user(id){
+		$("#edit_info_"+id).hide();
+		$("#save_edit_"+id).show();
+		$(".non_editable_"+id).hide();
+		$(".editable_"+id).show();
+	}
+	
 	function edit_user_information(){
 		$("#edit_information_btn").hide();
 		$("#save_information_btn").show();
@@ -1248,7 +1255,7 @@
 	function save_request(id){
 		$("#save_edit_"+id).hide();
 		$("#loading_icon_"+id).show();
-		var dataString = $("#ad_request_form_"+id).serialize();
+		var dataString = $("#user_form_"+id).serialize();
 		console.log(dataString);
 		//AJAX
 		if(!(report_ajax_call===undefined))
@@ -1278,8 +1285,40 @@
 				}
 			}
 		});//END AJAX
-		
-		
+	}
+	
+	function save_user(id){
+		$("#save_edit_"+id).hide();
+		$("#loading_icon_"+id).show();
+		var dataString = $("#user_form_"+id).serialize();
+		console.log(dataString);
+		//AJAX
+		if(!(report_ajax_call===undefined))
+		{
+			report_ajax_call.abort();
+		}
+		report_ajax_call = $.ajax({
+			
+			url: "<?=base_url("index.php/ads/edit_user") ?>",
+			type: "POST",
+			data: dataString,
+			cache: false,
+			statusCode: {
+				200: function(){
+					load_accounts_page();
+					$("#loading_icon_"+id).hide();
+					$("#edit_info_"+id).show();
+					$(".editable_"+id).hide();
+					$(".non_editable_"+id).show();
+				},
+				404: function(){
+					alert('Page not found');
+				},
+				500: function(response){
+					alert("500 error! "+response);
+				}
+			}
+		});//END AJAX
 	}
 	
 	function save_user_information(user_id){

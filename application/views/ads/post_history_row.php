@@ -37,7 +37,11 @@
 			<?=$ad_request['sub_category']?>
 		</td>
 		<td class="ellipsis" title="" style="max-width:20px;min-width:20px;">
-			$<?=number_format($ad_spot['value'],2)?>
+			<?php if(!empty($ad_spot['value'])): ?>
+				$<?=number_format($ad_spot['value'],2)?>
+			<?php else: ?>
+				$0.00
+			<?php endif?>
 		</td>
 		<td class="ellipsis" title="<?= $post['result'] ?>" style="max-width:30px;min-width:30px;">
 			<?php if(!empty($post["result_screen_shot_guid"])): ?>
@@ -47,7 +51,11 @@
 			<?php endif ?>
 		</td>
 		<td class="ellipsis" style="max-width:20px;min-width:20px;">
-			$<?= $post['amount_due'] ?>
+			<?php if(!empty($post['amount_due'])): ?>
+				$<?= $post['amount_due'] ?>
+			<?php else: ?>
+				$0.00
+			<?php endif?>
 		</td>
 	</tr>
 </table>
