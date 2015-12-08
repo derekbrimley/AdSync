@@ -33,7 +33,7 @@ Post History
 			</tr>
 		</table>
 	</div>
-	<div id="post_container" class="scrollable_div" style="">
+	<div id="accounts_container" class="scrollable_div" style="">
 		<?php foreach($users as $user): ?>
 			<?php
 				$row++;
