@@ -651,6 +651,40 @@
 		}
 	}
 	
+	function load_accounts_page(){
+		$("#refresh_icon").hide();
+		$("#loading_icon").show();
+		var this_div = $("#report_container");
+		var dataString;
+		
+		//AJAX
+		if(!(report_ajax_call===undefined))
+		{
+			report_ajax_call.abort();
+		}
+		report_ajax_call = $.ajax({
+			
+			url: "<?=base_url("index.php/ads/load_accounts_page") ?>",
+			type: "POST",
+			data: dataString,
+			cache: false,
+			context: this_div,
+			statusCode: {
+				200: function(response){
+					this_div.html(response);
+					update_balance();
+					change_nav_box('#accounts_box');
+				},
+				404: function(){
+					alert('Page not found');
+				},
+				500: function(response){
+					alert("500 error! "+response);
+				}
+			}
+		});//END AJAX
+	}
+	
 	function load_faq(){
 		$("#refresh_icon").hide();
 		$("#loading_icon").show();
@@ -1494,6 +1528,7 @@
 		$("#verify_posts_nav_icon").attr("src",'<?=base_url('images/verify_posts_icon.png')?>');
 		$("#generate_code_nav_icon").attr("src",'<?=base_url('images/code.png')?>');
 		$("#account_info_nav_icon").attr("src",'<?=base_url('images/account_info.png')?>');
+		$("#generate_code_nav_icon").attr("src",'<?=base_url('images/account_info.png')?>');
 		
 		//CHANGE THE ICON IMAGE TO THE SELECTED STYLE IMAGE
 		if(box_id == '#post_board_box'){
@@ -1519,6 +1554,8 @@
 		}else if(box_id == '#generate_code_box'){
 			$("#generate_code_nav_icon").attr("src", '<?=base_url('images/white_code_icon.png')?>');
 		}else if(box_id == '#account_info_box'){
+			$("#account_info_nav_icon").attr("src", '<?=base_url('images/white_account_info.png')?>');
+		}else if(box_id == '#accounts_box'){
 			$("#account_info_nav_icon").attr("src", '<?=base_url('images/white_account_info.png')?>');
 		}
 		

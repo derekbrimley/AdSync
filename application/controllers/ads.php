@@ -227,6 +227,15 @@ class Ads extends MY_Controller {
 		
 	}
 	
+	function load_accounts_page(){
+		$where = null;
+		$where = "1 = 1";
+		$users = db_select_users($where);
+		
+		$data['users'] = $users;
+		$this->load->view("ads/accounts",$data);
+	}
+	
 	function load_ad_requests(){
 		$where = null;
 		$where = "1 = 1";
