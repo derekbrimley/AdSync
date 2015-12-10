@@ -1271,10 +1271,6 @@
 			statusCode: {
 				200: function(){
 					load_ad_requests();
-					
-					setTimeout(function(){
-						refresh_ad_spots();
-					},500);
 				},
 				404: function(){
 					alert('Page not found');

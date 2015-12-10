@@ -279,10 +279,13 @@ class Ads extends MY_Controller {
 		);
 		
 		$where = null;
-		$where = "1 = 1";
-		$ad_requests = db_select_ad_requests($where,"id DESC");
+		$where['status'] = "active";
+		$ad_requests = db_select_ad_requests($where,"id DESC","100");
 		
-		$count = $this->count_array($ad_requests);
+		$where = null;
+		$where['status'] = "active";
+		$total_ad_requests = db_select_ad_requests($where);
+		$count = $this->count_array($total_ad_requests);
 		
 		$data['count'] = $count;
 		$data['category_options'] = $category_options;

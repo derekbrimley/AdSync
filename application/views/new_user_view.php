@@ -94,7 +94,23 @@
 			}
 			if(is_valid)
 			{
-				$("#new_user_form").submit();
+				var dataString = $("#new_user_form").serialize();
+				$.ajax({
+					url: "<?=base_url("index.php/login/create_new_user") ?>",
+					type: "POST",
+					data: dataString,
+					cache: false,
+					statusCode: {
+						200: function(){
+						},
+						404: function(){
+							alert('Page not found');
+						},
+						500: function(response){
+							alert("500 error! "+response);
+						}
+					}
+				});//END AJAX
 			}
 		}
 	</script>
@@ -113,25 +129,29 @@
 		<div class="login_form slide" style="margin:0 auto;padding:20px;margin-top:20px;width:400px;">
 			<div style="text-align:center;padding-bottom:10px;padding-top:10px;font-size:53px;">Create Account</div>
 			<?php $attributes = array('name'=>'new_user_form','id'=>'new_user_form','style'=>'margin-bottom:50px;' )?>
+			<?php echo validation_errors(); ?>
 			<?=form_open_multipart(base_url('index.php/login/create_new_user/'),$attributes);?>
 				<input id="latitude" name="latitude" type="hidden" value="" />
 				<input id="longitude" name="longitude" type="hidden" value="" />
 				<input id="ip_address" name="ip_address" type="hidden" value="" />
 				<table>
 					<tr>
-						<td><input placeholder="First Name" style="margin-left:80px;width:240px;height:40px;border-radius:3px;border: solid 1px #c9c9c9;" type="text" id="first_name" name="first_name"/></td>
+						<td><input placeholder="First Name" value="<?php echo set_value('first_name'); ?>" style="margin-left:80px;width:240px;height:40px;border-radius:3px;border: solid 1px #c9c9c9;" type="text" id="first_name" name="first_name"/></td>
 					</tr>
 					<tr>
-						<td><input placeholder="Last Name" style="margin-left:80px;width:240px;height:40px;border-radius:3px;border: solid 1px #c9c9c9;" type="text" id="last_name" name="last_name"/></td>
+						<td><input placeholder="Last Name" value="<?php echo set_value('last_name'); ?>" style="margin-left:80px;width:240px;height:40px;border-radius:3px;border: solid 1px #c9c9c9;" type="text" id="last_name" name="last_name"/></td>
 					</tr>
 					<tr>
-						<td><input placeholder="Username" style="margin-left:80px;width:240px;height:40px;border-radius:3px;border:solid 1px #c9c9c9;" type="text" id="username" name="username"/></td>
+						<td><input placeholder="Username" value="<?php echo set_value('username'); ?>" style="margin-left:80px;width:240px;height:40px;border-radius:3px;border:solid 1px #c9c9c9;" type="text" id="username" name="username"/></td>
 					</tr>
 					<tr>
-						<td><input placeholder="Password" style="margin-left:80px;width:240px;height:40px;border-radius:3px;border:solid 1px #c9c9c9;" type="password" id="password" name="password"/></td>
+						<td><input placeholder="Password" value="<?php echo set_value('password'); ?>" style="margin-left:80px;width:240px;height:40px;border-radius:3px;border:solid 1px #c9c9c9;" type="password" id="password" name="password"/></td>
 					</tr>
 					<tr>
-						<td><input placeholder="Gmail Address" style="margin-left:80px;width:145px;height:40px;border-radius:3px;border:solid 1px #c9c9c9;" type="text" id="email" name="email"/>@gmail.com
+						<td><input placeholder="Confirm Password" value="<?php echo set_value('passconf'); ?>" style="margin-left:80px;width:240px;height:40px;border-radius:3px;border:solid 1px #c9c9c9;" type="password" id="passconf" name="passconf"/></td>
+					</tr>
+					<tr>
+						<td><input placeholder="Gmail Address" value="<?php echo set_value('email'); ?>" style="margin-left:80px;width:145px;height:40px;border-radius:3px;border:solid 1px #c9c9c9;" type="text" id="email" name="email"/>@gmail.com
 						<span style="color:red;cursor:pointer" onClick="alert('Must be Gmail account. If you do not have a Gmail account, go to http://gmail.com/ to get one.')"> ?</span></td>
 					</tr>
 					<tr>
@@ -145,11 +165,13 @@
 							<span style="color:red;cursor:pointer;" onClick="alert('To find your market, go to http://www.craigslist.com/')"> ?</span>
 					</tr>
 					<tr>
-						<td><input placeholder="Code" style="margin-left:80px;width:230px;height:40px;border-radius:3px;border:solid 1px #c9c9c9;" type="text" id="secret_code" name="secret_code"/>
+						<td><input placeholder="Code" value="<?php echo set_value('secret_code'); ?>" style="margin-left:80px;width:230px;height:40px;border-radius:3px;border:solid 1px #c9c9c9;" type="text" id="secret_code" name="secret_code"/>
 						<span style="color:red;cursor:pointer;" onClick="alert('Enter the code that was given to you by us. If you have not received a code, send us an email at ryguy.msioo@gmail.com.')"> ?</span></td>
 					</tr>
 					<tr>
-						<td><button onClick="validate_new_user_form()" class="login_btn" id="next_btn" type="button">Next</button></td>
+						<td>
+							<input class="login_btn" id="next_btn" type="submit" value="Next" />
+						</td>
 					</tr>
 					<br>
 					<br>

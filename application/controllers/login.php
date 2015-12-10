@@ -55,63 +55,112 @@ class Login extends CI_Controller
 		}
 	}
 	
-	function create_new_user(){
-		date_default_timezone_set('America/Denver');
-		$current_datetime = date("Y-m-d H:i:s");
-		
-		$first_name = $_POST['first_name'];
-		$last_name = $_POST['last_name'];
-		$username = $_POST['username'];
-		$password = $_POST['password'];
-		$email = $_POST['email'];
-		$secret_code = $_POST['secret_code'];
-		
-		if(strpos($email,"@")){
-			$email = substr($email, 0, strpos($email,"@"));
-		}
-		
-		$full_email = $email."@gmail.com";
-		
-		$role = "affiliate";
-		$home_market_id = $_POST['market_id'];
-		$secret_code = $_POST['secret_code'];
-		$ip_address = $_SERVER['REMOTE_ADDR'];
-		$latitude = $_POST['latitude'];
-		$longitude = $_POST['longitude'];
-		$geolocation = $latitude.", ".$longitude;
-		$hash = md5(rand(0,1000));
-		// echo $ip_address;
-		// echo $geolocation;
-		
+	public function username_check($str)
+	{
 		$where = null;
 		$where = "1 = 1";
-		$current_users = db_select_users($where);
-		
-		$ip_list = array();
-		$geolocation_list = array();
+		$users = db_select_users($where);
 		$username_list = array();
-		$email_list = array();
-		foreach($current_users as $current_user){
-			$ip_list[] = $current_user['ip_address'];
-			$geolocation_list[] = $current_user['geolocation'];
-			$username_list[] = $current_user['username'];
-			$email_list[] = $current_user['email'];
+		foreach($users as $user){
+			$username_list[] = $user['username'];
+		}
+		if (in_array($str,$username_list)){
+			$this->form_validation->set_message('username_check', "The username $str is not available.");
+			return FALSE;
+		}
+		else
+		{
+			return TRUE;
+		}
+	}
+	
+	function create_new_user(){
+		
+		$this->load->helper(array('form', 'url'));
+
+		$this->load->library('form_validation');
+		$this->form_validation->set_rules('latitude', 'Latitude', 'callback_location_check');
+		$this->form_validation->set_rules('longitude', 'Longitude', 'callback_location_check');
+		$this->form_validation->set_rules('ip_address', 'IP Address', 'callback_ip_check');
+		
+		$this->form_validation->set_rules('first_name', 'First Name', 'required');
+		$this->form_validation->set_rules('last_name', 'Last Name', 'required');
+		$this->form_validation->set_rules('username', 'Username', 'required|callback_username_check');
+		$this->form_validation->set_rules('password', 'Password', 'required|matches[passconf]');
+		$this->form_validation->set_rules('passconf', 'Password Confirmation', 'required');
+		$this->form_validation->set_rules('email', 'Email', 'required');
+		$this->form_validation->set_rules('market_id', 'Market', 'required');
+		$this->form_validation->set_rules('secret_code', 'Code', 'required');
+		
+		if ($this->form_validation->run() == FALSE){
+			$where = null;
+			$where = "1 = 1";
+			$markets = db_select_markets($where,"name ASC");
+			
+			$data['markets'] = $markets;
+			$data['title'] = "New User";
+			$this->load->view('new_user_view',$data);
+		}
+		else{
+			redirect("ads");
 		}
 		
-		$where = null;
-		$where['is_active'] = "true";
-		$codes = db_select_secret_codes($where);
-		//print_r($codes);
-		$code_list = array();
-		foreach($codes as $code){
-			$code_list[] = $code['secret_code'];
-		}
+		// date_default_timezone_set('America/Denver');
+		// $current_datetime = date("Y-m-d H:i:s");
 		
-		if(in_array($full_email,$email_list)){
-			echo "<script>alert('We are sorry. It appears that your email has already been used for an AdSync account. Please try again.');
-					window.location.replace('".base_url('/index.php/login/new_user')."');
-				</script>";
-		}
+		// $first_name = $_POST['first_name'];
+		// $last_name = $_POST['last_name'];
+		// $username = $_POST['username'];
+		// $password = $_POST['password'];
+		// $email = $_POST['email'];
+		// $secret_code = $_POST['secret_code'];
+		
+		// if(strpos($email,"@")){
+			// $email = substr($email, 0, strpos($email,"@"));
+		// }
+		
+		// $full_email = $email."@gmail.com";
+		
+		// $role = "affiliate";
+		// $home_market_id = $_POST['market_id'];
+		// $secret_code = $_POST['secret_code'];
+		// $ip_address = $_SERVER['REMOTE_ADDR'];
+		// $latitude = $_POST['latitude'];
+		// $longitude = $_POST['longitude'];
+		// $geolocation = $latitude.", ".$longitude;
+		// $hash = md5(rand(0,1000));
+		// // echo $ip_address;
+		// // echo $geolocation;
+		
+		// $where = null;
+		// $where = "1 = 1";
+		// $current_users = db_select_users($where);
+		
+		// $ip_list = array();
+		// $geolocation_list = array();
+		// $username_list = array();
+		// $email_list = array();
+		// foreach($current_users as $current_user){
+			// $ip_list[] = $current_user['ip_address'];
+			// $geolocation_list[] = $current_user['geolocation'];
+			// $username_list[] = $current_user['username'];
+			// $email_list[] = $current_user['email'];
+		// }
+		// print_r($username_list);
+		
+		// $where = null;
+		// $where['is_active'] = "true";
+		// $codes = db_select_secret_codes($where);
+		// $code_list = array();
+		// foreach($codes as $code){
+			// $code_list[] = $code['secret_code'];
+		// }
+		
+		// if(in_array($full_email,$email_list)){
+			// echo "<script>alert('We are sorry. It appears that your email has already been used for an AdSync account. Please try again.');
+					// window.location.replace('".base_url('/index.php/login/new_user')."');
+				// </script>";
+		// }
 		// else if(in_array($username,$username_list))
 		// {
 			// echo "<script>alert('We are sorry. It appears that your username has already been used for an AdSync account. Please try again.');
@@ -130,65 +179,65 @@ class Login extends CI_Controller
 					// window.location.replace('".base_url('/index.php/login/new_user')."');
 				// </script>";
 		// }
-		else{
-			$where = null;
-			$where['secret_code'] = $secret_code;
-			$referral_code = db_select_secret_code($where);
-			if($referral_code['referral_id']){
-				$referred_by_user_id = $referral_code['referral_id'];
-			}
+		// else{
+			// $where = null;
+			// $where['secret_code'] = $secret_code;
+			// $referral_code = db_select_secret_code($where);
+			// if($referral_code['referral_id']){
+				// $referred_by_user_id = $referral_code['referral_id'];
+			// }
 			
-			$new_user['referred_by'] = $referred_by_user_id;
+			// $new_user['referred_by'] = $referred_by_user_id;
 			
-			$hashed_password = password_hash($password,PASSWORD_BCRYPT );
+			// $hashed_password = password_hash($password,PASSWORD_BCRYPT );
 			
-			$new_user['first_name'] = $first_name;
-			$new_user['last_name'] = $last_name;
-			$new_user['username'] = $username;
-			$new_user['password'] = $hashed_password;
-			$new_user['email'] = $full_email;
-			$new_user['role'] = $role;
-			$new_user['home_market'] = $home_market_id;
-			$new_user['date_joined'] = $current_datetime;
-			$new_user['is_active'] = "false";
-			$new_user['ip_address'] = $ip_address;
-			$new_user['geolocation'] = $geolocation;
-			$new_user['hash'] = $hash;
+			// $new_user['first_name'] = $first_name;
+			// $new_user['last_name'] = $last_name;
+			// $new_user['username'] = $username;
+			// $new_user['password'] = $hashed_password;
+			// $new_user['email'] = $full_email;
+			// $new_user['role'] = $role;
+			// $new_user['home_market'] = $home_market_id;
+			// $new_user['date_joined'] = $current_datetime;
+			// $new_user['is_active'] = "false";
+			// $new_user['ip_address'] = $ip_address;
+			// $new_user['geolocation'] = $geolocation;
+			// $new_user['hash'] = $hash;
 			
-			db_insert_user($new_user);
+			// db_insert_user($new_user);
 			
-			$user = db_select_user($new_user);
+			// $user = db_select_user($new_user);
 			
-			$to = $full_email;
-			$subject = "AdSync Confirmation Email";
-			$message = "
-				Click the link below to confirm your new AdSync Account.
+			// $to = $full_email;
+			// $subject = "AdSync Confirmation Email";
+			// $message = "
+				// Click the link below to confirm your new AdSync Account.
 				
-				http://www.adsync.nextgenmarketingsolutions.com/index.php/login/activate?email=$full_email&hash=$hash
-			";
-			$headers = 'From: admin@nextgenmarketingsolutions.com';
+				// http://www.adsync.nextgenmarketingsolutions.com/index.php/login/activate?email=$full_email&hash=$hash
+			// ";
+			// $headers = 'From: admin@nextgenmarketingsolutions.com';
 			
-			mail($to,$subject,$message,$headers);
+			// mail($to,$subject,$message,$headers);
 			
-			$this->session->set_userdata('user_id', $user['id']);
-			$this->session->set_userdata('first_name', $user["first_name"]);
-			$this->session->set_userdata('last_name', $user["last_name"]);
-			$this->session->set_userdata('username', $username);
-			$this->session->set_userdata('role', $user['role']);
-			$this->session->set_userdata('is_active', $user['is_active']);
-			$this->session->set_userdata('referral_id', $user['referral_id']);
+			// $this->session->set_userdata('user_id', $user['id']);
+			// $this->session->set_userdata('first_name', $user["first_name"]);
+			// $this->session->set_userdata('last_name', $user["last_name"]);
+			// $this->session->set_userdata('username', $username);
+			// $this->session->set_userdata('role', $user['role']);
+			// $this->session->set_userdata('is_active', $user['is_active']);
+			// $this->session->set_userdata('referral_id', $user['referral_id']);
 			
-			$where = null;
-			$where['secret_code'] = $secret_code;
+			// $where = null;
+			// $where['secret_code'] = $secret_code;
 			
-			$set = array();
-			$set['datetime_used'] = $current_datetime;
-			$set['is_active'] = "false";
+			// $set = array();
+			// $set['datetime_used'] = $current_datetime;
+			// $set['is_active'] = "false";
 			
-			db_update_secret_code($set,$where);
+			// db_update_secret_code($set,$where);
 			
-			redirect("ads");
-		}
+			// redirect("ads");
+		// }
 	}
 	
 	function leadsync_login(){
