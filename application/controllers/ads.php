@@ -145,12 +145,17 @@ class Ads extends MY_Controller {
 	
 	function edit_ad_request(){
 		$ad_request_id = $_POST['id'];
+		$market_name = $_POST['market_name'];
+		
+		$where = null;
+		$where['name'] = $market_name;
+		$market = db_select_market($where);
 		
 		$where = null;
 		$where['id'] = $ad_request_id;
 		
 		$set = array();
-		$set['market_id'] = $_POST['market_id'];
+		$set['market_id'] = $market['id'];
 		$set['category'] = $_POST['category'];
 		$set['sub_category'] = $_POST['sub_category'];
 		$set['price'] = $_POST['price'];
@@ -256,15 +261,6 @@ class Ads extends MY_Controller {
 		$where = "1 = 1";
 		$markets  = db_select_markets($where);
 		
-		$market_options = array();
-		$market_options[] = "Select";
-		foreach($markets as $market)
-		{
-			
-			$market_options[$market['id']] = $market['name'].", ".$market['state'];
-			
-		}
-		
 		$category_options = array(
 			'Select' => 'Select',
 			'job offered' => 'job offered',
@@ -290,7 +286,7 @@ class Ads extends MY_Controller {
 		
 		$data['count'] = $count;
 		$data['category_options'] = $category_options;
-		$data['market_options'] = $market_options;
+		$data['markets'] = $markets;
 		$data['ad_requests'] = $ad_requests;
 		$this->load->view("ads/ad_requests",$data);
 		
@@ -1080,7 +1076,7 @@ class Ads extends MY_Controller {
 	}
 	
 	
-	
+
 	
 	
 	//ONE TIME SCRIPTS

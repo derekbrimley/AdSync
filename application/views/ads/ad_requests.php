@@ -1,5 +1,5 @@
 <?php
-	$row = 0
+	$row = 0;
 ?>
 <script>
 	$(".post_row:even").css("background-color","#eee");

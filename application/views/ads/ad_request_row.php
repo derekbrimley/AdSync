@@ -10,7 +10,25 @@
 	}else{
 		$text_color = 'black';
 	}
+	
 ?>
+<script>
+	var options = [
+	<?php foreach($markets as $market):?>
+		"<?=$market['name']?>",
+	<?php endforeach ?>
+		
+	]
+	$( ".market_name_<?=$ad_request['id']?>" ).autocomplete({
+      source: options,
+	  change: function (event, ui) {
+		if(!ui.item){
+			$(".market_name_<?=$ad_request['id']?>").val("");
+		}
+
+	}
+    });
+</script>
 <form id="ad_request_form_<?=$ad_request['id']?>">
 	<input id="id" name="id" type="hidden" value="<?=$ad_request['id']?>" />
 	<table style="color:<?=$text_color?>">
@@ -18,7 +36,7 @@
 			<td style="max-width:70px;min-width:70px;">
 				<div class="non_editable_<?=$ad_request['id']?>" id="name_info_<?=$ad_request['id']?>"><?=$market_name?></div>
 				<div class="editable_<?=$ad_request['id']?>" id="name_edit_<?=$ad_request['id']?>" style="display:none">
-					<?php echo form_dropdown('market_id', $market_options,$market['id'],"id='market_id' style='width:100%'"); ?>
+					<input class="market_name_<?=$ad_request['id']?>" name="market_name" id="market_name" type="text" value="<?=$market_name?>" />
 				</div>
 			</td>
 			<td style="max-width:40px;min-width:40px;">

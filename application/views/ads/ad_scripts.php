@@ -1255,7 +1255,7 @@
 	function save_request(id){
 		$("#save_edit_"+id).hide();
 		$("#loading_icon_"+id).show();
-		var dataString = $("#user_form_"+id).serialize();
+		var dataString = $("#ad_request_form_"+id).serialize();
 		console.log(dataString);
 		//AJAX
 		if(!(report_ajax_call===undefined))
@@ -1271,11 +1271,10 @@
 			statusCode: {
 				200: function(){
 					load_ad_requests();
-					refresh_ad_spots();
-					$("#loading_icon_"+id).hide();
-					$("#edit_info_"+id).show();
-					$(".editable_"+id).hide();
-					$(".non_editable_"+id).show();
+					
+					setTimeout(function(){
+						refresh_ad_spots();
+					},500);
 				},
 				404: function(){
 					alert('Page not found');
