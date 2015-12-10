@@ -1567,7 +1567,7 @@
 		$("#verify_posts_nav_icon").attr("src",'<?=base_url('images/verify_posts_icon.png')?>');
 		$("#generate_code_nav_icon").attr("src",'<?=base_url('images/code.png')?>');
 		$("#account_info_nav_icon").attr("src",'<?=base_url('images/account_info.png')?>');
-		$("#generate_code_nav_icon").attr("src",'<?=base_url('images/account_info.png')?>');
+		$("#accounts_nav_icon").attr("src",'<?=base_url('images/accounts.png')?>');
 		
 		//CHANGE THE ICON IMAGE TO THE SELECTED STYLE IMAGE
 		if(box_id == '#post_board_box'){
@@ -1595,7 +1595,7 @@
 		}else if(box_id == '#account_info_box'){
 			$("#account_info_nav_icon").attr("src", '<?=base_url('images/white_account_info.png')?>');
 		}else if(box_id == '#accounts_box'){
-			$("#account_info_nav_icon").attr("src", '<?=base_url('images/white_account_info.png')?>');
+			$("#accounts_nav_icon").attr("src", '<?=base_url('images/accounts_white.png')?>');
 		}
 		
 		//CHANGE THE STYLE OF THE SELECTED BOX

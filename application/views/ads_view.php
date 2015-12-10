@@ -116,7 +116,7 @@
 							</div>
 							<div id="accounts_box" class="nav_box" onClick="load_accounts_page()">
 								<div style="height:77px;">
-									<img id="generate_code_nav_icon" src="<?= base_url("images/code.png") ?>" class="nav_box_image" style="height:75px; position:relative; right:5px;"/>
+									<img id="accounts_nav_icon" src="<?= base_url("images/accounts.png") ?>" class="nav_box_image" style="height:75px; position:relative;"/>
 								</div>
 								<div class="nav_box_title">Accounts</div>
 							</div>
