@@ -2,6 +2,10 @@
 	$where = null;
 	$where['id'] = $ad_request_id;
 	$ad_request = db_select_ad_request($where);
+	
+	$where = null;
+	$where['id'] = $ad_request['market_id'];
+	$market = db_select_market($where);
 ?>
 <script>
 	function warning(){
@@ -21,6 +25,9 @@
 </script>
 <div style="margin:0 auto; width:600px; text-align:center; margin-bottom:10px;">
 	You have this ad reserved for the next <span id="minutes">9</span>:<span id="seconds">56</span>.
+</div>
+<div>
+	Post the ad in the following Craigslist section: <a target="_blank" href="<?=$market['link']?>"><?=$market['name']?></a>
 </div>
 <div id="content_description" style="margin:0 auto; width:600px;height:300px;padding:10px;border-radius:15px;border:2px solid #7f7f7f;">
 	<div>Content Description</div>
