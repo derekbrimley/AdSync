@@ -27,6 +27,10 @@
 				
 				background-color:#4e78fc;
 			}
+			.error{
+				color:red;
+				margin-left:80px;
+			}
 		</style>
 	</head>
 	<script>
@@ -129,45 +133,85 @@
 		<div class="login_form slide" style="margin:0 auto;padding:20px;margin-top:20px;width:400px;">
 			<div style="text-align:center;padding-bottom:10px;padding-top:10px;font-size:53px;">Create Account</div>
 			<?php $attributes = array('name'=>'new_user_form','id'=>'new_user_form','style'=>'margin-bottom:50px;' )?>
-			<?php echo validation_errors(); ?>
 			<?=form_open_multipart(base_url('index.php/login/create_new_user/'),$attributes);?>
 				<input id="latitude" name="latitude" type="hidden" value="" />
 				<input id="longitude" name="longitude" type="hidden" value="" />
 				<input id="ip_address" name="ip_address" type="hidden" value="" />
 				<table>
-					<tr>
+					<tr> 	 	
 						<td><input placeholder="First Name" value="<?php echo set_value('first_name'); ?>" style="margin-left:80px;width:240px;height:40px;border-radius:3px;border: solid 1px #c9c9c9;" type="text" id="first_name" name="first_name"/></td>
+					</tr>
+					<tr>
+						<td>
+							<?php echo form_error('first_name'); ?>
+						</td>
+					<tr>
 					</tr>
 					<tr>
 						<td><input placeholder="Last Name" value="<?php echo set_value('last_name'); ?>" style="margin-left:80px;width:240px;height:40px;border-radius:3px;border: solid 1px #c9c9c9;" type="text" id="last_name" name="last_name"/></td>
 					</tr>
 					<tr>
+						<td>
+							<?php echo form_error('last_name'); ?>
+						</td>
+					<tr>
+					<tr>	
 						<td><input placeholder="Username" value="<?php echo set_value('username'); ?>" style="margin-left:80px;width:240px;height:40px;border-radius:3px;border:solid 1px #c9c9c9;" type="text" id="username" name="username"/></td>
 					</tr>
+					<tr>
+						<td>
+							<?php echo form_error('username'); ?>
+						</td>
+					<tr>
 					<tr>
 						<td><input placeholder="Password" value="<?php echo set_value('password'); ?>" style="margin-left:80px;width:240px;height:40px;border-radius:3px;border:solid 1px #c9c9c9;" type="password" id="password" name="password"/></td>
 					</tr>
 					<tr>
+						<td>
+							<?php echo form_error('password'); ?>
+						</td>
+					<tr>
+					<tr>
 						<td><input placeholder="Confirm Password" value="<?php echo set_value('passconf'); ?>" style="margin-left:80px;width:240px;height:40px;border-radius:3px;border:solid 1px #c9c9c9;" type="password" id="passconf" name="passconf"/></td>
 					</tr>
 					<tr>
-						<td><input placeholder="Gmail Address" value="<?php echo set_value('email'); ?>" style="margin-left:80px;width:145px;height:40px;border-radius:3px;border:solid 1px #c9c9c9;" type="text" id="email" name="email"/>@gmail.com
+						<td>
+							<?php echo form_error('passconf'); ?>
+						</td>
+					<tr>
+					<tr>
+						<td><input placeholder="Gmail Address" value="<?php echo set_value('email'); ?>" style="margin-left:80px;width:232px;height:40px;border-radius:3px;border:solid 1px #c9c9c9;" type="text" id="email" name="email"/>
 						<span style="color:red;cursor:pointer" onClick="alert('Must be Gmail account. If you do not have a Gmail account, go to http://gmail.com/ to get one.')"> ?</span></td>
 					</tr>
+					<tr>
+						<td>
+							<?php echo form_error('email'); ?>
+						</td>
+					<tr>
 					<tr>
 						<td>
 							<select id="market_id" name="market_id" style="margin-left:80px;width:232px;height:40px;border-radius:3px;border:solid 1px #c9c9c9;">
 								<option>Select Craigslist Market</option>
 								<?php foreach($markets as $market): ?>
-									<option value="<?=$market['id']?>"><?=$market['name']?>, <?=$market['state']?></option>
+									<option <?php echo set_select('market_id', $market['id']); ?> value="<?=$market['id']?>"><?=$market['name']?>, <?=$market['state']?></option>
 								<?php endforeach ?>
 							</select>
 							<span style="color:red;cursor:pointer;" onClick="alert('To find your market, go to http://www.craigslist.com/')"> ?</span>
 					</tr>
 					<tr>
+						<td>
+							<?php echo form_error('market_id'); ?>
+						</td>
+					<tr>
+					<tr>
 						<td><input placeholder="Code" value="<?php echo set_value('secret_code'); ?>" style="margin-left:80px;width:230px;height:40px;border-radius:3px;border:solid 1px #c9c9c9;" type="text" id="secret_code" name="secret_code"/>
 						<span style="color:red;cursor:pointer;" onClick="alert('Enter the code that was given to you by us. If you have not received a code, send us an email at ryguy.msioo@gmail.com.')"> ?</span></td>
 					</tr>
+					<tr>
+						<td>
+							<?php echo form_error('secret_code'); ?>
+						</td>
+					<tr>
 					<tr>
 						<td>
 							<input class="login_btn" id="next_btn" type="submit" value="Next" />
