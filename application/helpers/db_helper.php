@@ -18,38 +18,28 @@
 	}//end db_select_templates() many	
 
 	//SELECT TEMPLATE (one)
-	function db_select_template($where,$order_by = 'id',$limit = 'all',$many = 'one')
-	{
+	function db_select_template($where,$order_by = 'id',$limit = 'all',$many = 'one'){
 		$CI =& get_instance();
 		$i = 0;
 		$where_sql = "";
-		if(!empty($where))
-		{
+		if(!empty($where)){
 			$where_sql = " WHERE ";
 		}
 		$values = array();
-		if(is_array($where))
-		{
+		if(is_array($where)){
 			$i = 0;
 			$values = array();
-			foreach($where as $key => $value)
-			{
+			foreach($where as $key => $value){
 				
-				if ($i > 0)
-				{
+				if ($i > 0){
 					$where_sql = $where_sql." AND";
 				}
 				
-				if ($value == null)
-				{
+				if ($value == null){
 					$where_sql = $where_sql." template.".$key." is ?";
-				}
-				else if (substr($value,0,1) == "%" || substr($value,-1) == "%") //IF VALUE START OR ENDS WITH A %
-				{
+				}else if (substr($value,0,1) == "%" || substr($value,-1) == "%"){
 					$where_sql = $where_sql." template.".$key." LIKE ?";
-				}
-				else
-				{
+				}else{
 					$where_sql = $where_sql." template.".$key." = ?";
 				}
 				$values[$i] = $value;
@@ -57,8 +47,7 @@
 				$i++;
 			}
 		}
-		else
-		{
+		else{
 			$where_sql = $where_sql.$where;
 		}
 		

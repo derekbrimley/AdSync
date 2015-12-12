@@ -15,10 +15,54 @@
 			buttons: 
 				[
 					{
+						id: "back_btn",
+						text: "Back",
+						click: function(){
+							$("#instructions_container").show();
+							$("#post_form_container").hide();
+							$(event.target).hide();
+							$('.ui-button-text:contains(Submit)').hide();
+							$('.ui-button-text:contains(Next)').show();
+						}
+					},
+					{
+						id: "next_btn",
+						text: "Next",
+						click: function(){
+							var id = $("#post_id").val();
+							$("#instructions_container").hide();
+							$("#post_form_container").show();
+							$(event.target).hide();
+							$('.ui-button-text:contains(Submit)').show();
+							$('.ui-button-text:contains(Back)').show();
+							if(!(report_ajax_call===undefined)){
+								report_ajax_call.abort();
+							}
+							report_ajax_call = $.ajax({
+								
+								url: "<?=base_url("index.php/ads/load_post_form") ?>",
+								type: "POST",
+								data: {id:id},
+								cache: false,
+								statusCode: {
+									200: function(response){
+										//LOAD DIALOG WITH VIEW FROM SERVER
+										$("#post_form_container").html(response);
+									},
+									404: function(){
+										alert('Page not found');
+									},
+									500: function(response){
+										alert("500 error! "+response);
+									}
+								}
+							});//END AJAX
+						}
+					},
+					{
 						id: "submit_ad_post",
 						text: "Submit",
-						click: function() 
-						{
+						click: function(){
 							var dataString = $("#ad_submission_form").serialize();
 							var is_valid = true;
 							
@@ -26,16 +70,13 @@
 							var post_title = $("#post_title").val();
 							var post_content = $("#post_content").val();
 							
-							if(post_link == '' || post_title == '' || post_content == '')
-							{
+							if(post_link == '' || post_title == '' || post_content == ''){
 								is_valid = false;
 								alert("Please fill out the information.");
 							}
-							if(is_valid)
-							{
+							if(is_valid){
 								//AJAX
-								if(!(report_ajax_call===undefined))
-								{
+								if(!(report_ajax_call===undefined)){
 									report_ajax_call.abort();
 								}
 								report_ajax_call = $.ajax({
@@ -45,6 +86,8 @@
 									cache: false,
 									statusCode: {
 										200: function(response){
+											$('.ui-button-text:contains(Back)').hide();
+											$('.ui-button-text:contains(Next)').hide();
 											$("#ajax_container").html(response);
 											load_post_board();
 											$('#submit_ad_post').hide();
@@ -62,22 +105,24 @@
 					},
 					{
 						text: "Close",
-						click: function() 
-						{
+						click: function(){
+							$("#ajax_container").show();
+							$("#post_form_container").hide();
+							
+							$('.ui-button-text:contains(Submit)').hide()
+							$('.ui-button-text:contains(Next)').show()
+							
 							$( this ).dialog( "close" );
 						}
 					},
 				],//end of buttons
-				open: function()
-				{
+				open: function(){
 					$('#submit_ad_post').show();
 				},//end open function
-				close: function( event, ui) 
-				{
+				close: function( event, ui){
 					var dataString = $("#ad_submission_form").serialize();
 					//AJAX
-					if(!(report_ajax_call===undefined))
-					{
+					if(!(report_ajax_call===undefined)){
 						report_ajax_call.abort();
 					}
 					report_ajax_call = $.ajax({
@@ -1189,8 +1234,7 @@
 		
 		//RESERVE AD REQUEST--REMOVE FROM LIST
 		//AJAX
-		if(!(report_ajax_call===undefined))
-		{
+		if(!(report_ajax_call===undefined)){
 			report_ajax_call.abort();
 		}
 		report_ajax_call = $.ajax({
@@ -1209,8 +1253,7 @@
 					
 					//START TIMER
 					setTimeout(
-						function()
-						{
+						function(){
 							$("#ad_submission_dialog").dialog( "close" );
 						},600000);
 				},
@@ -1222,6 +1265,10 @@
 				}
 			}
 		});//END AJAX
+		
+		$('.ui-button-text:contains(Submit)').hide();
+		$('.ui-button-text:contains(Back)').hide();
+		
 		
 		
 	}

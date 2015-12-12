@@ -550,6 +550,18 @@ class Ads extends MY_Controller {
 		$this->load->view("ads/live_ads",$data);
 	}
 	
+	function load_post_form(){
+		$post_id = $_POST['id'];
+		
+		$post = null;
+		$post['id'] = $post_id;
+		
+		$post = db_select_post($post);
+		
+		$data['post_id'] = $post['id'];
+		$this->load->view("ads/ad_request_post_form",$data);
+	}
+	
 	function load_post_history(){
 		$user_id = $this->session->userdata('user_id');
 		$role = $this->session->userdata('role');
