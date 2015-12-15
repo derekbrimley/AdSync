@@ -251,7 +251,8 @@ class Login extends CI_Controller
 			$this->session->set_userdata('role', $user['role']);
 			$this->session->set_userdata('is_active', $user['is_active']);
 			$this->session->set_userdata('referral_id', $user['referral_id']);
-				
+			$this->session->set_userdata('email', $user['email']);
+			
 			if($role == "admin" || $role == "affiliate" || $role == "manager"){
 				redirect("ads");
 			}else{
@@ -319,6 +320,29 @@ class Login extends CI_Controller
 		}
 		
 		$this->load->view("sent_email_view");
+	}
+	
+	function send_new_email(){
+		$user_id = $_POST['id'];
+		
+		$where = null;
+		$where['id'] = $user_id;
+		$user = db_select_user($where);
+		
+		$email = $user['email'];
+		$hash = $user['hash'];
+
+		$to = $email;
+		$subject = "AdSync Confirmation Email";
+		$message = "
+			Click the link below to confirm your new AdSync Account.
+			http://www.adsync.nextgenmarketingsolutions.com/index.php/login/activate?email=$email&hash=$hash
+		";
+		$headers = 'From: admin@nextgenmarketingsolutions.com';
+		
+		mail($to,$subject,$message,$headers);
+		
+		echo "An email has been sent to $email";
 	}
 	
 	function update_password(){

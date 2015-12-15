@@ -63,6 +63,7 @@ class Ads extends MY_Controller {
 		
 		if($is_active == "false")
 		{
+			$data['user_id'] = $this->session->userdata('user_id');
 			$this->load->view('ads/inactive_user_view',$data);
 		}
 		else if($role == "admin" || $role == "manager" || $role == "client" || $role == "affiliate" || $role == "staff")
@@ -558,6 +559,7 @@ class Ads extends MY_Controller {
 		
 		$post = db_select_post($post);
 		
+		$data['post_datetime'] = $post['post_datetime'];
 		$data['post_id'] = $post['id'];
 		$this->load->view("ads/ad_request_post_form",$data);
 	}

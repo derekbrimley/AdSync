@@ -23,8 +23,10 @@
 	}
 	window.onbeforeunload = warning;
 </script>
-<input id="ad_request_id" name="ad_request_id" type="hidden" value="<?=$ad_request['id']?>" />
-<input id="post_id" name="post_id" type="hidden" value="<?=$post_id?>" />
+<form id="ad_request_form">
+	<input id="ad_request_id" name="ad_request_id" type="hidden" value="<?=$ad_request['id']?>" />
+	<input id="post_id" name="post_id" type="hidden" value="<?=$post_id?>" />
+</form>
 <div style="margin:0 auto; width:600px; text-align:center; margin-bottom:10px;">
 	You have this ad reserved for the next <span id="minutes">9</span>:<span id="seconds">56</span>.
 </div>

@@ -120,7 +120,8 @@
 					$('#submit_ad_post').show();
 				},//end open function
 				close: function( event, ui){
-					var dataString = $("#ad_submission_form").serialize();
+					var dataString = $("#ad_request_form").serialize();
+					console.log(dataString);
 					//AJAX
 					if(!(report_ajax_call===undefined)){
 						report_ajax_call.abort();
