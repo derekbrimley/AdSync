@@ -20,9 +20,9 @@
 						click: function(){
 							$("#instructions_container").show();
 							$("#post_form_container").hide();
-							$(event.target).hide();
-							$('.ui-button-text:contains(Submit)').hide();
-							$('.ui-button-text:contains(Next)').show();
+							$('.ui-dialog-buttonpane').find('button:eq(2)').css('visibility','hidden');
+							$('.ui-dialog-buttonpane').find('button:eq(1)').css('visibility','visible');
+							$('.ui-dialog-buttonpane').find('button:eq(0)').css('visibility','hidden');
 						}
 					},
 					{
@@ -32,9 +32,10 @@
 							var id = $("#post_id").val();
 							$("#instructions_container").hide();
 							$("#post_form_container").show();
-							$(event.target).hide();
-							$('.ui-button-text:contains(Submit)').show();
-							$('.ui-button-text:contains(Back)').show();
+							$('.ui-dialog-buttonpane').find('button:eq(2)').css('visibility','visible');
+							$('.ui-dialog-buttonpane').find('button:eq(1)').css('visibility','hidden');
+							$('.ui-dialog-buttonpane').find('button:eq(0)').css('visibility','visible');
+							
 							if(!(report_ajax_call===undefined)){
 								report_ajax_call.abort();
 							}
@@ -86,8 +87,8 @@
 									cache: false,
 									statusCode: {
 										200: function(response){
-											$('.ui-button-text:contains(Back)').hide();
-											$('.ui-button-text:contains(Next)').hide();
+											$('.ui-dialog-buttonpane').find('button:eq(0)').css('visibility','hidden');
+											$('.ui-dialog-buttonpane').find('button:eq(1)').css('visibility','hidden');
 											$("#ajax_container").html(response);
 											load_post_board();
 											$('#submit_ad_post').hide();
@@ -108,9 +109,8 @@
 						click: function(){
 							$("#ajax_container").show();
 							$("#post_form_container").hide();
-							
-							$('.ui-button-text:contains(Submit)').hide()
-							$('.ui-button-text:contains(Next)').show()
+							$('.ui-dialog-buttonpane').find('button:eq(2)').css('visibility','hidden');
+							$('.ui-dialog-buttonpane').find('button:eq(1)').css('visibility','visible');
 							
 							$( this ).dialog( "close" );
 						}
@@ -1267,8 +1267,9 @@
 			}
 		});//END AJAX
 		
-		$('.ui-button-text:contains(Submit)').hide();
-		$('.ui-button-text:contains(Back)').hide();
+		$('.ui-dialog-buttonpane').find('button:first').css('visibility','hidden');
+		$('.ui-dialog-buttonpane').find('button:eq(2)').css('visibility','hidden');
+		// $('.ui-button-text:contains(Back)').hide();
 		
 		
 		
