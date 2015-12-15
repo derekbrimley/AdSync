@@ -9,7 +9,6 @@
 		<style>
 			.login_btn{
 				margin-left:80px;
-				margin-top:40px;
 				height:50px;
 				width:244px;
 				background-color:#6295FC;
@@ -64,7 +63,7 @@
 		</div>
 		<div class="login_form slide" style="margin:0 auto;padding:20px;margin-top:20px;width:400px;">
 			<div style="text-align:center;padding-bottom:10px;padding-top:10px;font-size:53px;">Create Account</div>
-			<?php $attributes = array('name'=>'new_user_form','id'=>'new_user_form','style'=>'margin-bottom:50px;' )?>
+			<?php $attributes = array('name'=>'new_user_form','id'=>'new_user_form','style'=>'margin-bottom:30px;' )?>
 			<?=form_open_multipart(base_url('index.php/login/create_new_user/'),$attributes);?>
 				<input id="latitude" name="latitude" type="hidden" value="" />
 				<input id="longitude" name="longitude" type="hidden" value="" />

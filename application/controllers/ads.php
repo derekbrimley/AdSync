@@ -633,8 +633,7 @@ class Ads extends MY_Controller {
 		$role = $this->session->userdata('role');
 		
 		$where = null;
-		if($role!="admin")
-		{
+		if($role!="admin"){
 			$where['poster_id'] = $user_id;
 		}
 		$where['renewal_datetime'] = null;
@@ -655,14 +654,12 @@ class Ads extends MY_Controller {
 	function load_user_transactions(){
 		$user_id = $_POST['user_id'];
 		
-		if($user_id == "All Users")
-		{
+		if($user_id == "All Users"){
 			$where = null;
 			$where = "1 = 1";
 			$account_entrys = db_select_account_entrys($where,"datetime DESC");
 		}
-		else
-		{
+		else{
 			$where = null;
 			$where['user_id'] = $user_id;
 			$account_entrys = db_select_account_entrys($where,"datetime DESC");
@@ -758,35 +755,31 @@ class Ads extends MY_Controller {
 		$sql = "SELECT * FROM `post` WHERE poster_id = ".$user_id." AND post_datetime > '".date("Y-m-d H:i:s",strtotime($post_datetime) - (24*3600*45))."' AND is_renewal = 'false' AND result = 'Live'";
 		$query = $this->db->query($sql);
 		$posts = array();
-		foreach($query->result() as $row)
-		{
+		
+		foreach($query->result() as $row){
 			$post = array();
 			$post['id'] = $row->id;
 			$posts[] = $post;
 		}
+		
 		$count = count($posts);
 		
 		$sql = "SELECT * FROM `post` WHERE poster_id = ".$user_id." AND post_datetime > '".date("Y-m-d H:i:s",strtotime($post_datetime) - (24*3600))."' AND is_renewal = 'false' AND result = 'Live'";
 		$query = $this->db->query($sql);
 		$day_posts = array();
-		foreach($query->result() as $row)
-		{
+		
+		foreach($query->result() as $row){
 			$day_post = array();
 			$day_post['id'] = $row->id;
 			$day_posts[] = $day_post;
 		}
 		$day_count = count($day_posts);
 		
-		if($count > 20)
-		{
+		if($count > 20){
 			echo "<script>alert('Sorry! Craigslist limits the number of ads one person can post. You have reached the limit. Don't worry, after 45 days, the post is deleted. For now, just focus on renewing your current ads. Thanks!');</script>";
-		}
-		else if($day_count > 5)
-		{
+		}else if($day_count > 5){
 			echo "<script>alert('Sorry! Craigslist limits the number of ads one person can post per day to five. You have reached the limit. For now, just focus on renewing your current ads. Come back tomorrow to post some new ads! Thanks!');</script>";
-		}
-		else
-		{
+		}else{
 			$id = $_POST['id'];
 			
 			$where = null;
@@ -813,7 +806,6 @@ class Ads extends MY_Controller {
 			$data['ad_request_id'] = $ad_request_id;
 			$this->load->view("ads/ad_request_dialog",$data);
 		}
-
 	}
 	
 	function reset_password(){
