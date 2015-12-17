@@ -137,11 +137,12 @@
 		//GET LIST OF FILE IN THE PUBLIC FOLDER
 		$public_folder = "/public_html_adsync/temp_files_for_download/".ENVIRONMENT;
 		$files = $CI->ftp->list_files($public_folder);
+		//print_r($files);
 		// echo $public_folder."<br>";
 		//MOVE ANY LEFT OVER FILES IN THE PUBLIC FOLDER BACK TO THE PRIVATE FOLDER
 		foreach($files as $file)
 		{
-			//echo $file."<br>";
+			// echo $file."<br>";
 			//GET SECURE FILE
 			$this_file = null;
 			$where = null;
@@ -151,7 +152,7 @@
 			if(!empty($this_file))
 			{
 				$full_path = $this_file["server_path"].$this_file["name"];
-		
+				// echo $full_path;
 				//MOVE FILE BACK FROM PUBLICLY ACCESSIBLE FOLDER TO NON ACCESSABLE FOLDER
 				$CI->ftp->move('/public_html_adsync/temp_files_for_download'.'/'.ENVIRONMENT.'/'.$this_file["name"], $full_path);
 				//echo "moved<br>";
@@ -164,41 +165,35 @@
 		$secure_file = db_select_secure_file($where);
 		
 		
-		if(user_has_file_access($secure_file))
-		{
-			$full_path = $secure_file["server_path"].$secure_file["name"];
-			// echo $full_path;
+		if(user_has_file_access($secure_file)){
+			$full_path = $secure_file["server_path"]."/".$secure_file["name"];
+			echo "From: ".$full_path."<br>";
 			
 			
 			//***** EVEN IN THE DEV ENVIRONMENT THIS ACTUALLY USES THE LIVE SERVER TO UPLOAD AND DOWNLOAD FILES
 			
 			//MOVE FILE FROM NON ACCESSIBLE FOLDER TO PUBLICLY ACCESSABLE FOLDER
-			// echo '/public_html_adsync/temp_files_for_download'.'/'.ENVIRONMENT.'/'.$secure_file["name"]."<br>";
-			// echo $full_path;
-			$CI->ftp->move($full_path, '/public_html_adsync/temp_files_for_download'.'/'.ENVIRONMENT.'/'.$secure_file["name"]);
-			//$CI->ftp->move('/public_html/temp_files_for_download/temp_tester.pdf', '/edocuments/tester.pdf');
+			echo "To: ".'/public_html_adsync/temp_files_for_download/'.ENVIRONMENT.'/'.$secure_file["name"]."<br>";
+			$CI->ftp->move($full_path, '/public_html_adsync/temp_files_for_download/'.ENVIRONMENT.'/'.$secure_file["name"]);
 			
 			//GET FILE EXTENSION
 			$ext_pos = strpos($secure_file["name"],".");
 			$len = strlen($secure_file["name"]);
 			$ext = substr($secure_file["name"],($ext_pos-$len));
-		
-			$url = 'http://adsync.nextgenmarketingsolutions.com/temp_files_for_download'.'/'.ENVIRONMENT.'/'.$secure_file["name"];
+			
+			$url = 'http://adsync.nextgenmarketingsolutions.com/temp_files_for_download/'.ENVIRONMENT.'/'.$secure_file["name"];
 			
 			header("Content-Description: File Transfer");
 			header('Content-type: '.$secure_file["type"]);
-			header('Content-Dispositi	on: inline; filename="'.$secure_file["title"].$ext.'"');
+			header('Content-Disposition: inline; filename="'.$secure_file["title"].$ext.'"');
 			header("Cache-Control: no-cache, must-revalidate");
 			readfile($url);
 			
-			header("Location: ".'http://fleetsmarts.net/temp_files_for_download'.'/'.ENVIRONMENT.'/'.$secure_file["name"]);
 			// MOVE FILE BACK FROM PUBLICLY ACCESSIBLE FOLDER TO NON ACCESSABLE FOLDER
-			// $CI->ftp->move('/public_html_adsync/temp_files_for_download'.'/'.ENVIRONMENT.'/'.$secure_file["name"], $full_path);
+			// $CI->ftp->move('/public_html_adsync/temp_files_for_download/'.ENVIRONMENT.'/'.$secure_file["name"], $full_path);
 			
 			$CI->ftp->close();
-		}
-		else
-		{
+		}else{
 			echo "You do not have file access!";
 		}
 	}
