@@ -902,6 +902,20 @@ class Ads extends MY_Controller {
 		
 		db_update_account_entry($set,$where);
 		
+		$money_paid = "$".number_format($transaction_amount*-1,2);
+		
+		$email = $user['email'];
+		
+		$this->load->library('email');
+
+		$this->email->from('admin@nextgenmarketingsolutions.com', 'AdSync');
+		$this->email->to($email); 
+
+		$this->email->subject('Your AdSync balance has been paid');
+		$this->email->message("We have sent $money_paid to your Google Wallet account. Please verify that you have received that amount. If you have any questions, contact us immediately.");	
+
+		$this->email->send();
+		
 		//DISPLAY UPLOAD SUCCESS MESSAGE
 		load_upload_success_view();
 	}
@@ -931,6 +945,7 @@ class Ads extends MY_Controller {
 		$set = array();
 		$set['result_datetime'] = $post_datetime;
 		$set['result'] = $post_result;
+		$set['result_user_id'] = $this->session->userdata('user_id');
 		$set['result_screen_shot_guid'] = $secure_file['file_guid'];
 		
 		if($post_result != "Live"){
@@ -959,6 +974,19 @@ class Ads extends MY_Controller {
 		}
 		
 		db_insert_account_entry($new_account_entry);
+		
+		$email = $user['email'];
+		$link = $post['link'];
+		
+		$this->load->library('email');
+
+		$this->email->from('admin@nextgenmarketingsolutions.com', 'AdSync');
+		$this->email->to($email); 
+
+		$this->email->subject('Your AdSync posting has been checked');
+		$this->email->message("We have checked your AdSync posting. The result of the posting is: $post_result. We checked the link you provided at $link. You can also see the screenshot we took at AdSync.com. If you have any questions, contact us immediately.");	
+
+		$this->email->send();
 		
 		//DISPLAY UPLOAD SUCCESS MESSAGE
 		load_upload_success_view();
