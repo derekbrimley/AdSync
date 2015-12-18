@@ -6,6 +6,8 @@
 		<link type="text/css" href="<?php echo base_url("css/jquery-ui.min.css"); ?>" rel="stylesheet" />
 		<script type="text/javascript" src="<?php echo base_url("js/jquery-1.11.3.min.js"); ?>" ></script>
 		<script type="text/javascript" src="<?php echo base_url("js/jquery-ui.min.js"); ?>" ></script>
+		<script type="text/javascript" src="<?php echo base_url("js/jquery.validate.js"); ?>" ></script>
+		<script src="http://malsup.github.com/jquery.form.js"></script>
 		<link rel="shortcut icon" href="<?=base_url("/favicon-16x16.png")?>" />
 		<link href='http://fonts.googleapis.com/css?family=Roboto:300' rel='stylesheet' type='text/css'>
 	</head>

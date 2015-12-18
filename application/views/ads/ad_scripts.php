@@ -5,7 +5,9 @@
 		$("#nav_container").height($(window).height() - 370);
 		
 		load_post_board();
-		
+		$('#myForm').ajaxForm(function() { 
+			alert("submitted!"); 
+		});
 		//AD SUBMISSION DIALOG
         $( "#ad_submission_dialog").dialog({
 			autoOpen: false,
@@ -65,15 +67,27 @@
 						text: "Submit",
 						click: function(){
 							var dataString = $("#ad_submission_form").serialize();
+							console.log(dataString);
 							var is_valid = true;
 							
+							var phone_number = $('#post_phone_number').val();
+							var cleaned_phone = phone_number.replace(/\D/g,'');
 							var post_link = $("#post_link").val();
 							var post_title = $("#post_title").val();
 							var post_content = $("#post_content").val();
-							
-							if(post_link == '' || post_title == '' || post_content == ''){
+							console.log(cleaned_phone);
+							if(post_link==''){
 								is_valid = false;
-								alert("Please fill out the information.");
+								alert("Please fill in the link field.");
+							}else if(post_title==''){
+								is_valid = false;
+								alert("Please fill in the title field.");
+							}else if(post_content==''){
+								is_valid = false;
+								alert("Please fill in the content field.");
+							}else if(cleaned_phone.length != 10){
+								is_valid = false;
+								alert("Phone number not valid.");
 							}
 							if(is_valid){
 								//AJAX
