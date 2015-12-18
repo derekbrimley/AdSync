@@ -1106,7 +1106,7 @@
 					$("#settle_btn").show();
 					update_balance();
 					get_balance();
-					if(user_id=="All Users"){
+					if(user_id==0){
 						$("#settle_btn").hide();
 					}
 				},

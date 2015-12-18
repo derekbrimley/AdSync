@@ -1,5 +1,6 @@
 <?php
-	$row = 0
+	$row = 0;
+	$js = 'id="user_id" onChange="load_user_transactions();"';
 ?>
 <script>
 	$(".post_row:even").css("background-color","#eee");
@@ -18,14 +19,7 @@ Transactions
 <span style="float:right;">
 	<form id="user_form" name="user_form">
 		<input type="hidden" name="balance_input" id="balance_input" value=""/>
-		<select id="user_id" name="user_id" onChange="load_user_transactions()">
-			<option>All Users</option>
-			<?php foreach($dropdown_users as $dropdown_user): ?>
-				<option value="<?= $dropdown_user['id'] ?>">
-					<?= $dropdown_user['first_name']." ".$dropdown_user['last_name'] ?>
-				</option>
-			<?php endforeach ?>
-		</select>
+		<?=form_dropdown('user_id', $dropdown_users,'All Users',$js);?>
 	</form>
 </span>
 <span id="settle_btn" style="display:none;float:right;margin-right:20px;position:relative;bottom:6px;">

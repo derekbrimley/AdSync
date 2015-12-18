@@ -432,15 +432,22 @@ class Ads extends MY_Controller {
 		
 		$where = null;
 		$where = "1 = 1";
-		$dropdown_users = db_select_users($where,"last_name ASC");
+		$users = db_select_users($where,"last_name ASC");
 		
 		$balance = 0;
-		if(!empty($account_entrys))
-		{
+		$dropdown_users = array();
+		$dropdown_users[] = "All Users";
+		foreach($users as $user){
+			$user_balance = 0;
 			foreach($account_entrys as $account_entry)
 			{
-				$balance += $account_entry['amount'];
+				if($account_entry['user_id']==$user['id']){
+					$user_balance += $account_entry['amount'];
+					$balance += $account_entry['amount'];
+				}
 			}
+			
+		$dropdown_users[$user['id']] = $user['first_name']." ".$user['last_name']." - $".number_format($user_balance,2);
 		}
 		
 		$data['balance'] = number_format($balance,2);
@@ -658,8 +665,9 @@ class Ads extends MY_Controller {
 			$where = null;
 			$where = "1 = 1";
 			$account_entrys = db_select_account_entrys($where,"datetime DESC");
-		}
-		else{
+		}else if($user_id == "Users with balance"){
+			
+		}else{
 			$where = null;
 			$where['user_id'] = $user_id;
 			$account_entrys = db_select_account_entrys($where,"datetime DESC");
