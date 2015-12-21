@@ -59,7 +59,10 @@ class Ads extends MY_Controller {
 		$data['market_options'] = $market_options;
 		$data['title'] = $title;
 		
-		//echo $role;
+		$where = null;
+		$where['id'] = $this->session->userdata('user_id');
+		$user = db_select_user($where);
+		$data['user'] = $user;
 		
 		if($is_active == "false")
 		{
@@ -68,6 +71,16 @@ class Ads extends MY_Controller {
 		}
 		else if($role == "admin" || $role == "manager" || $role == "client" || $role == "affiliate" || $role == "staff")
 		{
+			$old_number = $user['number_of_visits'];
+			
+			$set = array();
+			$set['number_of_visits'] = $old_number + 1;
+			
+			$where = null;
+			$where['id'] = $user['id'];
+			
+			db_update_user($set,$where);
+			
 			$this->load->view('ads_view',$data);
 		}
 		

@@ -83,6 +83,22 @@ body{
 	border-radius:3px;
 	border: solid 1px #c9c9c9;
 }
+#help_btn{
+	margin-right:10px;
+	font-size:24px;
+	border:none;
+	cursor:pointer;
+	float:right;
+	background-color:#00B050;
+	padding:10px;
+	border-radius:8px;
+	position:relative;
+	bottom:10px;
+	color:white;
+}
+#help_btn:hover{
+	background-color:green;
+}
 .leads_container.shadow_card{
 	width: 1100px;
 	height:100%;
@@ -302,6 +318,26 @@ table{
 	color:#4E86FC;
 	font-size:14px;
 	width:1100px;
+}
+.tutorial_btn{
+	border: none;
+    background-color: #0079C1;
+    color: white;
+    width: 100px;
+    height: 30px;
+	font-weight:bold;
+}
+.tutorial_desc{
+	margin-top:15px;
+}
+.tutorial_text{
+	height:275px;
+}
+.tutorial_title{
+	font-size:38px;
+	text-align:center;
+	font-weight: bold;
+    color: #0079C1;
 }
 ::-webkit-scrollbar {
    width: 9px;

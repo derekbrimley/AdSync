@@ -2720,6 +2720,7 @@
 			$user["geolocation"] = $row->geolocation;
 			$user["hash"] = $row->hash;
 			$user["reset_token"] = $row->reset_token;
+			$user["number_of_visits"] = $row->number_of_visits;
 			
 			$users[] = $user;
 			//echo "hello world ";

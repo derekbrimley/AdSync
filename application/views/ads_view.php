@@ -38,10 +38,20 @@
 		setInterval('countdown()',1000);
 	</script>
 	<body style="background-color: #eee;">
+		<div style="display:none;">
+			<input type="hidden" id="number_of_visits" value="<?=$user['number_of_visits']?>" />
+		</div>
 		<div id="header" style="padding:25px 100px;background-color:#0079C1;color:white;font-size:24px;">
 			<div id="header_content" style="width:1100px;margin:0 auto;">
-				<span><a href="<?= base_url("/index.php/ads/") ?>" style="text-decoration:none;color:white;">AdSync</a></span>
-				<span id="logout_btn"><a style="text-decoration:none;color:white;" href="<?=base_url('/index.php/login/logout') ?>">Log Out</a></span>
+				<span>
+					<a href="<?= base_url("/index.php/ads/") ?>" style="text-decoration:none;color:white;">AdSync</a>
+				</span>
+				<span id="logout_btn">
+					<a style="text-decoration:none;color:white;" href="<?=base_url('/index.php/login/logout') ?>">Log Out</a>
+				</span>
+				<span>
+					<button style="font-family:'Roboto',sans-serif;" id="help_btn" type="button" onClick="tutorial_open()">Help</button>
+				</span>
 			</div>
 		</div>
 		<div id="main_content" style="display:block;margin:0 auto;width:1100px;">
@@ -179,5 +189,41 @@
 	<div id="settle_balance_dialog" title="Settle Balance" style="font-family: 'Roboto', sans-serif;">
 		<div id="settle_balance_ajax_container">
 			
+		</div>
+	</div>
+	<div id="tutorial_dialog" style="font-family: 'Roboto', sans-serif;">
+		<div>
+			<img style="width:450px;" src="<?=base_url('images/negative-space.jpg')?>"/>
+		</div>
+		<div class="tutorial_text" id="slide_1">
+			<div class="tutorial_title">Welcome to AdSync!</div>
+			<div class="tutorial_desc">
+				AdSync is a marketplace for Craigslist ads. We post "ad requests" from people who need ads posted. When you post an ad for them, you get paid.
+			</div>
+		</div>
+		<div class="tutorial_text" id="slide_2" style="display:none;">
+			<div class="tutorial_title">Posting an Ad</div>
+			<div class="tutorial_desc">To post an ad, go to the post board, and click on the "Reserve" button next to the ad request you would like to fulfill. From that point, follow the instructions to post the ad on Craigslist. You have the ad reserved for 10 minutes, so no one else can post that ad until your time runs out. Once you have posted the ad, fill out the form with the required information, and click the "Submit" button.</div>
+		</div>
+		<div class="tutorial_text" id="slide_3" style="display:none;">
+			<div class="tutorial_title">Verifying the Ad</div>
+			<div class="tutorial_desc">Now that you have posted the ad, we just need to verify that the post is actually there, and fulfills the requirements of the ad request. We generally verify an ad within 24 hours of the posting. As soon as we have checked the ad, we send you an email with the status of the post. You can see the statuses of all of your posts in the "Post History" tab. </div>
+		</div>
+		<div class="tutorial_text" id="slide_4" style="display:none;">
+			<div class="tutorial_title">Renewals</div>
+			<div class="tutorial_desc">24 hours after your ad goes live on Craigslist, you can repost it with a click of a button. When you do that, go to the "Renewals" tab to resubmit the ad. We will reverify that the ad was renewed, and add more money into your account. Each renewal is worth $1.00. Easy money!</div>
+		</div>
+		<div class="tutorial_text" id="slide_5" style="display:none;">
+			<div class="tutorial_title">How You Get Paid</div>
+			<div class="tutorial_desc">We pay your balance every week via Google Wallet. If you need to set up your Google Wallet account, or have any questions, go to <a href="https://www.google.com/wallet/">this link</a>. If you ever have any problems with getting paid, contact us immediately. We want to get you your money!</div>
+		</div>
+		<div class="tutorial_text" id="slide_6" style="display:none;">
+			<div class="tutorial_title">That's It!</div>
+			<div class="tutorial_desc">Simple, huh? Now, go start making some money!</div>
+		</div>
+		<div>
+			<button class="tutorial_btn" id="tutorial_back_btn" onClick="tutorial_back_btn()" type="button" style="cursor:pointer;" disabled> << </button>
+			<button class="tutorial_btn" id="tutorial_next_btn" onClick="tutorial_next_btn()" type="button" style="cursor:pointer;float:right;"> >> </button>
+			<button class="tutorial_btn" id="tutorial_close_btn" onClick="tutorial_close_btn()" style="cursor:pointer;display:none;float:right;" type="button">Close</button>
 		</div>
 	</div>

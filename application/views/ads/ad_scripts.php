@@ -5,6 +5,24 @@
 		$("#nav_container").height($(window).height() - 370);
 		
 		load_post_board();
+		
+		var number_of_visits = $("#number_of_visits").val();
+		
+		
+		$("#tutorial_dialog").dialog({
+			autoOpen:true,
+			width: 500,
+			height: 500,
+			title: "AdSync Tutorial",
+			draggable: false,
+			resizable: false,
+			modal: true,
+		});
+		
+		// if(number_of_visits < 1){
+			// tutorial_open();
+		// }
+		
 		//AD SUBMISSION DIALOG
         $( "#ad_submission_dialog").dialog({
 			autoOpen: false,
@@ -1604,6 +1622,66 @@
 		}
 	}
 
+	function tutorial_back_btn(){
+		if($("#slide_2").is(":visible")){
+			$("#slide_2").hide();
+			$("#slide_1").show();
+			$("#tutorial_back_btn").prop('disabled',true);
+		}else if($("#slide_3").is(":visible")){
+			$("#slide_3").hide();
+			$("#slide_2").show();
+		}else if($("#slide_4").is(":visible")){
+			$("#slide_4").hide();
+			$("#slide_3").show();
+		}else if($("#slide_5").is(":visible")){
+			$("#slide_5").hide();
+			$("#slide_4").show();
+		}else if($("#slide_6").is(":visible")){
+			$("#slide_6").hide();
+			$("#slide_5").show();
+			$("#tutorial_next_btn").show();
+			$("#tutorial_close_btn").hide();
+		}
+	}
+	
+	function tutorial_close_btn(){
+		$("#tutorial_dialog").dialog("close");
+	}
+	
+	function tutorial_next_btn(){
+		if($("#slide_1").is(":visible")){
+			$("#slide_1").hide();
+			$("#slide_2").show();
+			$("#tutorial_back_btn").prop('disabled',false);
+		}else if($("#slide_2").is(":visible")){
+			$("#slide_2").hide();
+			$("#slide_3").show();
+		}else if($("#slide_3").is(":visible")){
+			$("#slide_3").hide();
+			$("#slide_4").show();
+		}else if($("#slide_4").is(":visible")){
+			$("#slide_4").hide();
+			$("#slide_5").show();
+		}else if($("#slide_5").is(":visible")){
+			$("#slide_5").hide();
+			$("#slide_6").show();
+			$("#tutorial_next_btn").hide();
+			$("#tutorial_close_btn").show();
+		}
+	}
+	
+	function tutorial_open(){
+		$("#tutorial_dialog").dialog("open");
+		$("#slide_6").hide();
+		$("#slide_5").hide();
+		$("#slide_4").hide();
+		$("#slide_3").hide();
+		$("#slide_2").hide();
+		$("#tutorial_back_btn").prop('disabled',false);
+		$("#tutorial_next_btn").show();
+		$("#tutorial_close_btn").hide();
+		$("#slide_1").show();
+	}
 
 
 	function update_balance(){
