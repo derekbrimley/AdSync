@@ -77,6 +77,32 @@ class Login extends CI_Controller
 		
 	}
 	
+	public function request_email_check($str){
+		$where = null;
+		$where['is_active'] = "true";
+		$codes = db_select_secret_codes($where);
+		
+		$code_request_list = array();
+		foreach($codes as $code){
+			$code_request_list[] = $code['email_requested'];
+		}
+		
+		if (in_array($str,$code_request_list)){
+			$this->form_validation->set_message('request_email_check', "The email $str has already requested a code. Please provide another Gmail address.");
+			return FALSE;
+		}else{
+			list($user, $domain) = explode('@', $str);
+
+			if ($domain == 'gmail.com') {
+				return TRUE;
+				// use gmail
+			}else{
+				$this->form_validation->set_message('request_email_check', "The email $str is not a Gmail address. Please provide a valid Gmail address.");
+				return FALSE;
+			}
+		}
+	}
+	
 	public function email_check($str){
 		$where = null;
 		$where = "1 = 1";
@@ -85,9 +111,8 @@ class Login extends CI_Controller
 		foreach($users as $user){
 			$email_list[] = $user['email'];
 		}
-		
 		if (in_array($str,$email_list)){
-			$this->form_validation->set_message('email_check', "The email $str is already in use. Please provide another Gmail address.");
+			$this->form_validation->set_message('email_check', "The email $str is already associated with an account. Please provide another Gmail address.");
 			return FALSE;
 		}else{
 			list($user, $domain) = explode('@', $str);
@@ -283,6 +308,11 @@ class Login extends CI_Controller
 		$this->load->view('reset_password_view',$data);
 	}
 	
+	function load_request_code_view(){
+		$data['title'] = "Request Code";
+		$this->load->view('request_code_view',$data);
+	}
+	
 	function reset_password(){
 		date_default_timezone_set('America/Denver');
 		$timestamp = date("Y-m-d H:i:s");
@@ -320,6 +350,45 @@ class Login extends CI_Controller
 		}
 		
 		$this->load->view("sent_email_view");
+	}
+	
+	function request_code(){
+		$this->load->helper(array('form', 'url'));
+
+		$this->load->library('form_validation');
+		$this->form_validation->set_error_delimiters('<div class="error">', '</div>');
+		$this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email|callback_request_email_check|xss_clean');
+		
+		if ($this->form_validation->run() == FALSE){
+			$this->load_request_code_view();
+		}else{
+			date_default_timezone_set('America/Denver');
+			$current_datetime = date("Y-m-d H:i:s");
+			
+			$email = $_POST['email'];
+			
+			$characters = '0123456789';
+			$charactersLength = strlen($characters);
+			$randomString = '';
+			for ($i = 0; $i < 5; $i++) {
+				$randomString .= $characters[rand(0, $charactersLength - 1)];
+			}
+			
+			$secret_code = array();
+			$secret_code['secret_code'] = $randomString;
+			$secret_code['datetime_created'] = $current_datetime;
+			$secret_code['is_active'] = 'true';
+			$secret_code['email_requested'] = $email;
+			$secret_code['is_email_sent'] = "false";
+			
+			db_insert_secret_code($secret_code);
+			
+			$data['title'] = "Code Requested";
+			
+			$this->load->view('request_code_success',$data);
+		}
+		
+		
 	}
 	
 	function send_new_email(){

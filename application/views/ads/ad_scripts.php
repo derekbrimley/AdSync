@@ -1411,6 +1411,32 @@
 		
 	}
 	
+	function send_code(id){
+		//AJAX
+		if(!(report_ajax_call===undefined))
+		{
+			report_ajax_call.abort();
+		}
+		report_ajax_call = $.ajax({
+			
+			url: "<?=base_url("index.php/ads/send_code") ?>",
+			type: "POST",
+			data: {id:id},
+			cache: false,
+			statusCode: {
+				200: function(response){
+					$("#report_container").html(response);
+					},
+				404: function(){
+					alert('Page not found');
+				},
+				500: function(response){
+					alert("500 error! "+response);
+				}
+			}
+		});//END AJAX
+	}
+	
 	function settle_balance(){
 		var dataString = $("#user_form").serialize();
 		var is_valid = true;

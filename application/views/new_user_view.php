@@ -111,8 +111,10 @@
 						</td>
 					<tr>
 					<tr>
-						<td><input placeholder="Gmail Address" value="<?php echo set_value('email'); ?>" style="margin-left:80px;width:232px;height:40px;border-radius:3px;border:solid 1px #c9c9c9;" type="text" id="email" name="email"/>
-						<span style="color:red;cursor:pointer" onClick="alert('Must be Gmail account. If you do not have a Gmail account, go to http://gmail.com/ to get one.')"> ?</span></td>
+						<td>
+							<input placeholder="Gmail Address" value="<?php echo set_value('email'); ?>" style="margin-left:80px;width:232px;height:40px;border-radius:3px;border:solid 1px #c9c9c9;" type="text" id="email" name="email"/>
+							<span style="color:red;cursor:pointer" onClick="alert('Must be Gmail account. If you do not have a Gmail account, go to http://gmail.com/ to get one.')"> ?</span>
+						</td>
 					</tr>
 					<tr>
 						<td>
@@ -152,6 +154,9 @@
 					<br>
 				</table>
 			</form>
+			<div>
+				<a href="<?=base_url('/index.php/login/load_request_code_view/')?>" style="margin-left:100px;">Click here to request a code.</a>
+			</div>
 		</div>
 	</body>
 </html>

@@ -1,6 +1,8 @@
-Generate Code
+Code Manager
 <hr>
-<div>
+<div style="float:left;">
+	<b>Code Generator</b>
+	<hr align="left" style="width:300px;">
 	<form id="generate_code_form" style="width:350px;">
 		<table>
 			<tr>
@@ -24,4 +26,26 @@ Generate Code
 			</tr>
 		</table>
 	</form>
+</div>
+<div style="margin-left:350px;">
+	<b>Code Requests</b>
+	<hr align="left" style="width:400px;">
+	<table style="width:400px;">
+		<tr>
+			<td style="min-width:150px;max-width:150px;font-weight:bold;">Email</td>
+			<td style="min-width:50px;max-width:50px;font-weight:bold;">Send Code</td>
+		</tr>
+		<?php if(!empty($codes)):?>
+			<?php foreach($codes as $code): ?>
+				<tr>
+					<td style="min-width:150px;max-width:150px;">
+						<?=$code['email_requested']?>
+					</td>
+					<td onClick="send_code(<?=$code['id']?>)" style="cursor:pointer;text-align:center;min-width:50px;max-width:50px;">
+						<img style="height:20px;" src="<?=base_url('images/email.png')?>"/>
+					</td>
+				<tr>
+			<?php endforeach?>
+		<?php endif?>
+	</table>
 </div>

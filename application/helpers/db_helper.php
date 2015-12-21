@@ -2350,6 +2350,8 @@
 			$secret_code['datetime_created'] = $row->datetime_created;
 			$secret_code['datetime_used'] = $row->datetime_used;
 			$secret_code['is_active'] = $row->is_active;
+			$secret_code['email_requested'] = $row->email_requested;
+			$secret_code['is_email_sent'] = $row->is_email_sent;
 			
 			$secret_codes[] = $secret_code;
 			

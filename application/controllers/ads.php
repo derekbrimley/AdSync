@@ -419,6 +419,11 @@ class Ads extends MY_Controller {
 			$dropdown_users[$user['id']] = $user['first_name']." ".$user['last_name'];
 		}
 		
+		$where = null;
+		$where = "is_active = 'true' AND email_requested IS NOT NULL AND is_email_sent = 'false'";
+		$codes = db_select_secret_codes($where);
+		
+		$data['codes'] = $codes;
 		$data['dropdown_users'] = $dropdown_users;
 		$this->load->view("ads/generate_code_view",$data);
 	}
@@ -837,6 +842,34 @@ class Ads extends MY_Controller {
 		db_update_user($set,$where);
 		
 		$this->load_account_info();
+	}
+	
+	function send_code(){
+		$code_id = $_POST['id'];
+		
+		$where = null;
+		$where['id'] = $code_id;
+		$code = db_select_secret_code($where);
+		
+		$secret_code = $code['secret_code'];
+		
+		$email = $code['email_requested'];
+		
+		$this->load->library('email');
+
+		$this->email->from('admin@nextgenmarketingsolutions.com', 'AdSync');
+		$this->email->to($email); 
+
+		$this->email->subject('AdSync Authentication Code');
+		$this->email->message("You recently requested a code to create an AdSync account. Use the following code when you create your account. Your code is: $secret_code. Go to http://adsync.nextgenmarketingsolutions.com/index.php/login/new_user to create your account. If you have any questions, contact us immediately. Thanks for your interest in AdSync!");
+
+		$this->email->send();
+		
+		$set = array();
+		$set['is_email_sent'] = "true";
+		db_update_secret_code($set,$where);
+		
+		$this->load_generate_code_page();
 	}
 	
 	function settle_balance(){

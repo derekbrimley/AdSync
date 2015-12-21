@@ -13,25 +13,25 @@
 		<tr>
 			<td>Ad Link</td>
 			<td>
-				<input id="post_link" name="post_link" type="text" style="width:546px;" required/>
+				<input id="post_link" name="post_link" type="text" style="width:546px;" />
 			</td>
 		</tr>
 		<tr>
 			<td>Ad Title</td>
 			<td>
-				<input id="post_title" name="post_title" type="text" style="width:546px;" required/>
+				<input id="post_title" name="post_title" type="text" style="width:546px;" />
 			</td>
 		</tr>
 		<tr>
 			<td>Ad Content</td>
 			<td>
-				<textarea id="post_content" name="post_content" style="width:544px;height:130px;" required></textarea>
+				<textarea id="post_content" name="post_content" style="width:544px;height:130px;" ></textarea>
 			</td>
 		</tr>
 		<tr>
 			<td>Phone Number</td>
 			<td>
-				<input id="post_phone_number" name="post_phone_number" type="text" style="width:546px;" required/>
+				<input id="post_phone_number" name="post_phone_number" type="text" style="width:546px;" />
 			</td>
 		</tr>
 	</table>
