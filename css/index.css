@@ -141,7 +141,7 @@ body{
 	margin: 0 auto;
 }
 .nav_box{
-	border:2px solid #7f7f7f;
+	border:1px solid #7f7f7f;
 	padding:5px;
 	margin-top:1px;
 	margin-left:1px;
@@ -154,7 +154,7 @@ body{
 	height:90px;
 }
 .highlighted_nav_box{
-	border:2px solid #0079C1;
+	border:1px solid #0079C1;
 	/*border:2px solid white;*/
 	background-color: #0079C1;
 	color:white;
@@ -170,9 +170,9 @@ body{
 .nav_box:hover{
 	/*background-color:#eee;*/
 	cursor:pointer;
-	-webkit-box-shadow: 5px 5px 20px 0px rgba(0,0,0,0.75);
-	-moz-box-shadow: 5px 5px 20px 0px rgba(0,0,0,0.75);
-	box-shadow: 5px 5px 20px 0px rgba(0,0,0,0.75);
+	-webkit-box-shadow: 2px 2px 10px 0px rgba(0,0,0,0.75);
+	-moz-box-shadow: 2px 2px 10px 0px rgba(0,0,0,0.75);
+	box-box-shadow: 2px 2px 10px 0px rgba(0,0,0,0.75);
 	position:relative;
 	bottom:1px;
 	right:1px;

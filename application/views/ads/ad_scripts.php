@@ -5,9 +5,6 @@
 		$("#nav_container").height($(window).height() - 370);
 		
 		load_post_board();
-		$('#myForm').ajaxForm(function() { 
-			alert("submitted!"); 
-		});
 		//AD SUBMISSION DIALOG
         $( "#ad_submission_dialog").dialog({
 			autoOpen: false,

@@ -6,8 +6,6 @@
 		<link type="text/css" href="<?php echo base_url("css/jquery-ui.min.css"); ?>" rel="stylesheet" />
 		<script type="text/javascript" src="<?php echo base_url("js/jquery-1.11.3.min.js"); ?>" ></script>
 		<script type="text/javascript" src="<?php echo base_url("js/jquery-ui.min.js"); ?>" ></script>
-		<script type="text/javascript" src="<?php echo base_url("js/jquery.validate.js"); ?>" ></script>
-		<script src="http://malsup.github.com/jquery.form.js"></script>
 		<link rel="shortcut icon" href="<?=base_url("/favicon-16x16.png")?>" />
 		<link href='http://fonts.googleapis.com/css?family=Roboto:300' rel='stylesheet' type='text/css'>
 	</head>
@@ -155,22 +153,21 @@
 		</div>
 	</body>
 	
-	<div id="ad_submission_dialog" title="New Ad Submission">
+	<div id="ad_submission_dialog" title="New Ad Submission" style="font-family: 'Roboto', sans-serif;">
 		<div id="ajax_container">
 		</div>
 	</div>
-	<div id="ad_request_dialog" title="New Ad Request">
+	<div id="ad_request_dialog" title="New Ad Request" style="font-family: 'Roboto', sans-serif;">
 		<div id="ad_request_container">
 			<?php include("ads/ad_request_form.php"); ?>
 		</div>
 	</div>
-	<div id="ad_verification_dialog" title="Ad Verification">
+	<div id="ad_verification_dialog" title="Ad Verification" style="font-family: 'Roboto', sans-serif;">
 		<div id="verification_ajax_container">
 			
 		</div>
 	</div>
-	
-	<div id="post_renewal_dialog" title="Ad Renewal">
+	<div id="post_renewal_dialog" title="Ad Renewal" style="font-family: 'Roboto', sans-serif;">
 		<form id="renewal_form">
 			<input id="renewal_post_id" name="renewal_post_id" type="hidden" value="" />
 		</form>
@@ -179,8 +176,7 @@
 			post will be re-verified.
 		</div>
 	</div>
-	
-	<div id="settle_balance_dialog" title="Settle Balance">
+	<div id="settle_balance_dialog" title="Settle Balance" style="font-family: 'Roboto', sans-serif;">
 		<div id="settle_balance_ajax_container">
 			
 		</div>
