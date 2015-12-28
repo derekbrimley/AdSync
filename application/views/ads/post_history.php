@@ -33,15 +33,14 @@ Post History
 		<table>
 			<tr style="font-weight:bold;color:#0079C1">
 				<?php if($role == "admin"): ?>
-					<td style="max-width:35px;min-width:35px;">User</td>
+					<td style="max-width:70px;min-width:70px;">User</td>
 				<?php endif ?>
-				<td style="max-width:37px;min-width:37px;">Date Posted</td>
-				<td style="max-width:40px;min-width:40px;">Market</td>
-				<td style="max-width:40px;min-width:40px;">Category</td>
-				<td style="max-width:40px;min-width:40px;">Sub-Category</td>
-				<td style="max-width:20px;min-width:20px;">Value</td>
-				<td style="max-width:30px;min-width:30px;">Result</td>
-				<td style="max-width:20px;min-width:20px;">Earned</td>
+				<td style="max-width:75px;min-width:75px;">Date Posted</td>
+				<td style="max-width:77px;min-width:77px;">Market</td>
+				<td style="max-width:81px;min-width:81px;">Category</td>
+				<td style="max-width:79px;min-width:79px;">Sub-Category</td>
+				<td style="max-width:59px;min-width:59px;">Result</td>
+				<td style="max-width:46px;min-width:46px;">Earned</td>
 			</tr>
 		</table>
 	</div>

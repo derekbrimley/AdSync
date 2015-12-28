@@ -24,7 +24,7 @@
 				<?=$user['username'] ?>
 			</td>
 		<?php endif ?>
-		<td class="ellipsis" title="<?=date("m/d/y",strtotime($post['post_datetime']))?>" style="max-width:37px;min-width:37px;">
+		<td class="ellipsis" title="<?=date("m/d/y g:i A",strtotime($post['post_datetime']))?>" style="max-width:37px;min-width:37px;">
 			<?=date("m/d/y",strtotime($post['post_datetime']))?>
 		</td>
 		<td class="ellipsis" title="<?=$market['name']?>" style="max-width:40px;min-width:40px;">
@@ -36,13 +36,6 @@
 		<td class="ellipsis" title="<?=$ad_request['sub_category']?>" style="max-width:40px;min-width:40px;">
 			<?=$ad_request['sub_category']?>
 		</td>
-		<td class="ellipsis" title="" style="max-width:20px;min-width:20px;">
-			<?php if(!empty($ad_spot['value'])): ?>
-				$<?=number_format($ad_spot['value'],2)?>
-			<?php else: ?>
-				$0.00
-			<?php endif?>
-		</td>
 		<td class="ellipsis" title="<?= $post['result'] ?>" style="max-width:30px;min-width:30px;">
 			<?php if(!empty($post["result_screen_shot_guid"])): ?>
 				<a target="_blank" href="<?=base_url('/index.php/ads/download_file')."/".$post["result_screen_shot_guid"]?>"><?= $post['result'] ?></a>
@@ -51,8 +44,10 @@
 			<?php endif ?>
 		</td>
 		<td class="ellipsis" style="max-width:20px;min-width:20px;">
-			<?php if(!empty($post['amount_due'])): ?>
-				$<?= $post['amount_due'] ?>
+			<?php if($post['result']=="Live"): ?>
+				$<?= number_format($post['amount_due'],2) ?>
+			<?php elseif($post['result']=="Needs verification"): ?>
+				N/A
 			<?php else: ?>
 				$0.00
 			<?php endif?>

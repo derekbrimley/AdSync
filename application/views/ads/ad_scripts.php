@@ -101,7 +101,8 @@
 											$('.ui-dialog-buttonpane').find('button:eq(0)').css('visibility','hidden');
 											$('.ui-dialog-buttonpane').find('button:eq(1)').css('visibility','hidden');
 											$("#ajax_container").html(response);
-											load_post_board();
+											refresh_ad_spots();
+											
 											$('#submit_ad_post').hide();
 										},
 										404: function(){
@@ -124,6 +125,8 @@
 							$('.ui-dialog-buttonpane').find('button:eq(1)').css('visibility','visible');
 							
 							$( this ).dialog( "close" );
+							
+							load_post_board();
 						}
 					},
 				],//end of buttons

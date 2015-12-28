@@ -527,26 +527,23 @@ class Ads extends MY_Controller {
 		$available_markets[] = $home_market_id;
 		$where = null;
 		$where = "post_datetime IS NULL AND (market_id = '".$home_market_id."'";
-		if(!empty($related_markets))
-		{
-			foreach($related_markets as $related_market)
-			{
+		
+		if(!empty($related_markets)){
+			foreach($related_markets as $related_market){
 				$where = $where." OR market_id = '".$related_market['related_market_id']."'";
 			}
 		}
+		
 		$ad_spots = array();
-		if($role=="admin")
-		{
-			$sql = "SELECT ad_spot.id AS id, ad_spot.ad_request_id AS ad_request_id, ad_spot.value as value, ad_spot.post_datetime as post_datetime, ad_request.market_id AS market_id FROM `ad_spot` LEFT JOIN `ad_request` ON ad_spot.ad_request_id = ad_request.id ORDER BY ad_spot.value ASC, ad_spot.ad_request_id ASC";
-		}
-		else
-		{
+		if($role=="admin"){
+			$sql = "SELECT ad_spot.id AS id, ad_spot.ad_request_id AS ad_request_id, ad_spot.value as value, ad_spot.post_datetime as post_datetime, ad_request.market_id AS market_id FROM `ad_spot` LEFT JOIN `ad_request` ON ad_spot.ad_request_id = ad_request.id ORDER BY ad_spot.value DESC";
+		}else{
 			$sql = "SELECT ad_spot.id AS id, ad_spot.ad_request_id AS ad_request_id, ad_spot.value as value, ad_spot.post_datetime as post_datetime, ad_request.market_id AS market_id FROM `ad_spot` LEFT JOIN `ad_request` ON ad_spot.ad_request_id = ad_request.id WHERE ".$where.") ORDER BY ad_spot.value ASC, ad_spot.ad_request_id ASC";
 		}
+		
 		//echo $sql;
 		$query = $this->db->query($sql);
-		foreach($query->result() as $row)
-		{
+		foreach($query->result() as $row){
 			$ad_spot = array();
 			$ad_spot['id'] = $row->id;
 			$ad_spot['ad_request_id'] = $row->ad_request_id;
