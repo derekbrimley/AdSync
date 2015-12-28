@@ -9,7 +9,7 @@
 </script>
 Renewals
 <span>
-	<img id="loading_icon" style="display:none;margin-right:20px;float:right;height:20px;" src="<?=base_url('images/loading.gif')?>"/>
+	<img id="loading_icon" style="display:none;float:right;height:20px;" src="<?=base_url('images/loading.gif')?>"/>
 </span>
 <span>
 	<img id="refresh_icon" onClick="load_renewals()" style="float:right;height:20px;cursor:pointer" src="<?=base_url('images/refresh_icon_grey_360.png')?>"/>
