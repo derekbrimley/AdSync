@@ -2721,6 +2721,7 @@
 			$user["hash"] = $row->hash;
 			$user["reset_token"] = $row->reset_token;
 			$user["number_of_visits"] = $row->number_of_visits;
+			$user["referrer_paid"] = $row->referrer_paid;
 			
 			$users[] = $user;
 			//echo "hello world ";

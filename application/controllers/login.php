@@ -223,6 +223,7 @@ class Login extends CI_Controller
 			$new_user['ip_address'] = $ip_address;
 			$new_user['geolocation'] = $geolocation;
 			$new_user['hash'] = $hash;
+			$new_user['referrer_paid'] = "false";
 			
 			db_insert_user($new_user);
 			

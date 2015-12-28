@@ -1004,8 +1004,10 @@ class Ads extends MY_Controller {
 		$where['id'] = $post_id;
 		$post = db_select_post($where);
 		
+		$poster_id = $post['poster_id'];
+		
 		$where = null;
-		$where['id'] = $post['poster_id'];
+		$where['id'] = $poster_id;
 		$user = db_select_user($where);
 		
 		$new_account_entry = array();
@@ -1015,6 +1017,33 @@ class Ads extends MY_Controller {
 		$new_account_entry['datetime'] = $post_datetime;
 		if($post_result == "Live"){
 			$new_account_entry['description'] = "Post ".$post['id']." verified on ".date("m/d/Y",strtotime($post_datetime)).". User ".$user['first_name']." ".$user['last_name']." earned ".$post['amount_due'].".";
+			
+			$where = null;
+			$where['poster_id'] = $poster_id;
+			$where['result'] = "Live";
+			$live_posts = db_select_posts($where);
+			
+			if(count($live_posts)==1){
+				if($user['referrer_paid']=="false"){
+					$where = null;
+					$where['id'] = $poster_id;
+					
+					$set = array();
+					$set['referrer_paid'] = "true";
+					
+					db_update_user($set,$where);
+					
+					$referral_id = $user['referred_by'];
+					
+					$account_entry = null;
+					$account_entry['user_id'] = $referral_id;
+					$account_entry['description'] = "Payment for referring user ".$user['first_name']." ".$user['last_name']."  (".$user['id'].") on $post_datetime.";
+					$account_entry['amount'] = 10;
+					$account_entry['datetime'] = $post_datetime;
+					
+					db_insert_account_entry($account_entry);
+				}
+			}
 		}else{
 			$new_account_entry['description'] = "Post ".$post['id']." rejected on ".date("m/d/Y",strtotime($post_datetime)).". User ".$user['first_name']." ".$user['last_name']." earned no money for this post.";
 		}
