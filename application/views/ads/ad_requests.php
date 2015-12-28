@@ -12,7 +12,7 @@ Ad Requests
 	<img id="loading_icon" style="display:none;float:right;height:20px;" src="<?=base_url('images/loading.gif')?>"/>
 </span>
 <span>
-	<img id="refresh_icon" onClick="load_post_board()" style="float:right;height:20px;cursor:pointer" src="<?=base_url('images/refresh_icon_grey_360.png')?>"/>
+	<img id="refresh_icon" onClick="load_ad_requests()" style="float:right;height:20px;cursor:pointer" src="<?=base_url('images/refresh_icon_grey_360.png')?>"/>
 </span>
 <span style="float:right;margin-right:20px;">
 	<?= $count ?>

@@ -422,8 +422,8 @@
 				statusCode: {
 					200: function(response){
 						alert("Ad Request deleted.");
-						load_ad_requests();
 						refresh_ad_spots();
+						load_ad_requests();
 					},
 					404: function(){
 						alert('Page not found');
@@ -433,8 +433,6 @@
 					}
 				}
 			});//END AJAX
-		}else{
-			
 		}
 	}
 	
