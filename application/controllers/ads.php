@@ -197,10 +197,22 @@ class Ads extends MY_Controller {
 		
 		$characters = '0123456789';
 		$charactersLength = strlen($characters);
-		$randomString = '';
-		for ($i = 0; $i < 5; $i++) {
-			$randomString .= $characters[rand(0, $charactersLength - 1)];
+		
+		$where = null;
+		$where = "1 = 1";
+		$codes = db_select_secret_codes($where);
+		
+		$code_list = array();
+		foreach($codes as $code){
+			$code_list[] = $code['secret_code'];
 		}
+		
+		do{
+			$randomString = '';
+			for ($i = 0; $i < 5; $i++) {
+				$randomString .= $characters[rand(0, $charactersLength - 1)];
+			}
+		}while(in_array($random_string,$code_list));
 		
 		$new_secret_code = array();
 		if($referral_id!="Select")

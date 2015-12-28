@@ -166,22 +166,14 @@ body{
 	border-radius:5px;
 	float:left;
 	font-size:15px;
-	width:88px;
-	height:90px;
+	width:97px;
+	height:95px;
 }
 .highlighted_nav_box{
 	border:1px solid #0079C1;
-	/*border:2px solid white;*/
 	background-color: #0079C1;
 	color:white;
 	font-weight:bold;
-	
-	/*-webkit-box-shadow: 5px 5px 20px 0px rgba(0,0,0,0.75);
-	-moz-box-shadow: 5px 5px 20px 0px rgba(0,0,0,0.75);
-	box-shadow: 5px 5px 20px 0px rgba(0,0,0,0.75);
-	position:relative;
-	bottom:1px;
-	right:1px;*/
 }
 .nav_box:hover{
 	/*background-color:#eee;*/
