@@ -10,8 +10,12 @@ class Login extends CI_Controller
 	}
 	
 	function activate(){
+		date_default_timezone_set('America/Denver');
+		$current_datetime = date("Y-m-d H:i:s");
+			
 		$email = $_GET['email'];
 		$hash = $_GET['hash'];
+		$secret_code = $GET['code'];
 		
 		//GET USER WITH THAT EMAIL
 		$where = null;
@@ -31,6 +35,27 @@ class Login extends CI_Controller
 			$where['hash'] = $hash;
 			
 			db_update_user($set,$where);
+			
+			$where = null;
+			$where['secret_code'] = $secret_code;
+			
+			$set = array();
+			$set['datetime_used'] = $current_datetime;
+			$set['is_active'] = "false";
+			
+			db_update_secret_code($set,$where);
+			
+			$code = db_select_secret_code($where);
+			
+			$referral_id = $code['referral_id'];
+			
+			$account_entry = null;
+			$account_entry['user_id'] = $referral_id;
+			$account_entry['description'] = "Payment for referring user $user['first_name'] $user['last_name'] ($user['id']) on $current_datetime.";
+			$account_entry['amount'] = 10;
+			$account_entry['datetime'] = $current_datetime;
+			
+			db_insert_account_entry($account_entry);
 			
 			redirect("login");
 			//$this->load->view("adsync_login_view.php",$data);
@@ -179,7 +204,6 @@ class Login extends CI_Controller
 			$secret_code = $_POST['secret_code'];
 			$role = "affiliate";
 			$home_market_id = $_POST['market_id'];
-			$secret_code = $_POST['secret_code'];
 			$ip_address = $_SERVER['REMOTE_ADDR'];
 			$latitude = $_POST['latitude'];
 			$longitude = $_POST['longitude'];
@@ -219,7 +243,7 @@ class Login extends CI_Controller
 			$message = "
 				Click the link below to confirm your new AdSync Account.
 				
-				http://www.adsync.nextgenmarketingsolutions.com/index.php/login/activate?email=$email&hash=$hash
+				http://www.adsync.nextgenmarketingsolutions.com/index.php/login/activate?email=$email&hash=$hash&code=$secret_code
 			";
 			$headers = 'From: admin@nextgenmarketingsolutions.com';
 			
@@ -232,15 +256,6 @@ class Login extends CI_Controller
 			$this->session->set_userdata('role', $user['role']);
 			$this->session->set_userdata('is_active', $user['is_active']);
 			$this->session->set_userdata('referral_id', $user['referral_id']);
-			
-			$where = null;
-			$where['secret_code'] = $secret_code;
-			
-			$set = array();
-			$set['datetime_used'] = $current_datetime;
-			$set['is_active'] = "false";
-			
-			db_update_secret_code($set,$where);
 			
 			redirect("ads");
 		}
