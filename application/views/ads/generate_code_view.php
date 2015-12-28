@@ -1,4 +1,8 @@
 Code Manager
+<span>
+	<img id="loading_icon" style="display:none;float:right;height:20px;margin-left:20px;" src="<?=base_url('images/loading.gif')?>"/>
+	<img id="refresh_icon" onClick="load_generate_code_page()" style="float:right;height:20px;cursor:pointer;margin-left:20px;" src="<?=base_url('images/refresh_icon_grey_360.png')?>"/>
+</span>
 <hr>
 <div style="float:left;">
 	<b>Code Generator</b>

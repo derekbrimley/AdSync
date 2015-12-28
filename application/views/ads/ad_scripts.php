@@ -1626,7 +1626,7 @@
 		if($("#slide_2").is(":visible")){
 			$("#slide_2").hide();
 			$("#slide_1").show();
-			$("#tutorial_back_btn").prop('disabled',true);
+			$("#tutorial_back_btn").hide();
 		}else if($("#slide_3").is(":visible")){
 			$("#slide_3").hide();
 			$("#slide_2").show();
@@ -1652,7 +1652,7 @@
 		if($("#slide_1").is(":visible")){
 			$("#slide_1").hide();
 			$("#slide_2").show();
-			$("#tutorial_back_btn").prop('disabled',false);
+			$("#tutorial_back_btn").show();
 		}else if($("#slide_2").is(":visible")){
 			$("#slide_2").hide();
 			$("#slide_3").show();
@@ -1677,7 +1677,7 @@
 		$("#slide_4").hide();
 		$("#slide_3").hide();
 		$("#slide_2").hide();
-		$("#tutorial_back_btn").prop('disabled',false);
+		$("#tutorial_back_btn").hide();
 		$("#tutorial_next_btn").show();
 		$("#tutorial_close_btn").hide();
 		$("#slide_1").show();

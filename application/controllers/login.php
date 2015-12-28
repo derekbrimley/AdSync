@@ -229,15 +229,19 @@ class Login extends CI_Controller
 			
 			$user = db_select_user($new_user);
 			
+			$link = "'http://www.adsync.nextgenmarketingsolutions.com/index.php/login/activate?email=$email&hash=$hash&code=$secret_code'";
+			
 			$to = $email;
 			$subject = "AdSync Confirmation Email";
-			$message = "
-				Click the link below to confirm your new AdSync Account.
-				
-				http://www.adsync.nextgenmarketingsolutions.com/index.php/login/activate?email=$email&hash=$hash&code=$secret_code
-			";
-			$headers = 'From: admin@nextgenmarketingsolutions.com';
+			$message = "<html><body>";
+			$message .= "<h1>Click the link below to confirm your new AdSync Account.</h1>";
+			$message .= "<a href=$link>Click Here</a><br><br>";
+			$message .= "<p>Thanks for signing up for AdSync!</p>";
+			$message .= "</body></html>";
 			
+			$headers = "From: admin@nextgenmarketingsolutions.com\r\n";
+			$headers .= "MIME-Version: 1.0\r\n";
+			$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
 			mail($to,$subject,$message,$headers);
 			
 			$this->session->set_userdata('user_id', $user['id']);
@@ -407,13 +411,19 @@ class Login extends CI_Controller
 		$email = $user['email'];
 		$hash = $user['hash'];
 
+		$link = "'http://www.adsync.nextgenmarketingsolutions.com/index.php/login/activate?email=$email&hash=$hash&code=$secret_code'";
+			
 		$to = $email;
 		$subject = "AdSync Confirmation Email";
-		$message = "
-			Click the link below to confirm your new AdSync Account.
-			http://www.adsync.nextgenmarketingsolutions.com/index.php/login/activate?email=$email&hash=$hash
-		";
-		$headers = 'From: admin@nextgenmarketingsolutions.com';
+		$message = "<html><body>";
+		$message .= "<h1>Click the link below to confirm your new AdSync Account.</h1>";
+		$message .= "<a href=$link>Click Here</a><br><br>";
+		$message .= "<p>Thanks for signing up for AdSync!</p>";
+		$message .= "</body></html>";
+		
+		$headers = "From: admin@nextgenmarketingsolutions.com\r\n";
+		$headers .= "MIME-Version: 1.0\r\n";
+		$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
 		
 		mail($to,$subject,$message,$headers);
 		

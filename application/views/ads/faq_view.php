@@ -5,6 +5,10 @@
 </script>
 
 FAQ
+<span>
+	<img id="loading_icon" style="display:none;float:right;height:20px;margin-left:20px;" src="<?=base_url('images/loading.gif')?>"/>
+	<img id="refresh_icon" onClick="load_faq()" style="float:right;height:20px;cursor:pointer;margin-left:20px;" src="<?=base_url('images/refresh_icon_grey_360.png')?>"/>
+</span>
 <hr>
 <div>
 	<div id="site_explanation_question" class="question clickable_row" onclick="show_answer(1)">

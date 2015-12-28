@@ -222,7 +222,7 @@
 			<div class="tutorial_desc">Simple, huh? Now, go start making some money!</div>
 		</div>
 		<div>
-			<button class="tutorial_btn" id="tutorial_back_btn" onClick="tutorial_back_btn()" type="button" style="cursor:pointer;" disabled> << </button>
+			<button class="tutorial_btn" id="tutorial_back_btn" onClick="tutorial_back_btn()" type="button" style="display:none;cursor:pointer;"> << </button>
 			<button class="tutorial_btn" id="tutorial_next_btn" onClick="tutorial_next_btn()" type="button" style="cursor:pointer;float:right;"> >> </button>
 			<button class="tutorial_btn" id="tutorial_close_btn" onClick="tutorial_close_btn()" style="cursor:pointer;display:none;float:right;" type="button">Close</button>
 		</div>

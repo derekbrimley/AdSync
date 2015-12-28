@@ -1,7 +1,8 @@
 Account Information
 <span>
+	<img id="loading_icon" style="display:none;float:right;height:20px;margin-left:20px;" src="<?=base_url('images/loading.gif')?>"/>
+	<img id="refresh_icon" onClick="load_account_info()" style="float:right;height:20px;cursor:pointer;margin-left:20px;" src="<?=base_url('images/refresh_icon_grey_360.png')?>"/>
 	<img id="edit_information_btn" onClick="edit_user_information();" src=<?=base_url("images/edit.png")?> style="float:right;cursor:pointer;height:20px;"/>
-	<img id="loading_icon" style="display:none;float:right;height:20px;" src="<?=base_url('images/loading.gif')?>"/>
 	<img id="save_information_btn" onClick="save_user_information(<?=$user['id']?>)" src="<?=base_url('images/save_icon_360.png')?>" style="float:right;display:none;height:20px;cursor:pointer;"/>
 </span>
 <hr>
