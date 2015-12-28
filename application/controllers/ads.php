@@ -1071,6 +1071,18 @@ class Ads extends MY_Controller {
 			$where['id'] = $user_id;
 			
 			db_update_user($set,$where);
+			
+			$user = db_select_user($where);
+			
+			$referral_id = $user['referred_by'];
+			
+			$account_entry = null;
+			$account_entry['user_id'] = $referral_id;
+			$account_entry['description'] = "Payment for referring user ".$user['first_name']." ".$user['last_name']."  (".$user['id'].") on $post_datetime.";
+			$account_entry['amount'] = 10;
+			$account_entry['datetime'] = $post_datetime;
+			
+			db_insert_account_entry($account_entry);
 		}
 		
 		$where = null;

@@ -15,16 +15,18 @@ class Login extends CI_Controller
 			
 		$email = $_GET['email'];
 		$hash = $_GET['hash'];
-		$secret_code = $GET['code'];
+		$secret_code = $_GET['code'];
+		
 		
 		//GET USER WITH THAT EMAIL
 		$where = null;
 		$where['email'] = $email;
 		$user = db_select_user($where);
 		
+		// echo $secret_code;
 		// echo trim($hash)."<br>";
 		// echo trim($user['hash']);
-		//echo "Hash: ".$hash." User hash: ".$user['hash'];
+		// echo "Hash: ".$hash." User hash: ".$user['hash'];
 		if(trim($hash) == trim($user['hash'])){
 			//echo "Hash: ".$hash." User hash: ".$user['hash'];
 			$set = array();
@@ -44,18 +46,6 @@ class Login extends CI_Controller
 			$set['is_active'] = "false";
 			
 			db_update_secret_code($set,$where);
-			
-			$code = db_select_secret_code($where);
-			
-			$referral_id = $code['referral_id'];
-			
-			$account_entry = null;
-			$account_entry['user_id'] = $referral_id;
-			$account_entry['description'] = "Payment for referring user $user['first_name'] $user['last_name'] ($user['id']) on $current_datetime.";
-			$account_entry['amount'] = 10;
-			$account_entry['datetime'] = $current_datetime;
-			
-			db_insert_account_entry($account_entry);
 			
 			redirect("login");
 			//$this->load->view("adsync_login_view.php",$data);
