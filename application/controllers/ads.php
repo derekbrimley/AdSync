@@ -445,8 +445,10 @@ class Ads extends MY_Controller {
 		}
 		
 		$where = null;
-		$where = "is_active = 'true' AND email_requested IS NOT NULL AND is_email_sent = 'false'";
-		$codes = db_select_secret_codes($where);
+		$where = "email_requested IS NOT NULL";
+		$sort = "case when is_email_sent = 'true' then 1 else 0 end, datetime_created ASC";
+		
+		$codes = db_select_secret_codes($where,$sort);
 		
 		$data['codes'] = $codes;
 		$data['dropdown_users'] = $dropdown_users;

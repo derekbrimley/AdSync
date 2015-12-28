@@ -41,9 +41,15 @@ Code Manager
 					<td style="min-width:150px;max-width:150px;">
 						<?=$code['email_requested']?>
 					</td>
-					<td onClick="send_code(<?=$code['id']?>)" style="cursor:pointer;text-align:center;min-width:50px;max-width:50px;">
-						<img style="height:20px;" src="<?=base_url('images/email.png')?>"/>
-					</td>
+					<?php if($code['is_email_sent']=="false"): ?>
+						<td onClick="send_code(<?=$code['id']?>)" style="cursor:pointer;text-align:center;min-width:50px;max-width:50px;">
+							<img style="height:20px;" src="<?=base_url('images/email.png')?>"/>
+						</td>
+					<?php else: ?>
+						<td style="text-align:center;min-width:50px;max-width:50px;">
+							<img style="height:20px;" src="<?=base_url('images/live_ads_icon.png')?>"/>
+						</td>
+					<?php endif ?>
 				<tr>
 			<?php endforeach?>
 		<?php endif?>
