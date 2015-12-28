@@ -10,7 +10,7 @@
 		
 		
 		$("#tutorial_dialog").dialog({
-			autoOpen:true,
+			autoOpen:false,
 			width: 500,
 			height: 500,
 			title: "AdSync Tutorial",
@@ -19,9 +19,13 @@
 			modal: true,
 		});
 		
-		// if(number_of_visits < 1){
-			// tutorial_open();
-		// }
+		$(window).unload(function(){
+			return 'Are you sure ?';
+		});
+		
+		if(number_of_visits < 1){
+			tutorial_open();
+		}
 		
 		//AD SUBMISSION DIALOG
         $( "#ad_submission_dialog").dialog({
@@ -53,28 +57,6 @@
 							$('.ui-dialog-buttonpane').find('button:eq(1)').css('visibility','hidden');
 							$('.ui-dialog-buttonpane').find('button:eq(0)').css('visibility','visible');
 							
-							if(!(report_ajax_call===undefined)){
-								report_ajax_call.abort();
-							}
-							report_ajax_call = $.ajax({
-								
-								url: "<?=base_url("index.php/ads/load_post_form") ?>",
-								type: "POST",
-								data: {id:id},
-								cache: false,
-								statusCode: {
-									200: function(response){
-										//LOAD DIALOG WITH VIEW FROM SERVER
-										$("#post_form_container").html(response);
-									},
-									404: function(){
-										alert('Page not found');
-									},
-									500: function(response){
-										alert("500 error! "+response);
-									}
-								}
-							});//END AJAX
 						}
 					},
 					{

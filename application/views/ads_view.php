@@ -14,6 +14,7 @@
 		$role = $this->session->userdata('role');
 	?>
 	<script>
+		
 		function countdown() {
 			var m = $('#minutes');
 			var s = $('#seconds');  
