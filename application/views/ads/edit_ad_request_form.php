@@ -7,7 +7,7 @@
 		<input type="hidden" id="ad_request_id" name="ad_request_id" value="<?=$ad_request['id']?>" />
 		<tr>
 			<td>Market</td>
-			<td><?=form_dropdown("market_id",$market_options,$ad_request_market['name'],$mjs)?></td>
+			<td><?=form_dropdown("market_id",$market_options,$ad_request_market['id'],$mjs)?></td>
 		</tr>
 		<tr>
 			<td>Category</td>

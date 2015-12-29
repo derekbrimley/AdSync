@@ -304,7 +304,7 @@ class Ads extends MY_Controller {
 		$where = null;
 		$where['id'] = $ad_request['market_id'];
 		$ad_request_market = db_select_market($where);
-		
+
 		$where = null;
 		$where = "1 = 1";
 		$markets = db_select_markets($where);
