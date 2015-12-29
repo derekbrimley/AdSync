@@ -6,7 +6,8 @@
 		<link type="text/css" href="<?php echo base_url("css/jquery-ui.min.css"); ?>" rel="stylesheet" />
 		<script type="text/javascript" src="<?php echo base_url("js/jquery-1.11.3.min.js"); ?>" ></script>
 		<script type="text/javascript" src="<?php echo base_url("js/jquery-ui.min.js"); ?>" ></script>
-		<link rel="shortcut icon" href="<?=base_url("/favicon-16x16.png")?>" />
+		<link rel="shortcut icon" href="<?php echo base_url('/favicon.ico/');?>" type="image/x-icon">
+		<link rel="icon" href="<?php echo base_url('/favicon.ico/');?>" type="image/x-icon">
 		<link href='http://fonts.googleapis.com/css?family=Roboto:300' rel='stylesheet' type='text/css'>
 	</head>
 	<?php include("ads/ad_scripts.php"); ?>
@@ -45,7 +46,10 @@
 		<div id="header" style="padding:25px 100px;background-color:#0079C1;color:white;font-size:24px;">
 			<div id="header_content" style="width:1100px;margin:0 auto;">
 				<span>
-					<a href="<?= base_url("/index.php/ads/") ?>" style="text-decoration:none;color:white;">AdSync</a>
+					<img src="<?=base_url("/images/adsync_logo_white.png")?>" style="height:23px;" />
+				</span>
+				<span>
+					<a href="<?=base_url("/index.php/ads/") ?>" style="text-decoration:none;color:white;">AdSync</a>
 				</span>
 				<span id="logout_btn">
 					<a style="text-decoration:none;color:white;" href="<?=base_url('/index.php/login/logout') ?>">Log Out</a>

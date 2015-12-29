@@ -1,7 +1,8 @@
 <html>
 	<head>
 		<title><?php echo $title;?></title>
-		<link rel="shortcut icon" href="<?php echo base_url("favicon.ico");?>" />
+		<link rel="shortcut icon" href="<?php echo base_url('/favicon.ico/');?>" type="image/x-icon">
+		<link rel="icon" href="<?php echo base_url('/favicon.ico/');?>" type="image/x-icon">
 	</head>
 	<style>
 		.box_shadow

@@ -3,7 +3,8 @@
 		<link type="text/css" href="<?php echo base_url("css/index.css"); ?>" rel="stylesheet" />
 		<script type="text/javascript" src="<?php echo base_url("js/jquery-1.11.3.min.js"); ?>" ></script>
 		<link href='http://fonts.googleapis.com/css?family=Roboto:300' rel='stylesheet' type='text/css'>
-		<link rel="shortcut icon" href="<?=base_url("/favicon-16x16.png")?>" />
+		<link rel="shortcut icon" href="<?php echo base_url('/favicon.ico/');?>" type="image/x-icon">
+		<link rel="icon" href="<?php echo base_url('/favicon.ico/');?>" type="image/x-icon">
 		<style>
 			.login_btn{
 				margin-left:80px;
