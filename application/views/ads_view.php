@@ -228,3 +228,8 @@
 			<button class="tutorial_btn" id="tutorial_close_btn" onClick="tutorial_close_btn()" style="cursor:pointer;display:none;float:right;" type="button">Close</button>
 		</div>
 	</div>
+	<div id="edit_ad_request_dialog" style="font-family: 'Roboto', sans-serif;">
+		<div id="edit_ad_request_form_container">
+		</div>
+	</div>
+</html>

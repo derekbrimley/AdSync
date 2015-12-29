@@ -8,6 +8,57 @@
 		
 		var number_of_visits = $("#number_of_visits").val();
 		
+		$("#edit_ad_request_dialog").dialog({
+			autoOpen:false,
+			height: 580,
+			width: 750,
+			title: "Edit Ad Request",
+			draggable: false,
+			resizable: false,
+			modal: true,
+			buttons:
+				[
+					{
+						text: "Submit",
+						id: "submit_btn",
+						click: function(){
+							var dataString = $("#edit_ad_request_form").serialize();
+							console.log(dataString);
+							//AJAX
+							if(!(report_ajax_call===undefined)){
+								report_ajax_call.abort();
+							}
+							report_ajax_call = $.ajax({
+								
+								url: "<?=base_url("index.php/ads/edit_ad_request") ?>",
+								type: "POST",
+								data: dataString,
+								cache: false,
+								statusCode: {
+									200: function(){
+										$("#edit_ad_request_dialog").dialog("close");
+										refresh_ad_spots();
+										load_ad_requests();
+									},
+									404: function(){
+										alert('Page not found');
+									},
+									500: function(response){
+										alert("500 error! "+response);
+									}
+								}
+							});//END AJAX
+						}
+					},
+					{
+						text: "Close",
+						id: "close_btn",
+						click: function(){
+							$("#edit_ad_request_dialog").dialog("close");
+						}
+					}
+				]
+		});
 		
 		$("#tutorial_dialog").dialog({
 			autoOpen:false,
@@ -20,7 +71,7 @@
 		});
 		
 		$(window).unload(function(){
-			return 'Are you sure ?';
+			return 'Are you sure?';
 		});
 		
 		if(number_of_visits < 1){
@@ -121,8 +172,9 @@
 						click: function(){
 							$("#ajax_container").show();
 							$("#post_form_container").hide();
-							$('.ui-dialog-buttonpane').find('button:eq(2)').css('visibility','hidden');
+							$('.ui-dialog-buttonpane').find('button:eq(0)').css('visibility','visible');
 							$('.ui-dialog-buttonpane').find('button:eq(1)').css('visibility','visible');
+							$('.ui-dialog-buttonpane').find('button:eq(2)').css('visibility','visible');
 							
 							$( this ).dialog( "close" );
 							
@@ -436,20 +488,27 @@
 		}
 	}
 	
-	function edit_request(id){
-		// $("#name_info_"+id).hide();
-		// $("#category_info_"+id).hide();
-		// $("#sub_info_"+id).hide();
-		// $("#price_info_"+id).hide();
+	function edit_request(ad_request_id){
 		
-		// $("#name_edit_"+id).show();
-		// $("#category_edit_"+id).show();
-		// $("#sub_edit_"+id).show();
-		// $("#price_edit_"+id).show();
-		$("#edit_info_"+id).hide();
-		$("#save_edit_"+id).show();
-		$(".non_editable_"+id).hide();
-		$(".editable_"+id).show();
+		$.ajax({
+			url: "<?=base_url("index.php/ads/load_edit_ad_request_form") ?>",
+			type: "POST",
+			data: {ad_request_id:ad_request_id},
+			cache: false,
+			statusCode: {
+				200: function(response){
+					$("#edit_ad_request_form_container").html(response);
+				},
+				404: function(){
+					alert('Page not found');
+				},
+				500: function(response){
+					alert("500 error! "+response);
+				}
+			}
+		});//END AJAX
+		
+		$("#edit_ad_request_dialog").dialog("open");
 	}
 	
 	function edit_user(id){
@@ -1314,7 +1373,7 @@
 	}
 	
 	function save_request(id){
-		$("#save_edit_"+id).hide();
+		$("#edit_info_"+id).hide();
 		$("#loading_icon_"+id).show();
 		var dataString = $("#ad_request_form_"+id).serialize();
 		console.log(dataString);

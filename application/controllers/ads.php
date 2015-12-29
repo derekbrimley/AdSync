@@ -158,20 +158,17 @@ class Ads extends MY_Controller {
 	}
 	
 	function edit_ad_request(){
-		$ad_request_id = $_POST['id'];
-		$market_name = $_POST['market_name'];
-		
-		$where = null;
-		$where['name'] = $market_name;
-		$market = db_select_market($where);
+		$ad_request_id = $_POST['ad_request_id'];
+		$market_id = $_POST['market_id'];
 		
 		$where = null;
 		$where['id'] = $ad_request_id;
 		
 		$set = array();
-		$set['market_id'] = $market['id'];
+		$set['market_id'] = $market_id;
 		$set['category'] = $_POST['category'];
 		$set['sub_category'] = $_POST['sub_category'];
+		$set['content_desc'] = $_POST['content_desc'];
 		$set['price'] = $_POST['price'];
 		
 		db_update_ad_request($set,$where);
@@ -283,9 +280,39 @@ class Ads extends MY_Controller {
 	}
 	
 	function load_ad_requests(){
+		
+		$where = null;
+		$where['status'] = "active";
+		$ad_requests = db_select_ad_requests($where,"id DESC");
+		
+		$count = $this->count_array($ad_requests);
+		
+		$data['count'] = $count;
+		$data['ad_requests'] = $ad_requests;
+		$this->load->view("ads/ad_requests",$data);
+		
+	}
+	
+	function load_edit_ad_request_form(){
+		
+		$ad_request_id = $_POST['ad_request_id'];
+		
+		$where = null;
+		$where['id'] = $ad_request_id;
+		$ad_request = db_select_ad_request($where);
+		
+		$where = null;
+		$where['id'] = $ad_request['market_id'];
+		$ad_request_market = db_select_market($where);
+		
 		$where = null;
 		$where = "1 = 1";
-		$markets  = db_select_markets($where);
+		$markets = db_select_markets($where);
+		
+		$market_options = array();
+		foreach($markets as $market){
+			$market_options[$market['id']] = $market['name'];
+		}
 		
 		$category_options = array(
 			'Select' => 'Select',
@@ -304,21 +331,11 @@ class Ads extends MY_Controller {
 			'event / class' => 'event / class',
 		);
 		
-		$where = null;
-		$where['status'] = "active";
-		$ad_requests = db_select_ad_requests($where,"id DESC","100");
-		
-		$where = null;
-		$where['status'] = "active";
-		$total_ad_requests = db_select_ad_requests($where);
-		$count = $this->count_array($total_ad_requests);
-		
-		$data['count'] = $count;
 		$data['category_options'] = $category_options;
-		$data['markets'] = $markets;
-		$data['ad_requests'] = $ad_requests;
-		$this->load->view("ads/ad_requests",$data);
-		
+		$data['ad_request_market'] = $ad_request_market;
+		$data['market_options'] = $market_options;
+		$data['ad_request'] = $ad_request;
+		$this->load->view("ads/edit_ad_request_form",$data);
 	}
 	
 	function load_faq(){
