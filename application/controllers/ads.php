@@ -209,7 +209,7 @@ class Ads extends MY_Controller {
 			for ($i = 0; $i < 5; $i++) {
 				$randomString .= $characters[rand(0, $charactersLength - 1)];
 			}
-		}while(in_array($random_string,$code_list));
+		}while(in_array($randomString,$code_list));
 		
 		$new_secret_code = array();
 		if($referral_id!="Select")

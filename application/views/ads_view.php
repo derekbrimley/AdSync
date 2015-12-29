@@ -46,7 +46,9 @@
 		<div id="header" style="padding:25px 100px;background-color:#0079C1;color:white;font-size:24px;">
 			<div id="header_content" style="width:1100px;margin:0 auto;">
 				<span>
-					<img src="<?=base_url("/images/adsync_logo_white.png")?>" style="height:23px;" />
+					<a style="text-decoration:none;" href="<?=base_url("/index.php/ads/")?>" >
+						<img src="<?=base_url("/images/adsync_logo_white.png")?>" style="height:23px;" />
+					</a>
 				</span>
 				<span>
 					<a href="<?=base_url("/index.php/ads/") ?>" style="text-decoration:none;color:white;">AdSync</a>
