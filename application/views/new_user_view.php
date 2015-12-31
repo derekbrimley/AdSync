@@ -55,7 +55,7 @@
 			<table>
 				<tr style="font-size:30px;">
 					<td style="width:20px;">
-						<img style="height:35px;padding-top:5px;padding-left:15px;" src="<?=base_url("images/blue_logo.png")?>"/>
+						<img style="height:35px;padding-top:5px;padding-left:15px;" src="<?=base_url("images/adsync_logo_white.png")?>"/>
 					</td>
 					<td style="padding-bottom:3px;padding-left:5px;">AdSync</td>
 					<td style="float:right;padding-right:15px;margin-top:5px;"><a href="http://nextgenmarketingsolutions.com/" style="color:white;text-decoration:none;">NextGen Marketing Solutions</a></td>
