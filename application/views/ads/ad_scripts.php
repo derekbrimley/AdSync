@@ -170,12 +170,22 @@
 					{
 						text: "Close",
 						click: function(){
-							$("#ajax_container").show();
+							var dataString = $("#ad_submission_form").serialize();
+                            console.log("Datastring: "+dataString);
+							
+                            $("#ajax_container").show();
 							$("#post_form_container").hide();
 							$('.ui-dialog-buttonpane').find('button:eq(0)').css('visibility','visible');
 							$('.ui-dialog-buttonpane').find('button:eq(1)').css('visibility','visible');
 							$('.ui-dialog-buttonpane').find('button:eq(2)').css('visibility','visible');
-							
+                            
+                            $.ajax({
+                                url: "<?=base_url("index.php/ads/delete_post") ?>",
+                                type: "POST",
+                                data: dataString,
+                                async: false,
+                                cache: false,
+                            });
 							$( this ).dialog( "close" );
 							
 							load_post_board();
