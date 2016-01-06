@@ -28,7 +28,7 @@ Post History
 				<td style="max-width:20px;min-width:20px;">Role</td>
 				<td style="max-width:30px;min-width:30px;">Date Joined</td>
 				<td style="max-width:30px;min-width:30px;">Referred By</td>
-				<td style="max-width:20px;min-width:20px;">Status</td>
+				<td style="max-width:23px;min-width:23px;">Status</td>
 				<td style="max-width:20px;min-width:20px;">Edit</td>
 			</tr>
 		</table>

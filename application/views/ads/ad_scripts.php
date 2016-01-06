@@ -1735,7 +1735,6 @@
 		$("#slide_1").show();
 	}
 
-
 	function update_balance(){
 		//AJAX
 		if(!(report_ajax_call===undefined))

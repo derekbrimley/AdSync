@@ -32,7 +32,7 @@
 			<td class="ellipsis" title="<?=$referrer['first_name']." ".$referrer['last_name']?>" style="max-width:30px;min-width:30px;">
 				<?=$referrer['first_name']." ".$referrer['last_name']?>
 			</td>
-			<td class="ellipsis" style="max-width:20px;min-width:20px;">
+			<td class="ellipsis" style="max-width:23px;min-width:23px;">
 				<?php if($user['is_active']=="true"): ?>
 					<div class="non_editable_<?=$user['id']?>">Active</div>
 					<div class="editable_<?=$user['id']?>" style="display:none;">
