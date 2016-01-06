@@ -6,6 +6,7 @@
 		<link type="text/css" href="<?php echo base_url("css/jquery-ui.min.css"); ?>" rel="stylesheet" />
 		<script type="text/javascript" src="<?php echo base_url("js/jquery-1.11.3.min.js"); ?>" ></script>
 		<script type="text/javascript" src="<?php echo base_url("js/jquery-ui.min.js"); ?>" ></script>
+        <script type="text/javascript" src="<?php echo base_url("js/jquery.countdown.min.js"); ?>" ></script>
 		<link rel="shortcut icon" href="<?php echo base_url('/favicon.ico/');?>" type="image/x-icon">
 		<link rel="icon" href="<?php echo base_url('/favicon.ico/');?>" type="image/x-icon">
 		<link href='http://fonts.googleapis.com/css?family=Roboto:300' rel='stylesheet' type='text/css'>
@@ -14,31 +15,6 @@
 	<?php
 		$role = $this->session->userdata('role');
 	?>
-	<script>
-		
-		function countdown() {
-			var m = $('#minutes');
-			var s = $('#seconds');  
-			if(m.length == 0 && parseInt(s.html()) <= 0) {
-				$('.clock').html('Timer Complete.');    
-			}
-			if(parseInt(s.html()) <= 0) {
-				m.html(parseInt(m.html()-1));   
-				s.html(60);
-			}
-			if(parseInt(m.html()) <= 0) {
-				$('.clock').html('<span class="sec">59</span> seconds.'); 
-			}
-			if(parseInt(s.html()) <= 10) {
-				s.html("0"+parseInt(s.html()-1));
-			}
-			else
-			{
-				s.html(parseInt(s.html()-1));
-			}
-		}
-		setInterval('countdown()',1000);
-	</script>
 	<body style="background-color: #eee;">
 		<div style="display:none;">
 			<input type="hidden" id="number_of_visits" value="<?=$user['number_of_visits']?>" />
