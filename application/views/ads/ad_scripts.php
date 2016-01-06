@@ -551,6 +551,8 @@
 					$("#live_ads_container").html(response);
 					$("#refresh_icon").show();
 					$("#loading_icon").hide();
+                    
+                    update_live_ads_count(user_id);
 				},
 				404: function(){
 					alert('Page not found');
@@ -577,6 +579,8 @@
 					$("#post_container").html(response);
 					$("#refresh_icon").show();
 					$("#loading_icon").hide();
+                    
+                    update_post_history_count(user_id);
 				},
 				404: function(){
 					alert('Page not found');
@@ -603,6 +607,8 @@
 					$("#referral_container").html(response);
 					$("#refresh_icon").show();
 					$("#loading_icon").hide();
+                    
+                    update_referral_count(user_id);
 				},
 				404: function(){
 					alert('Page not found');
@@ -629,6 +635,8 @@
 					$("#renewal_container").html(response);
 					$("#refresh_icon").show();
 					$("#loading_icon").hide();
+                    
+                    update_renewal_count(user_id);
 				},
 				404: function(){
 					alert('Page not found');
@@ -1760,6 +1768,92 @@
 		});//END AJAX
 	}
 	
+    function update_live_ads_count(user_id){
+        $.ajax({
+			url: "<?=base_url("index.php/ads/get_filtered_live_ads_count") ?>",
+			type: "POST",
+			data: {user_id:user_id},
+			cache: false,
+			statusCode: {
+				200: function(response){
+					$("#count").html(response);
+                    
+				},
+				404: function(){
+					alert('Page not found');
+				},
+				500: function(response){
+					alert("500 error! "+response);
+				}
+			}
+		});//END AJAX
+    }
+    
+    function update_post_history_count(user_id){
+        
+        $.ajax({
+			url: "<?=base_url("index.php/ads/get_filtered_post_history_count") ?>",
+			type: "POST",
+			data: {user_id:user_id},
+			cache: false,
+			statusCode: {
+				200: function(response){
+					$("#post_history_count").html(response);
+                    
+				},
+				404: function(){
+					alert('Page not found');
+				},
+				500: function(response){
+					alert("500 error! "+response);
+				}
+			}
+		});//END AJAX
+        
+    }
+    
+    function update_referral_count(user_id){
+        $.ajax({
+			url: "<?=base_url("index.php/ads/get_filtered_referral_count") ?>",
+			type: "POST",
+			data: {user_id:user_id},
+			cache: false,
+			statusCode: {
+				200: function(response){
+					$("#count").html(response);
+                    
+				},
+				404: function(){
+					alert('Page not found');
+				},
+				500: function(response){
+					alert("500 error! "+response);
+				}
+			}
+		});//END AJAX
+    }
+    
+    function update_renewal_count(user_id){
+        $.ajax({
+			url: "<?=base_url("index.php/ads/get_filtered_renewal_count") ?>",
+			type: "POST",
+			data: {user_id:user_id},
+			cache: false,
+			statusCode: {
+				200: function(response){
+					$("#count").html(response);
+                    
+				},
+				404: function(){
+					alert('Page not found');
+				},
+				500: function(response){
+					alert("500 error! "+response);
+				}
+			}
+		});//END AJAX
+    }
+    
 	function change_nav_box(box_id){
 		//RETURN ALL NAV BOXES BACK TO NON-SELECTED STYLE
 		$(".nav_box").removeClass("highlighted_nav_box");

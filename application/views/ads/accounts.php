@@ -6,7 +6,7 @@
 	$(".post_row:even").css("background-color","#eee");
 	$("#accounts_container").height($(window).height() - 241);
 </script>
-Post History
+Accounts
 <span>
 	<img id="loading_icon" style="display:none;float:right;height:20px;" src="<?=base_url('images/loading.gif')?>"/>
 </span>
@@ -43,6 +43,10 @@ Post History
 			</div>
 		<?php endforeach ?>
 	</div>
+    <datalist id="roles">
+        <option>affiliate</option>
+        <option>admin</option>
+    </datalist>
 <?php else: ?>
 	No users.
 <?php endif ?>

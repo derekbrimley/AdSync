@@ -244,6 +244,87 @@ class Ads extends MY_Controller {
 		echo number_format($balance,2);
 	}
 	
+    function get_filtered_live_ads_count(){
+        $selected_user_id = $_POST['user_id'];
+		$role = $this->session->userdata('role');
+		
+		$where = null;
+		if($selected_user_id=="All Users"){
+			
+		}else{
+			$where['poster_id'] = $selected_user_id;
+		}
+		$where['result'] = "live";
+		$posts = db_select_posts($where,"post_datetime DESC");
+		
+		$count = $this->count_array($posts);
+        
+        echo $count;
+    }
+    
+    function get_filtered_referral_count(){
+        
+        $selected_user_id = $_POST['user_id'];
+		$role = $this->session->userdata('role');
+		
+		$where = null;
+		$where = "1 = 1";
+		$users = db_select_users($where);
+		
+		$referred_users = array();
+		foreach($users as $user){
+			if(!empty($user['referred_by'])){
+				if($selected_user_id!="All Users"){
+					if($user['referred_by'] == $selected_user_id){
+						$referred_users[] = $user;
+					}
+				}else{
+					$referred_users[] = $user;
+				}
+			}
+		}
+		
+		$count = $this->count_array($referred_users);
+        echo $count;
+    }
+    
+    function get_filtered_renewal_count(){
+        
+        $selected_user_id = $_POST['user_id'];
+		$role = $this->session->userdata('role');
+		
+		$where = null;
+		if($selected_user_id=="All Users"){
+			
+		}else{
+			$where['poster_id'] = $selected_user_id;
+		}
+		$where['renewal_datetime'] = null;
+		$posts = db_select_posts($where,"next_renewal_datetime ASC");
+		
+		$count = $this->count_array($posts);
+        echo $count;
+    }
+    
+    function get_filtered_post_history_count(){
+        
+        $user_id = $_POST['user_id'];
+        
+        $role = $this->session->userdata('role');
+		
+		$where = null;
+		if($user_id=="All Users"){
+			$where = "1 = 1";
+		}else{
+			$where['poster_id'] = $user_id;
+		}
+		$posts = db_select_posts($where,"post_datetime DESC");
+		
+		$count = $this->count_array($posts);
+        
+        echo $count;
+    }
+    
 	function load_account_info(){
 		$user_id = $this->session->userdata('user_id');
 		
@@ -594,7 +675,7 @@ class Ads extends MY_Controller {
 		
 		$where = null;
 		$where = "1 = 1";
-		$users = db_select_users($where);
+		$users = db_select_users($where,"last_name ASC");
 		
 		$count = $this->count_array($posts);
 		
@@ -629,7 +710,7 @@ class Ads extends MY_Controller {
 		
 		$where = null;
 		$where = "1 = 1";
-		$users = db_select_users($where);
+		$users = db_select_users($where,"last_name ASC");
 		
 		$count = $this->count_array($posts);
 		
@@ -658,7 +739,7 @@ class Ads extends MY_Controller {
 		
 		$where = null;
 		$where = "1 = 1";
-		$users = db_select_users($where);
+		$users = db_select_users($where,"last_name ASC");
 		
 		$referred_users = array();
 		foreach($users as $user){
@@ -694,7 +775,7 @@ class Ads extends MY_Controller {
 		
 		$where = null;
 		$where = "1 = 1";
-		$users = db_select_users($where);
+		$users = db_select_users($where,"last_name ASC");
 		
 		$count = $this->count_array($posts);
 		

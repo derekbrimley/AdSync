@@ -14,7 +14,7 @@ Renewals
 <span>
 	<img id="refresh_icon" onClick="load_renewals()" style="float:right;height:20px;cursor:pointer" src="<?=base_url('images/refresh_icon_grey_360.png')?>"/>
 </span>
-<span style="float:right;margin-right:20px;">
+<span id="count" style="float:right;margin-right:20px;">
 	<?= $count ?>
 </span>
 <?php if($role=="admin"): ?>
