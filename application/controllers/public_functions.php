@@ -1,11 +1,9 @@
 <?php		
 
 	
-class Public_functions extends CI_Controller 
-{
+class Public_functions extends CI_Controller {
 	//CRON JOBS
-	function refresh_post_board()
-	{
+	function refresh_post_board(){
 		
 		date_default_timezone_set('America/Denver');
 		$current_datetime = strtotime(date("Y-m-d H:i:s"));
@@ -126,10 +124,60 @@ class Public_functions extends CI_Controller
 		
 	}
 
-	function clean_up_post_board()
-	{
+	function clean_up_post_board(){
 		
 	}
-
 	
+	function add_geopoint_data(){
+		date_default_timezone_set('America/Denver');
+		
+		$opts = array(
+			'http'=>array(
+				'method'=>"GET",
+				'header'=>"Accept-language: en\r\n" .
+									"Cookie: foo=bar\r\n",
+				'user_agent'=>    $_SERVER['HTTP_USER_AGENT'] 
+			)
+		);
+
+		$context = stream_context_create($opts);
+
+		$xml = file_get_contents('http://dir3696.zonarsystems.net/interface.php?customer=dir3696&username=system&password=password&action=showposition&operation=current&format=xml&version=2&logvers=3.3', false, $context);
+
+		$parsed_xml = simplexml_load_string($xml);
+
+		foreach($parsed_xml->children() as $child)
+		{
+			$time = intval ($child->time);
+			$datetime = date("Y-m-d H:i:s",$time);
+
+			$meters = intval($child->odometer);
+			$miles = round($meters * .000621371);
+			
+			//GET TRUCK ID
+			$where = null;
+			$where["truck_number"] = $child->attributes()->fleet;
+			$truck = db_select_truck($where);
+
+			$asset['truck_id'] = $truck["id"];
+			$asset['datetime'] = $datetime;
+			$asset['latitude'] = $child->lat;
+			$asset['longitude'] = $child->long;
+			$asset['heading'] = $child->heading;
+			$asset['speed'] = $child->speed;
+			$asset['power'] = "$child->power";
+			$asset['odometer'] = $miles;
+
+			$where = null;
+			$where['truck_id'] = $asset['truck_id'];
+			$where['datetime'] = $asset['datetime'];
+
+			$duplicate_truck = db_select_geopoint($where);
+
+			db_insert_geopoint($asset);
+			
+		}
+		
+		echo "Success!";
+	}
 }

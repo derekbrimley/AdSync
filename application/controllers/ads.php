@@ -6,20 +6,20 @@ class Ads extends MY_Controller {
 		$role = $this->session->userdata('role');
 		$title = "AdSync";
 		$is_active = $this->session->userdata('is_active');
-		
+
 		$where = null;
 		$where = "1 = 1";
 		$markets  = db_select_markets($where);
-		
+
 		$market_options = array();
 		$market_options["Select"] = "Select";
 		foreach($markets as $market)
 		{
-			
+
 			$market_options[$market['id']] = $market['name'].", ".$market['state'];
-			
+
 		}
-		
+
 		$category_options = array(
 			'Select' => 'Select',
 			'job offered' => 'job offered',
@@ -36,34 +36,34 @@ class Ads extends MY_Controller {
 			'community' => 'community',
 			'event / class' => 'event / class',
 		);
-		
+
 		$where = null;
 		$where = "1 = 1";
 		$clients = db_select_clients($where);
-		
+
 		$client_options = array();
 		$client_options["Select"] = "Select";
 		foreach($clients as $client)
 		{
-			
+
 			$client_options[$client['id']] = $client['name'];
-			
+
 		}
-		
+
 		$where = null;
 		$where = "1 = 1";
 		$ad_requests = db_select_ad_requests($where);
-		
+
 		$data['client_options'] = $client_options;
 		$data['category_options'] = $category_options;
 		$data['market_options'] = $market_options;
 		$data['title'] = $title;
-		
+
 		$where = null;
 		$where['id'] = $this->session->userdata('user_id');
 		$user = db_select_user($where);
 		$data['user'] = $user;
-		
+
 		if($is_active == "false")
 		{
 			$data['user_id'] = $this->session->userdata('user_id');
@@ -72,20 +72,20 @@ class Ads extends MY_Controller {
 		else if($role == "admin" || $role == "manager" || $role == "client" || $role == "affiliate" || $role == "staff")
 		{
 			$old_number = $user['number_of_visits'];
-			
+
 			$set = array();
 			$set['number_of_visits'] = $old_number + 1;
-			
+
 			$where = null;
 			$where['id'] = $user['id'];
-			
+
 			db_update_user($set,$where);
-			
+
 			$this->load->view('ads_view',$data);
 		}
-		
+
 	}
-	
+
 	function create_ad_request(){
 		$client_id = $_POST['client_id'];
 		$market_id = $_POST['market_id'];
@@ -94,9 +94,9 @@ class Ads extends MY_Controller {
 		$content_description = $_POST['content_description'];
 		$price = $_POST['price'];
 		$minimum_live_ads = $_POST['minimum_live_ads'];
-		
+
 		$stripped_price = preg_replace("/[^0-9,.]/", "", $price);
-		
+
 		$ad_request = null;
 		$ad_request['client_id'] = $client_id;
 		$ad_request['market_id'] = $market_id;
@@ -106,111 +106,111 @@ class Ads extends MY_Controller {
 		$ad_request['price'] = $stripped_price;
 		$ad_request['post_expense'] = 10;
 		$ad_request['min_count'] = $minimum_live_ads;
-		
+
 		db_insert_ad_request($ad_request);
 		header("Location: ".base_url('/index.php/ads/'));
 		die();
 	}
-	
+
 	function count_array($array){
 
 		$count = count($array);
 		return $count;
 	}
-	
+
 	function delete_ad_request(){
 		$id = $_POST['id'];
-		
+
 		$where = null;
 		$where['id'] = $id;
-		
+
 		$set = array();
 		$set['status'] = 'inactive';
-		
+
 		db_update_ad_request($set,$where);
 	}
-	
+
 	function delete_post(){
 		$post_id = $_POST['post_id'];
 		$ad_request_id = $_POST['ad_request_id'];
-		
+
 		if(!empty($post_id))
 		{
-			
+
 			$where = null;
 			$where['id'] = $post_id;
-			
+
 			db_delete_post($where);
-			
+
 			$where = null;
 			$where['ad_request_id'] = $ad_request_id;
-			
+
 			$set['post_datetime'] = '';
-			
+
 			db_update_ad_spot($set,$where);
-			
+
 		}
-		
+
 	}
-	
+
 	function download_file($file_guid){
 		get_secure_ftp_file($file_guid);
 	}
-	
+
 	function edit_ad_request(){
 		$ad_request_id = $_POST['ad_request_id'];
 		$market_id = $_POST['market_id'];
-		
+
 		$where = null;
 		$where['id'] = $ad_request_id;
-		
+
 		$set = array();
 		$set['market_id'] = $market_id;
 		$set['category'] = $_POST['category'];
 		$set['sub_category'] = $_POST['sub_category'];
 		$set['content_desc'] = $_POST['content_desc'];
 		$set['price'] = $_POST['price'];
-		
+
 		db_update_ad_request($set,$where);
 	}
-	
+
 	function edit_user(){
 		$user_id = $_POST['user_id'];
 		$status = $_POST['status'];
 		$where = null;
 		$where['id'] = $user_id;
-		
+
 		$set = array();
 		$set['is_active'] = $status;
-		
+
 		db_update_user($set,$where);
 	}
-	
+
 	function generate_code(){
 		date_default_timezone_set('America/Denver');
 		$current_datetime = date("Y-m-d H:i:s");
-		
+
 		$referral_id = $_POST['referral_id'];
-		
+
 		$characters = '0123456789';
 		$charactersLength = strlen($characters);
-		
+
 		$where = null;
 		$where = "1 = 1";
 		$codes = db_select_secret_codes($where);
-		
+
 		$code_list = array();
 		foreach($codes as $code){
 			$code_list[] = $code['secret_code'];
 		}
-		
+
 		do{
 			$randomString = '';
 			for ($i = 0; $i < 5; $i++) {
 				$randomString .= $characters[rand(0, $charactersLength - 1)];
 			}
 		}while(in_array($randomString,$code_list));
-		
+
 		$new_secret_code = array();
 		if($referral_id!="Select")
 		{
@@ -219,15 +219,15 @@ class Ads extends MY_Controller {
 		$new_secret_code['secret_code'] = $randomString;
 		$new_secret_code['datetime_created'] = $current_datetime;
 		$new_secret_code['is_active'] = "true";
-		
+
 		db_insert_secret_code($new_secret_code);
-		
+
 		echo $randomString;
 	}
-		
+
 	function get_balance(){
 		$user_id = $_POST['id'];
-		
+
 		$where = null;
 		$where['user_id'] = $user_id;
 		$account_entries = db_select_account_entrys($where);
@@ -240,37 +240,37 @@ class Ads extends MY_Controller {
 				$balance += $account_entry['amount'];
 			}
 		}
-		
+
 		echo number_format($balance,2);
 	}
-	
-    function get_filtered_live_ads_count(){
+
+   function get_filtered_live_ads_count(){
         $selected_user_id = $_POST['user_id'];
 		$role = $this->session->userdata('role');
-		
+
 		$where = null;
 		if($selected_user_id=="All Users"){
-			
+
 		}else{
 			$where['poster_id'] = $selected_user_id;
 		}
 		$where['result'] = "live";
 		$posts = db_select_posts($where,"post_datetime DESC");
-		
+
 		$count = $this->count_array($posts);
-        
+
         echo $count;
     }
-    
-    function get_filtered_referral_count(){
-        
+
+   function get_filtered_referral_count(){
+
         $selected_user_id = $_POST['user_id'];
 		$role = $this->session->userdata('role');
-		
+
 		$where = null;
 		$where = "1 = 1";
 		$users = db_select_users($where);
-		
+
 		$referred_users = array();
 		foreach($users as $user){
 			if(!empty($user['referred_by'])){
@@ -283,35 +283,35 @@ class Ads extends MY_Controller {
 				}
 			}
 		}
-		
+
 		$count = $this->count_array($referred_users);
         echo $count;
     }
-    
-    function get_filtered_renewal_count(){
-        
+
+   function get_filtered_renewal_count(){
+
         $selected_user_id = $_POST['user_id'];
 		$role = $this->session->userdata('role');
-		
+
 		$where = null;
 		if($selected_user_id=="All Users"){
-			
+
 		}else{
 			$where['poster_id'] = $selected_user_id;
 		}
 		$where['renewal_datetime'] = null;
 		$posts = db_select_posts($where,"next_renewal_datetime ASC");
-		
+
 		$count = $this->count_array($posts);
         echo $count;
     }
-    
-    function get_filtered_post_history_count(){
-        
+
+   function get_filtered_post_history_count(){
+
         $user_id = $_POST['user_id'];
-        
+
         $role = $this->session->userdata('role');
-		
+
 		$where = null;
 		if($user_id=="All Users"){
 			$where = "1 = 1";
@@ -319,69 +319,69 @@ class Ads extends MY_Controller {
 			$where['poster_id'] = $user_id;
 		}
 		$posts = db_select_posts($where,"post_datetime DESC");
-		
+
 		$count = $this->count_array($posts);
-        
+
         echo $count;
     }
-    
+
 	function load_account_info(){
 		$user_id = $this->session->userdata('user_id');
-		
+
 		$where = null;
 		$where['id'] = $user_id;
 		$user = db_select_user($where);
-		
+
 		$where = null;
 		$where['id'] = $user['home_market'];
 		$market = db_select_market($where);
-		
+
 		$where = null;
 		$where['id'] = $user['referred_by'];
 		$referred_by_user = db_select_user($where);
-		
+
 		$data['referred_by_user'] = $referred_by_user;
 		$data['market'] = $market;
 		$data['user'] = $user;
-		
+
 		$this->load->view("ads/account_info",$data);
-		
+
 	}
-	
+
 	function load_accounts_page(){
 		$where = null;
 		$where = "1 = 1";
 		$users = db_select_users($where);
-		
+
 		$count = $this->count_array($users);
-		
+
 		$data['count'] = $count;
 		$data['users'] = $users;
 		$this->load->view("ads/accounts",$data);
 	}
-	
+
 	function load_ad_requests(){
-		
+
 		$where = null;
 		$where['status'] = "active";
 		$ad_requests = db_select_ad_requests($where,"id DESC");
-		
+
 		$count = $this->count_array($ad_requests);
-		
+
 		$data['count'] = $count;
 		$data['ad_requests'] = $ad_requests;
 		$this->load->view("ads/ad_requests",$data);
-		
+
 	}
-	
+
 	function load_edit_ad_request_form(){
-		
+
 		$ad_request_id = $_POST['ad_request_id'];
-		
+
 		$where = null;
 		$where['id'] = $ad_request_id;
 		$ad_request = db_select_ad_request($where);
-		
+
 		$where = null;
 		$where['id'] = $ad_request['market_id'];
 		$ad_request_market = db_select_market($where);
@@ -389,12 +389,12 @@ class Ads extends MY_Controller {
 		$where = null;
 		$where = "1 = 1";
 		$markets = db_select_markets($where);
-		
+
 		$market_options = array();
 		foreach($markets as $market){
 			$market_options[$market['id']] = $market['name'];
 		}
-		
+
 		$category_options = array(
 			'Select' => 'Select',
 			'job offered' => 'job offered',
@@ -411,48 +411,48 @@ class Ads extends MY_Controller {
 			'community' => 'community',
 			'event / class' => 'event / class',
 		);
-		
+
 		$data['category_options'] = $category_options;
 		$data['ad_request_market'] = $ad_request_market;
 		$data['market_options'] = $market_options;
 		$data['ad_request'] = $ad_request;
 		$this->load->view("ads/edit_ad_request_form",$data);
 	}
-	
+
 	function load_faq(){
 		$this->load->view("ads/faq_view");
 	}
-	
+
 	function load_filtered_live_ads(){
 		$selected_user_id = $_POST['user_id'];
 		$role = $this->session->userdata('role');
-		
+
 		$where = null;
 		if($selected_user_id=="All Users"){
-			
+
 		}else{
 			$where['poster_id'] = $selected_user_id;
 		}
 		$where['result'] = "live";
 		$posts = db_select_posts($where,"post_datetime DESC");
-		
+
 		$where = null;
 		$where = "1 = 1";
 		$users = db_select_users($where);
-		
+
 		$count = $this->count_array($posts);
-		
+
 		$data['role'] = $role;
 		$data['users'] = $users;
 		$data['count'] = $count;
 		$data['posts'] = $posts;
 		$this->load->view("ads/filtered_live_ads",$data);
 	}
-	
+
 	function load_filtered_post_history(){
 		$selected_user_id = $_POST['user_id'];
 		$role = $this->session->userdata('role');
-		
+
 		$where = null;
 		if($selected_user_id=="All Users"){
 			$where = "1 = 1";
@@ -460,28 +460,28 @@ class Ads extends MY_Controller {
 			$where['poster_id'] = $selected_user_id;
 		}
 		$posts = db_select_posts($where,"post_datetime DESC");
-		
+
 		$where = null;
 		$where = "1 = 1";
 		$users = db_select_users($where);
-		
+
 		$count = $this->count_array($posts);
-		
+
 		$data['role'] = $role;
 		$data['users'] = $users;
 		$data['count'] = $count;
 		$data['posts'] = $posts;
 		$this->load->view("ads/filtered_post_history",$data);
 	}
-	
+
 	function load_filtered_referrals(){
 		$selected_user_id = $_POST['user_id'];
 		$role = $this->session->userdata('role');
-		
+
 		$where = null;
 		$where = "1 = 1";
 		$users = db_select_users($where);
-		
+
 		$referred_users = array();
 		foreach($users as $user){
 			if(!empty($user['referred_by'])){
@@ -494,46 +494,46 @@ class Ads extends MY_Controller {
 				}
 			}
 		}
-		
+
 		$count = $this->count_array($referred_users);
-		
+
 		$data['count'] = $count;
 		$data['users'] = $users;
 		$data['referred_users'] = $referred_users;
 		$this->load->view("ads/filtered_referrals",$data);
 	}
-	
+
 	function load_filtered_renewals(){
 		$selected_user_id = $_POST['user_id'];
 		$role = $this->session->userdata('role');
-		
+
 		$where = null;
 		if($selected_user_id=="All Users"){
-			
+
 		}else{
 			$where['poster_id'] = $selected_user_id;
 		}
 		$where['renewal_datetime'] = null;
 		$posts = db_select_posts($where,"next_renewal_datetime ASC");
-		
+
 		$where = null;
 		$where = "1 = 1";
 		$users = db_select_users($where);
-		
+
 		$count = $this->count_array($posts);
-		
+
 		$data['role'] = $role;
 		$data['users'] = $users;
 		$data['count'] = $count;
 		$data['posts'] = $posts;
 		$this->load->view("ads/filtered_renewals",$data);
 	}
-	
+
 	function load_generate_code_page(){
 		$where = null;
 		$where = "1 = 1";
 		$users = db_select_users($where);
-		
+
 		$dropdown_users = array();
 		$dropdown_users["Select"] = "Select";
 		$dropdown_users["No Referrer"] = "No Referrer";
@@ -541,29 +541,29 @@ class Ads extends MY_Controller {
 		{
 			$dropdown_users[$user['id']] = $user['first_name']." ".$user['last_name'];
 		}
-		
+
 		$where = null;
 		$where = "email_requested IS NOT NULL";
 		$sort = "case when is_email_sent = 'true' then 1 else 0 end, datetime_created ASC";
-		
+
 		$codes = db_select_secret_codes($where,$sort);
-		
+
 		$data['codes'] = $codes;
 		$data['dropdown_users'] = $dropdown_users;
 		$this->load->view("ads/generate_code_view",$data);
 	}
-	
+
 	function load_manage_money_page(){
 		$user_id = $this->session->userdata('user_id');
-	
+
 		$where = null;
 		$where = "1 = 1";
 		$account_entrys = db_select_account_entrys($where,"datetime DESC");
-		
+
 		$where = null;
 		$where = "1 = 1";
 		$users = db_select_users($where,"last_name ASC");
-		
+
 		$balance = 0;
 		$dropdown_users = array();
 		$dropdown_users[] = "All Users";
@@ -576,23 +576,23 @@ class Ads extends MY_Controller {
 					$balance += $account_entry['amount'];
 				}
 			}
-			
+
 		$dropdown_users[$user['id']] = $user['first_name']." ".$user['last_name']." - $".number_format($user_balance,2);
 		}
-		
+
 		$data['balance'] = number_format($balance,2);
 		$data['dropdown_users'] = $dropdown_users;
 		$data['account_entrys'] = $account_entrys;
 		$this->load->view("ads/manage_money_page",$data);
 	}
-	
+
 	function load_money_report(){
 		$user_id = $this->session->userdata('user_id');
-		
+
 		$where = null;
 		$where['user_id'] = $user_id;
 		$account_entrys = db_select_account_entrys($where,"datetime DESC");
-		
+
 		$balance = 0;
 		if(!empty($account_entrys))
 		{
@@ -601,44 +601,44 @@ class Ads extends MY_Controller {
 				$balance += $account_entry['amount'];
 			}
 		}
-		
+
 		$data['balance'] = number_format($balance,2);
 		$data['account_entrys'] = $account_entrys;
 		$this->load->view("ads/money_report",$data);
 	}
-	
+
 	function load_post_board(){
 		$user_id = $this->session->userdata('user_id');
 		$role = $this->session->userdata('role');
-		
+
 		$where = null;
 		$where['id'] = $user_id;
 		$user = db_select_user($where);
-		
+
 		$home_market_id = $user['home_market'];
 		$where = null;
 		$where['market_id'] = $home_market_id;
 		$related_markets = db_select_market_relationships($where);
 		//print_r($related_markets);
-		
+
 		$available_markets = array();
 		$available_markets[] = $home_market_id;
 		$where = null;
 		$where = "post_datetime IS NULL AND (market_id = '".$home_market_id."'";
-		
+
 		if(!empty($related_markets)){
 			foreach($related_markets as $related_market){
 				$where = $where." OR market_id = '".$related_market['related_market_id']."'";
 			}
 		}
-		
+
 		$ad_spots = array();
 		if($role=="admin"){
 			$sql = "SELECT ad_spot.id AS id, ad_spot.ad_request_id AS ad_request_id, ad_spot.value as value, ad_spot.post_datetime as post_datetime, ad_request.market_id AS market_id FROM `ad_spot` LEFT JOIN `ad_request` ON ad_spot.ad_request_id = ad_request.id ORDER BY ad_spot.value DESC";
 		}else{
 			$sql = "SELECT ad_spot.id AS id, ad_spot.ad_request_id AS ad_request_id, ad_spot.value as value, ad_spot.post_datetime as post_datetime, ad_request.market_id AS market_id FROM `ad_spot` LEFT JOIN `ad_request` ON ad_spot.ad_request_id = ad_request.id WHERE ".$where.") ORDER BY ad_spot.value ASC, ad_spot.ad_request_id ASC";
 		}
-		
+
 		//echo $sql;
 		$query = $this->db->query($sql);
 		foreach($query->result() as $row){
@@ -650,97 +650,97 @@ class Ads extends MY_Controller {
 			$ad_spot['market_id'] = $row->market_id;
 			$ad_spots[] = $ad_spot;
 		}
-		
-		
+
+
 		//$ad_spots  = db_select_ad_spots($where);
-		
+
 		$count = $this->count_array($ad_spots);
-		
+
 		$data['count'] = $count;
 		$data['ad_spots'] = $ad_spots;
 		$this->load->view("ads/post_board",$data);
 	}
-	
+
 	function load_live_ads(){
 		$user_id = $this->session->userdata('user_id');
 		$role = $this->session->userdata('role');
-		
+
 		$where = null;
 		if($role!="admin"){
 			$where['poster_id'] = $user_id;
 		}
-		
+
 		$where['result'] = "live";
 		$posts = db_select_posts($where,"post_datetime DESC");
-		
+
 		$where = null;
 		$where = "1 = 1";
 		$users = db_select_users($where,"last_name ASC");
-		
+
 		$count = $this->count_array($posts);
-		
+
 		$data['users'] = $users;
 		$data['count'] = $count;
 		$data['posts'] = $posts;
 		$this->load->view("ads/live_ads",$data);
 	}
-	
+
 	function load_post_form(){
 		$post_id = $_POST['id'];
-		
+
 		$post = null;
 		$post['id'] = $post_id;
-		
+
 		$post = db_select_post($post);
-		
+
 		$data['post_datetime'] = $post['post_datetime'];
 		$data['post_id'] = $post['id'];
 		$this->load->view("ads/ad_request_post_form",$data);
 	}
-	
+
 	function load_post_history(){
 		$user_id = $this->session->userdata('user_id');
 		$role = $this->session->userdata('role');
-		
+
 		$where = null;
 		if($role!="admin"){
 			$where['poster_id'] = $user_id;
 		}
 		$posts = db_select_posts($where,"post_datetime DESC");
-		
+
 		$where = null;
 		$where = "1 = 1";
 		$users = db_select_users($where,"last_name ASC");
-		
+
 		$count = $this->count_array($posts);
-		
+
 		$data['role'] = $role;
 		$data['users'] = $users;
 		$data['count'] = $count;
 		$data['posts'] = $posts;
 		$this->load->view("ads/post_history",$data);
 	}
-	
+
 	function load_post_verification_page(){
 		$where = null;
 		$where['result'] = "Needs verification";
 		$posts = db_select_posts($where);
-		
+
 		$count = $this->count_array($posts);
-		
+
 		$data['count'] = $count;
 		$data['posts'] = $posts;
 		$this->load->view("ads/post_verification",$data);
 	}
-	
+
 	function load_referrals(){
 		$user_id = $this->session->userdata('user_id');
 		$role = $this->session->userdata('role');
-		
+
 		$where = null;
 		$where = "1 = 1";
 		$users = db_select_users($where,"last_name ASC");
-		
+
 		$referred_users = array();
 		foreach($users as $user){
 			if(!empty($user['referred_by'])){
@@ -753,105 +753,105 @@ class Ads extends MY_Controller {
 				}
 			}
 		}
-		
+
 		$count = $this->count_array($referred_users);
-		
+
 		$data['count'] = $count;
 		$data['users'] = $users;
 		$data['referred_users'] = $referred_users;
 		$this->load->view("ads/referrals",$data);
 	}
-	
+
 	function load_renewals(){
 		$user_id = $this->session->userdata('user_id');
 		$role = $this->session->userdata('role');
-		
+
 		$where = null;
 		if($role!="admin"){
 			$where['poster_id'] = $user_id;
 		}
 		$where['renewal_datetime'] = null;
 		$posts = db_select_posts($where,"next_renewal_datetime ASC");
-		
+
 		$where = null;
 		$where = "1 = 1";
 		$users = db_select_users($where,"last_name ASC");
-		
+
 		$count = $this->count_array($posts);
-		
+
 		$data['users'] = $users;
 		$data['count'] = $count;
 		$data['posts'] = $posts;
 		$this->load->view("ads/renewals",$data);
 	}
-	
+
 	function load_user_transactions(){
 		$user_id = $_POST['user_id'];
-		
+
 		if($user_id == "All Users"){
 			$where = null;
 			$where = "1 = 1";
 			$account_entrys = db_select_account_entrys($where,"datetime DESC");
 		}else if($user_id == "Users with balance"){
-			
+
 		}else{
 			$where = null;
 			$where['user_id'] = $user_id;
 			$account_entrys = db_select_account_entrys($where,"datetime DESC");
 		}
-		
-		
+
+
 		$where = null;
 		$where['id'] = $user_id;
 		$user = db_select_user($where);
-		
+
 		$where = null;
 		$where = "1 = 1";
 		$dropdown_users = db_select_users($where);
-		
+
 		$data['user'] = $user;
 		$data['dropdown_users'] = $dropdown_users;
 		$data['account_entrys'] = $account_entrys;
 		$this->load->view("ads/manage_money_page_report",$data);
 	}
-	
+
 	function open_post_verification_dialog(){
 		$post_id = $_POST['post_id'];
-		
+
 		$where = null;
 		$where['id'] = $post_id;
 		$post = db_select_post($where);
-		
+
 		$where = null;
 		$where['id'] = $post['ad_request_id'];
 		$ad_request = db_select_ad_request($where);
-		
+
 		$where = null;
 		$where['id'] = $ad_request['market_id'];
 		$market = db_select_market($where);
-		
+
 		$data['ad_request'] = $ad_request;
 		$data['market'] = $market;
 		$data['post'] = $post;
 		$this->load->view("ads/post_verification_form",$data);
 	}
-	
+
 	function renew_post(){
 		date_default_timezone_set('America/Denver');
 		$current_datetime = strtotime(date("Y-m-d H:i:s"));
 		$post_datetime = date("Y-m-d H:i:s",$current_datetime);
-		
+
 		$renewal_post_id = $_POST['renewal_post_id'];
-		
+
 		$where = null;
 		$where['id'] = $renewal_post_id;
 		$post = db_select_post($where);
-		
+
 		$set = array();
 		$set['renewal_datetime'] = $post_datetime;
-		
+
 		db_update_post($set,$where);
-		
+
 		$new_post = array();
 		$new_post['post_datetime'] = $post_datetime;
 		$new_post['poster_id'] = $this->session->userdata('user_id');
@@ -865,177 +865,177 @@ class Ads extends MY_Controller {
 		$new_post['next_renewal_datetime'] = date("Y-m-d H:i:s",strtotime($post_datetime . " +48 hours"));
 		$new_post['result'] = "Needs verification";
 		$new_post['amount_due'] = 1;
-		
+
 		db_insert_post($new_post);
 	}
-	
+
 	//OPENS NEW AD SUBMISSION DIALOG
 	function reserve_ad_request(){
 		date_default_timezone_set('America/Denver');
 		$current_datetime = strtotime(date("Y-m-d H:i:s"));
 		$post_datetime = date("Y-m-d H:i:s",$current_datetime);
-		
+
 		$user_id = $this->session->userdata('user_id');
-		
+
 		$where = null;
 		$where['id'] = $user_id;
 		$user = db_select_user($where);
-		
+
 		$where = null;
 		$where['poster_id'] = $user_id;
 		$where['is_renewal'] = "false";
 		$where['result'] = "Live";
 		$total_posts = db_select_posts($where);
-		
+
 		$sql = "SELECT * FROM `post` WHERE poster_id = ".$user_id." AND post_datetime > '".date("Y-m-d H:i:s",strtotime($post_datetime) - (24*3600*45))."' AND is_renewal = 'false' AND result = 'Live'";
 		$query = $this->db->query($sql);
 		$posts = array();
-		
+
 		foreach($query->result() as $row){
 			$post = array();
 			$post['id'] = $row->id;
 			$posts[] = $post;
 		}
-		
+
 		$count = count($posts);
-		
+
 		$sql = "SELECT * FROM `post` WHERE poster_id = ".$user_id." AND post_datetime > '".date("Y-m-d H:i:s",strtotime($post_datetime) - (24*3600))."' AND is_renewal = 'false' AND result = 'Live'";
 		$query = $this->db->query($sql);
 		$day_posts = array();
-		
+
 		foreach($query->result() as $row){
 			$day_post = array();
 			$day_post['id'] = $row->id;
 			$day_posts[] = $day_post;
 		}
 		$day_count = count($day_posts);
-		
-		if($count > 20){
-			echo "<script>alert('Sorry! Craigslist limits the number of ads one person can post. You have reached the limit. Don't worry, after 45 days, the post is deleted. For now, just focus on renewing your current ads. Thanks!');</script>";
+
+		if($count > 100){
+			echo "<script>alert('Sorry! Craigslist limits the number of ads one person can post. You have reached the limit. Don\'t worry, after 45 days, the post is deleted. For now, just focus on renewing your current ads. Thanks!');</script>";
 		}else if($day_count > 5){
 			echo "<script>alert('Sorry! Craigslist limits the number of ads one person can post per day to five. You have reached the limit. For now, just focus on renewing your current ads. Come back tomorrow to post some new ads! Thanks!');</script>";
 		}else{
 			$id = $_POST['id'];
-			
+
 			$where = null;
 			$where['id'] = $id;
 			$ad_spot = db_select_ad_spot($where);
-			
+
 			$set = null;
 			$set['post_datetime'] = $post_datetime;
-			
+
 			db_update_ad_spot($set,$where);
-			
+
 			//CREATE POST
 			$ad_request_id = $ad_spot['ad_request_id'];
-			
+
 			$post = null;
 			$post['ad_request_id'] = $ad_request_id;
 			$post['post_datetime'] = $post_datetime;
-			
+
 			db_insert_post($post);
-			
+
 			$post = db_select_post($post);
-			
+
 			$data['post_id'] = $post['id'];
 			$data['ad_request_id'] = $ad_request_id;
 			$this->load->view("ads/ad_request_dialog",$data);
 		}
 	}
-	
+
 	function reset_password(){
 		$user_id = $_POST['user_id'];
-		
-		
+
+
 	}
-	
+
 	function save_user_information(){
 		$user_id = $_POST['user_id'];
 		$first_name = $_POST['first_name'];
 		$last_name = $_POST['last_name'];
-		
+
 		$where = null;
 		$where['id'] = $user_id;
-		
+
 		$set = null;
 		$set['first_name'] = $first_name;
 		$set['last_name'] = $last_name;
-		
+
 		db_update_user($set,$where);
-		
+
 		$this->load_account_info();
 	}
-	
+
 	function send_code(){
 		$code_id = $_POST['id'];
-		
+
 		$where = null;
 		$where['id'] = $code_id;
 		$code = db_select_secret_code($where);
-		
+
 		$secret_code = $code['secret_code'];
-		
+
 		$email = $code['email_requested'];
-		
+
 		$this->load->library('email');
 
 		$this->email->from('admin@nextgenmarketingsolutions.com', 'AdSync');
-		$this->email->to($email); 
+		$this->email->to($email);
 
 		$this->email->subject('AdSync Authentication Code');
 		$this->email->message("You recently requested a code to create an AdSync account. Use the following code when you create your account. Your code is: $secret_code. Go to http://adsync.nextgenmarketingsolutions.com/index.php/login/new_user to create your account. If you have any questions, contact us immediately. Thanks for your interest in AdSync!");
 
 		$this->email->send();
-		
+
 		$set = array();
 		$set['is_email_sent'] = "true";
 		db_update_secret_code($set,$where);
-		
+
 		$this->load_generate_code_page();
 	}
-	
+
 	function settle_balance(){
 		$user_id = $_POST['user_id'];
-		
+
 		$where = null;
 		$where['id'] = $user_id;
 		$user = db_select_user($where);
-		
+
 		$where = null;
 		$where['poster_id'] = $user_id;
 		$posts = db_select_posts($where);
-		
+
 		$balance = $_POST['balance_input'];
-		
+
 		$data['balance'] = $balance;
 		$data['user'] = $user;
 		$this->load->view('ads/settle_balance_ajax',$data);
-		
+
 	}
-	
+
 	function submit_payment(){
 		date_default_timezone_set('America/Denver');
 		$current_datetime = strtotime(date("Y-m-d H:i:s"));
 		$transaction_datetime = date("Y-m-d H:i:s",$current_datetime);
-		
+
 		$user_id = $_POST['user_id'];
 		$amount_paid = $_POST['amount_paid'];
 		$transaction_amount = $amount_paid * -1;
-		
+
 		$where = null;
 		$where['id'] = $user_id;
 		$user = db_select_user($where);
-		
+
 		$account_entry = array();
 		$account_entry['user_id'] = $user_id;
 		$account_entry['description'] = $transaction_datetime." Payment to ".$user['first_name']." ".$user['last_name']." for $".$amount_paid;
 		$account_entry['amount'] = $transaction_amount;
 		$account_entry['datetime'] = $transaction_datetime;
-		
+
 		db_insert_account_entry($account_entry);
-		
+
 		$new_entry = db_select_account_entry($account_entry);
-		
+
 		$payment_name = 'payment_screenshot';
         $file = $_FILES[$payment_name];
         $name = str_replace(' ','_',$file["name"]);
@@ -1046,43 +1046,43 @@ class Ads extends MY_Controller {
         $server_path = '/file_uploads/';
         $permission = 'All';
         $secure_file = store_secure_ftp_file($payment_name,$name,$type,$title,$category,$local_path,$server_path,$permission);
-		
+
 		$guid = $secure_file['file_guid'];
-		
+
 		$set = array();
 		$set['payment_screenshot_guid'] = $guid;
-		
+
 		$where = null;
 		$where['id'] = $new_entry['id'];
-		
+
 		db_update_account_entry($set,$where);
-		
+
 		$money_paid = "$".number_format($transaction_amount*-1,2);
-		
+
 		$email = $user['email'];
-		
+
 		$this->load->library('email');
 
 		$this->email->from('admin@nextgenmarketingsolutions.com', 'AdSync');
-		$this->email->to($email); 
+		$this->email->to($email);
 
 		$this->email->subject('Your AdSync balance has been paid');
-		$this->email->message("We have sent $money_paid to your Google Wallet account. Please verify that you have received that amount. If you have any questions, contact us immediately.");	
+		$this->email->message("We have sent $money_paid to your Google Wallet account. Please verify that you have received that amount. If you have any questions, contact us immediately.");
 
 		$this->email->send();
-		
+
 		//DISPLAY UPLOAD SUCCESS MESSAGE
 		load_upload_success_view();
 	}
-	
+
 	function submit_validation(){
 		date_default_timezone_set('America/Denver');
 		$current_datetime = strtotime(date("Y-m-d H:i:s"));
 		$post_datetime = date("Y-m-d H:i:s",$current_datetime);
-		
+
 		$post_id = $_POST['post_id'];
 		$post_result = $_POST['post_result'];
-		
+
 		$post_name = 'result_screen_shot';
         $file = $_FILES[$post_name];
         $name = str_replace(' ','_',$file["name"]);
@@ -1093,32 +1093,32 @@ class Ads extends MY_Controller {
         $server_path = '/file_uploads/';
         $permission = 'All';
         $secure_file = store_secure_ftp_file($post_name,$name,$type,$title,$category,$local_path,$server_path,$permission);
-		
+
 		$where = null;
 		$where['id'] = $post_id;
-		
+
 		$set = array();
 		$set['result_datetime'] = $post_datetime;
 		$set['result'] = $post_result;
 		$set['result_user_id'] = $this->session->userdata('user_id');
 		$set['result_screen_shot_guid'] = $secure_file['file_guid'];
-		
+
 		if($post_result != "Live"){
 			$set['amount_due'] = 0;
 		}
-		
+
 		db_update_post($set,$where);
-		
+
 		$where = null;
 		$where['id'] = $post_id;
 		$post = db_select_post($where);
-		
+
 		$poster_id = $post['poster_id'];
-		
+
 		$where = null;
 		$where['id'] = $poster_id;
 		$user = db_select_user($where);
-		
+
 		$new_account_entry = array();
 		$new_account_entry['user_id'] = $post['poster_id'];
 		$new_account_entry['post_id'] = $post['id'];
@@ -1126,119 +1126,119 @@ class Ads extends MY_Controller {
 		$new_account_entry['datetime'] = $post_datetime;
 		if($post_result == "Live"){
 			$new_account_entry['description'] = "Post ".$post['id']." verified on ".date("m/d/Y",strtotime($post_datetime)).". User ".$user['first_name']." ".$user['last_name']." earned ".$post['amount_due'].".";
-			
+
 			$where = null;
 			$where['poster_id'] = $poster_id;
 			$where['result'] = "Live";
 			$live_posts = db_select_posts($where);
-			
+
 			if(count($live_posts)==1){
 				if($user['referrer_paid']=="false"){
 					$where = null;
 					$where['id'] = $poster_id;
-					
+
 					$set = array();
 					$set['referrer_paid'] = "true";
-					
+
 					db_update_user($set,$where);
-					
+
 					$referral_id = $user['referred_by'];
-					
+
 					$account_entry = null;
 					$account_entry['user_id'] = $referral_id;
 					$account_entry['description'] = "Payment for referring user ".$user['first_name']." ".$user['last_name']."  (".$user['id'].") on $post_datetime.";
 					$account_entry['amount'] = 10;
 					$account_entry['datetime'] = $post_datetime;
-					
+
 					db_insert_account_entry($account_entry);
 				}
 			}
 		}else{
 			$new_account_entry['description'] = "Post ".$post['id']." rejected on ".date("m/d/Y",strtotime($post_datetime)).". User ".$user['first_name']." ".$user['last_name']." earned no money for this post.";
 		}
-		
+
 		db_insert_account_entry($new_account_entry);
-		
+
 		$email = $user['email'];
 		$link = $post['link'];
-		
+
 		$this->load->library('email');
 
 		$this->email->from('admin@nextgenmarketingsolutions.com', 'AdSync');
-		$this->email->to($email); 
+		$this->email->to($email);
 
 		$this->email->subject('Your AdSync posting has been checked');
-		$this->email->message("We have checked your AdSync posting. The result of the posting is: $post_result. We checked the link you provided at $link. You can also see the screenshot we took at AdSync.com. If you have any questions, contact us immediately.");	
+		$this->email->message("We have checked your AdSync posting. The result of the posting is: $post_result. We checked the link you provided at $link. You can also see the screenshot we took at AdSync.com. If you have any questions, contact us immediately.");
 
 		$this->email->send();
-		
+
 		//DISPLAY UPLOAD SUCCESS MESSAGE
 		load_upload_success_view();
-		
+
 	}
-	
+
 	//USER SUBMITS NEW POST INFO INTO THE NEW AD SUBMISSION DIALOG
 	function update_post(){
 		date_default_timezone_set('America/Denver');
 		$current_datetime = strtotime(date("Y-m-d H:i:s"));
 		$post_datetime = date("Y-m-d H:i:s",$current_datetime);
-		
+
 		$user_id = $this->session->userdata('user_id');
-		
+
 		$post_id = $_POST['post_id'];
 		$ad_request_id = $_POST['ad_request_id'];
 		$post_link = $_POST['post_link'];
 		$post_title = $_POST['post_title'];
 		$post_content = $_POST['post_content'];
 		$phone_number = $_POST['post_phone_number'];
-		
+
 		$where = null;
 		$where['ad_request_id'] = $ad_request_id;
 		$ad_spot = db_select_ad_spot($where);
 		$amount_due = number_format(round($ad_spot['value'],2),2);
-		
+
 		$where = null;
 		$where['poster_id'] = $user_id;
 		$posts = db_select_posts($where);
-		
+
 		if(empty($posts)){
 			$set = array();
 			$set['first_post_datetime'] = $post_datetime;
-			
+
 			$where = null;
 			$where['id'] = $user_id;
-			
+
 			db_update_user($set,$where);
-			
+
 			$user = db_select_user($where);
-			
+
 			$referral_id = $user['referred_by'];
-			
+
 			$account_entry = null;
 			$account_entry['user_id'] = $referral_id;
 			$account_entry['description'] = "Payment for referring user ".$user['first_name']." ".$user['last_name']."  (".$user['id'].") on $post_datetime.";
 			$account_entry['amount'] = 10;
 			$account_entry['datetime'] = $post_datetime;
-			
+
 			db_insert_account_entry($account_entry);
 		}
-		
+
 		$where = null;
 		$where = "1 = 1";
 		$old_posts = db_select_posts($where);
-		
+
 		$unique_link = '';
 		$old_links = array();
 		foreach($old_posts as $old_post){
 			$old_links[] = $old_post['link'];
 		}
-		
+
 		if(in_array($post_link,$old_links)){
 			$unique_link = false;
 		}else{
 			$unique_link = true;
 		}
-		
+
 		if($unique_link){
 			$set = array();
 			$set['poster_id'] = $user_id;
@@ -1252,27 +1252,27 @@ class Ads extends MY_Controller {
 			$set['next_renewal_datetime'] = date("Y-m-d H:i:s",strtotime($post_datetime . " +48 hours"));
 			$set['result'] = "Needs verification";
 			$set['amount_due'] = $amount_due;
-			
+
 			$where = null;
 			$where['id'] = $post_id;
-			
+
 			db_update_post($set,$where);
-			
+
 			echo "Your submission has been received. In the next 24 hours, we will verify the posting. Thank you!";
 		}else{
 
 			$where = null;
 			$where['id'] = $post_id;
 			db_delete_post($where);
-			
+
 			echo "Link not unique. Post has been deleted. Please provide a unique link.";
 		}
 	}
-	
+
 	function update_balance(){
 		$user_id = $this->session->userdata('user_id');
 		$user_role = $this->session->userdata('role');
-		
+
 
 		if($user_role != "admin"){
 			$where = null;
@@ -1282,7 +1282,7 @@ class Ads extends MY_Controller {
 			$where = null;
 			$where['user_id'] = $user_id;
 			$account_entries = db_select_account_entrys($where);
-			
+
 			$balance = 0;
 			if(!empty($account_entries)){
 				foreach($account_entries as $account_entry)
@@ -1290,13 +1290,13 @@ class Ads extends MY_Controller {
 					$balance += $account_entry['amount'];
 				}
 			}
-			
+
 		}
 		else{
 			$where = null;
 			$where = "1 = 1";
 			$account_entries = db_select_account_entrys($where);
-			
+
 			$balance = 0;
 			if(!empty($account_entries))
 			{
@@ -1306,93 +1306,221 @@ class Ads extends MY_Controller {
 				}
 			}
 		}
-		
+
 		echo number_format($balance,2);
-		
+
 	}
-	
-	
+
+
 	function test(){
 		$this->load->view('test_view');
 	}
 	
-	
+	function add_geopoint_data(){
+		$opts = array(
+			'http'=>array(
+				'method'=>"GET",
+				'header'=>"Accept-language: en\r\n" .
+									"Cookie: foo=bar\r\n",
+				'user_agent'=>    $_SERVER['HTTP_USER_AGENT'] 
+			)
+		);
 
+		$context = stream_context_create($opts);
+
+		$xml = file_get_contents('http://dir3696.zonarsystems.net/interface.php?customer=dir3696&username=system&password=password&action=showposition&operation=current&format=xml&version=2&logvers=3.3', false, $context);
+
+		$parsed_xml = simplexml_load_string($xml);
+	  
+		foreach($parsed_xml->children() as $child){
+			$time = intval ($child->time);
+			$datetime = date("Y-m-d H:i:s",$time);
+
+			$meters = intval($child->odometer);
+			$miles = $meters * .000621371;
+
+			$asset['truck_id'] = $child->attributes()->fleet;
+			$asset['datetime'] = $datetime;
+			$asset['latitude'] = $child->lat;
+			$asset['longitude'] = $child->long;
+			$asset['heading'] = $child->heading;
+			$asset['speed'] = $child->speed;
+			$asset['power'] = "$child->power";
+			$asset['odometer'] = $miles;
+			
+			db_insert_geopoint($asset);
+			
+		}
+		
+	}
 	
+	function load_asset_map(){
+		$json_geopoints = $this->return_asset_data();
+		
+		$data['json_geopoints'] = $json_geopoints;
+		$this->load->view("asset_map.php",$data);
+	}
+
+	function get_asset_data(){
+		$trucks = array();
+		$sql = 'SELECT DISTINCT truck_id FROM geopoint WHERE truck_id IS NOT NULL';
+		
+		$query = $this->db->query($sql);
+		foreach ($query->result() as $row){
+			
+//			echo "Truck ID: ".$row->truck_id."<br>";
+			
+			$truck_sql = 'SELECT * FROM truck WHERE id = ' . $row->truck_id;
+			$truck_query = $this->db->query($truck_sql);
+			foreach($truck_query->result() as $truck_row){
+				$truck = array();
+				$truck['id'] = $row->truck_id;
+				$truck['truck_number'] = $truck_row->truck_number;
+				$truck['dropdown_status'] = $truck_row->dropdown_status;
+				
+				$trucks[$row->truck_id] = $truck;
+			}
+		}
+		
+		$geopoints = array();
+		foreach($trucks as $truck){
+			$sql="SELECT * from geopoint where truck_id = " . $truck['id'] . " ORDER BY id DESC LIMIT 1";
+			$query = $this->db->query($sql);
+			foreach($query->result() as $row){
+				$geopoint['truck_number'] = $truck['truck_number'];
+				$geopoint['lat'] = $row->latitude;
+				$geopoint['long'] = $row->longitude;
+				$geopoint['heading'] = $row->heading;
+				$geopoint['speed'] = $row->speed;
+				$geopoint['power'] = $row->power;
+				$geopoint['odom'] = $row->odometer;
+				
+//				echo "Truck: " . $truck['truck_number'] . " lat: " . $row->latitude . " lng: " . $row->longitude . "<br>";
+				
+				$geopoints[] = $geopoint;
+			}
+		}
+		echo json_encode((array)$geopoints);
+	}
 	
+	function return_asset_data(){
+		$trucks = array();
+		$sql = 'SELECT DISTINCT truck_id FROM geopoint WHERE truck_id IS NOT NULL';
+		
+		$query = $this->db->query($sql);
+		foreach ($query->result() as $row){
+			
+//			echo "Truck ID: ".$row->truck_id."<br>";
+			
+			$truck_sql = 'SELECT * FROM truck WHERE id = ' . $row->truck_id;
+			$truck_query = $this->db->query($truck_sql);
+			foreach($truck_query->result() as $truck_row){
+				$truck = array();
+				$truck['id'] = $row->truck_id;
+				$truck['truck_number'] = $truck_row->truck_number;
+				$truck['dropdown_status'] = $truck_row->dropdown_status;
+				
+				$trucks[$row->truck_id] = $truck;
+			}
+		}
+		
+		$geopoints = array();
+		foreach($trucks as $truck){
+			$sql="SELECT * from geopoint where truck_id = " . $truck['id'] . " ORDER BY id DESC LIMIT 1";
+			$query = $this->db->query($sql);
+			foreach($query->result() as $row){
+				$geopoint['truck_number'] = $truck['truck_number'];
+				$geopoint['lat'] = $row->latitude;
+				$geopoint['long'] = $row->longitude;
+				$geopoint['heading'] = $row->heading;
+				$geopoint['speed'] = $row->speed;
+				$geopoint['power'] = $row->power;
+				$geopoint['odom'] = round($row->odometer);
+				
+//				echo "Truck: " . $truck['truck_number'] . " lat: " . $row->latitude . " lng: " . $row->longitude . "<br>";
+				
+				$geopoints[] = $geopoint;
+			}
+		}
+		return json_encode((array)$geopoints);
+	}
+
+
+
+
 	//ONE TIME SCRIPTS
-	
+
 	// function hash_passwords(){
 		// $where = null;
 		// $where = "1 = 1";
 		// $users = db_select_users($where);
-		
+
 		// foreach($users as $user){
 			// $password = $user['password'];
-			
+
 			// $hashed_password = password_hash($password,PASSWORD_BCRYPT);
-			
+
 			// $where = null;
 			// $where['id'] = $user['id'];
-			
+
 			// $set = null;
 			// $set['password'] = $hashed_password;
-			
+
 			// db_update_user($set,$where);
-			
+
 		// }
-		
-		
+
+
 	// }
-	
+
 	// function create_initial_ad_requests(){
 		// $where = null;
 		// $where = "1 = 1";
 		// $markets = db_select_markets($where);
-		
+
 		// foreach($markets as $market){
 			// $ad_request = array();
 			// $ad_request['client_id'] = 1;
 			// $ad_request['market_id'] = $market['id'];
 			// $ad_request['category'] = "job offered";
 			// $ad_request['sub_category'] = "transportation";
-			// $ad_request['content_desc'] = "Explain that we have a driving program that is currently enrolling. We are searching for students from across the nation who are ready for a new career. Our training program offers individuals an opportunity to get their Commercial Drivers License with no up-front payment and receive paid on-the-road training. <br><br>The training consists of two parts: <br><br>(1) In-class Training: During this period, they will be brought to our training facility and we will provide them with a place to stay as well as all of their food. They will first undergo training to get their drivers permit for a Class A commercial drivers license. Then they will receive training in a truck to help them pass a skills test. After passing the skills test through the DOT, they will receive a paper copy of their license. In whole, this process typically takes 2-3 weeks. <br><br>(2) On the Road training: We then set them up with a trainer who will teach them the ins and outs of the trucking industry. They will haul loads, learn to fill out all paperwork, and gain the know-how to succeed as a truck driver. This portion takes 12 weeks in which the goal is to get the driver 60,000 miles of training experience. During this portion, they will receive a living stipend of $300/wk with bonuses up to an additional $300/wk. <br><br>After the training, our best trainees receive in-house offers to continue driving. Otherwise, we set them up with one of our partner carriers to drive. <br><br>Use one of the following phone numbers for the contact information: <br><br>(224) 212-9254 <br>(208) 963-5639 <br>(216) 930-4089 <br>(952) 222-3893 <br>(512) 593-7271";
+			// $ad_request['content_desc'] = "Explain that we have a driving program that is currently enrolling. We are searching for students from across the nation who are ready for a new career. Our training program offers individuals an all inclusive opportunity to get their Commercial Drivers License with no up-front payment and receive on-the-road training. <br><br>The training consists of two parts: <br><br>(1) In-class Training: During this period, they will be brought to our training facility and we will provide them with a place to stay as well as all of their food. They will first undergo training to get their drivers permit for a Class A commercial drivers license. Then they will receive training in a truck to help them pass a skills test. After passing the skills test through the DOT, they will receive a paper copy of their license. In whole, this process typically takes 2-3 weeks. <br><br>(2) On the Road training: We then set them up with a trainer who will teach them the ins and outs of the trucking industry. They will haul loads, learn to fill out all paperwork, and gain the know-how to succeed as a truck driver. This portion takes 12 weeks in which the goal is to get the driver 60,000 miles of training experience. During this portion, they will receive a living stipend of $300/wk with bonuses up to an additional $300/wk. <br><br>After the training, we set them up with our unique driver opportunities to make $1,000 - $2,000 per week. <br><br>Use one of the following phone numbers for the contact information: <br><br>(224) 212-9254 <br>(208) 963-5639 <br>(216) 930-4089 <br>(952) 222-3893 <br>(512) 593-7271";
 			// $ad_request['price'] = 10;
 			// $ad_request['post_expense'] = 10;
 			// $ad_request['min_count'] = 1;
-			
+			// $ad_request['status'] = "active";
+
 			// db_insert_ad_request($ad_request);
 			// echo "inserted school ad request for market ".$market['name']."<br>";
-			
+
 			// $ad_request = array();
 			// $ad_request['client_id'] = 1;
 			// $ad_request['market_id'] = $market['id'];
 			// $ad_request['category'] = "job offered";
 			// $ad_request['sub_category'] = "transportation";
-			// $ad_request['content_desc'] = "Make the following clear in the ad: <br><br>We have openings for dedicated routes, local routes, regional position, over-the-road long haul (2-6 weeks Over-the-Road), team or solo. All of these positions are for hauling dry van and refer loads. <br><br>Requirements for the job include: <br><br>current Class A CDL, no recent accidents, no recent tickets, must have recent experience driving 53' trailers, cannot currently be on parole, and must be over 21 years to be able to haul interstate loads. <br><br>Pay is weekly and most of our drivers make a minimum $800-$900 dollars per week but paychecks often exceed $1,300 for our experienced drivers. <br><br>The best way to get a hold of the company is to call the number listed in the 'Reply' section of this ad. If that's not possible, shoot the company a resume and be sure to include a call back number so we can get in touch. <br><br>Use one of the following phone numbers for the contact information: <br><br>(224) 212-9254 <br>(208) 963-5639 <br>(216) 930-4089 <br>(952) 222-3893 <br>(512) 593-7271";
+			// $ad_request['content_desc'] = "Make the following clear in the ad: <br><br>We are recruiting drivers for OTR opportunities at 6 weeks Over-the-Road and 2 weeks off, team and solo available. All of these positions are for hauling dry van and refer loads. <br><br>Requirements for the job include: <br><br>current Class A CDL, no recent accidents, no recent tickets, recent experience driving 53' trailers a plus, cannot currently be on parole, and must be over 21 years to be able to haul interstate loads. <br><br>Pay is weekly and good drivers make $500 - $800 per week for the first 3 - 6 weeks and then $1,000 - $1,600 per week after that. <br><br>The best way to get a hold of the company is to call the number listed in the 'Reply' section of this ad. If that's not possible, shoot the company a resume and be sure to include a call back number so we can get in touch. <br><br>Use one of the following phone numbers for the contact information: <br><br>(224) 212-9254 <br>(208) 963-5639 <br>(216) 930-4089 <br>(952) 222-3893 <br>(512) 593-7271";
 			// $ad_request['price'] = 10;
 			// $ad_request['post_expense'] = 10;
 			// $ad_request['min_count'] = 1;
-			
+			// $ad_request['status'] = "active";
+
 			// db_insert_ad_request($ad_request);
 			// echo "inserted cdl ad request for market ".$market['name']."<br>";
-			
 		// }
-		
 	// }
-	
+
 	// function add_status_ad_requests(){
 		// $where = null;
 		// $where = "1 = 1";
 		// $ad_requests = db_select_ad_requests($where);
-		
+
 		// foreach($ad_requests as $ad_request){
 			// $where = null;
 			// $where['id'] = $ad_request['id'];
-			
+
 			// $set = null;
 			// $set['status'] = 'active';
-			
+
 			// db_update_ad_request($set,$where);
 		// }
 	// }

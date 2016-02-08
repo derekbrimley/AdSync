@@ -1447,6 +1447,113 @@
 	}//end db_delete_current_form()	
 	
 	
+
+//GEOPOINT: INSERT, SELECT (many), SELECT (one), UPDATE, DELETE
+
+	//INSERT GEOPOINT
+	function db_insert_geopoint($geopoint)
+	{
+		db_insert_table("geopoint",$geopoint);
+	
+	}//END db_insert_geopoint	
+
+	//SELECT GEOPOINTS (many)
+	function db_select_geopoints($where,$order_by = 'id',$limit = 'all')
+	{
+		return db_select_geopoint($where,$order_by,$limit,"many");
+		
+	}//end db_select_geopoints() many	
+
+	//SELECT GEOPOINT (one)
+	function db_select_geopoint($where,$order_by = 'id',$limit = 'all',$many = 'one'){
+		$CI =& get_instance();
+		$i = 0;
+		$where_sql = "";
+		if(!empty($where)){
+			$where_sql = " WHERE ";
+		}
+		$values = array();
+		if(is_array($where)){
+			$i = 0;
+			$values = array();
+			foreach($where as $key => $value){
+				
+				if ($i > 0){
+					$where_sql = $where_sql." AND";
+				}
+				
+				if ($value == null){
+					$where_sql = $where_sql." geopoint.".$key." is ?";
+				}else if (substr($value,0,1) == "%" || substr($value,-1) == "%"){
+					$where_sql = $where_sql." geopoint.".$key." LIKE ?";
+				}else{
+					$where_sql = $where_sql." geopoint.".$key." = ?";
+				}
+				$values[$i] = $value;
+				//echo "value[$i] = $value ";
+				$i++;
+			}
+		}
+		else{
+			$where_sql = $where_sql.$where;
+		}
+		
+		$limit_txt = "";
+		if($limit != "all")
+		{
+			$limit_txt = " LIMIT ".$limit;
+		}
+		
+		$sql = "SELECT * FROM geopoint ".$where_sql." ORDER BY ".$order_by.$limit_txt;
+		
+		//error_log($sql." | LINE ".__LINE__." ".__FILE__);
+		$query = $CI->db->query($sql,$values);
+		$geopoints = array();
+		foreach ($query->result() as $row)
+		{
+			$geopoint['id'] = $row->id;
+			$geopoint['truck_id'] = $row->truck_id;
+			$geopoint['latitude'] = $row->latitude;
+			$geopoint['longitude'] = $row->longitude;
+			$geopoint['heading'] = $row->heading;
+			$geopoint['datetime'] = $row->datetime;
+			$geopoint['speed'] = $row->speed;
+			$geopoint['power'] = $row->power;
+			$geopoint['odometer'] = $row->odometer;
+			
+			$geopoints[] = $geopoint;
+			
+		}// end foreach
+		
+		if (empty($geopoint))
+		{
+			return null;
+		}
+		else if($many == 'one')
+		{
+			return $geopoint;
+		}
+		else if($many == "many")
+		{
+			return $geopoints;
+		}
+	}//end db_select_geopoint()
+
+	//UPDATE GEOPOINT
+	function db_update_geopoint($set,$where)
+	{
+		db_update_table("geopoint",$set,$where);
+		
+	}//end update geopoint	
+	
+	//DELETE GEOPOINT	
+	function db_delete_geopoint($where)
+	{
+		db_delete_from_table("geopoint",$where);
+		
+	}//end db_delete_geopoint()	
+
+
 		
 
 //LEAD: INSERT, SELECT (many), SELECT (one), UPDATE, DELETE
@@ -2756,7 +2863,135 @@
 		
 	}//end db_delete_user()	
 	
+
+
+
+//TRUCK: INSERT, SELECT (many), SELECT (one), UPDATE, DELETE
+
+	//INSERT TRUCK
+	function db_insert_truck($truck)
+	{
+		db_insert_table("truck",$truck);
 	
+	}//END db_insert_truck	
+
+	//SELECT TRUCKS (many)
+	function db_select_trucks($where,$order_by = 'id')
+	{
+		return db_select_truck($where,"many",$order_by);
+		
+	}//end db_select_trucks() many	
+
+	//SELECT TRUCK (one)
+	function db_select_truck($where,$many = 'one',$order_by = 'id')
+	{
+		$CI =& get_instance();
+		$i = 0;
+		$where_sql = " WHERE ";
+		$values = array();
+		if(is_array($where))
+		{
+			$i = 0;
+			$values = array();
+			foreach($where as $key => $value)
+			{
+				
+				if ($i > 0)
+				{
+					$where_sql = $where_sql." And";
+				}
+				
+				if ($value == null)
+				{
+					$where_sql = $where_sql." truck.".$key." is ?";
+				}
+				else
+				{
+					$where_sql = $where_sql." truck.".$key." = ?";
+				}
+				$values[$i] = $value;
+				//echo "value[$i] = $value ";
+				$i++;
+			}
+		}
+		else
+		{
+			$where_sql = $where_sql.$where;
+		}
+		
+		$sql = "SELECT * from truck ".$where_sql." ORDER BY ".$order_by;
+		$query = $CI->db->query($sql,$values);
+		$trucks = array();
+		foreach ($query->result() as $row)
+		{
+			$truck['id'] = $row->id;
+			$truck['client_id'] = $row->client_id;
+			$truck['codriver_id'] = $row->codriver_id;
+			$truck['company_id'] = $row->company_id;
+			$truck['vendor_id'] = $row->vendor_id;
+			$truck['fm_id'] = $row->fm_id;
+			$truck['dm_id'] = $row->dm_id;
+			$truck['trailer_id'] = $row->trailer_id;
+			$truck['truck_number'] = $row->truck_number;
+			$truck['make'] = $row->make;
+			$truck['model'] = $row->model;
+			$truck['year'] = $row->year;
+			$truck['vin'] = $row->vin;
+			$truck['plate_number'] = $row->plate_number;
+			$truck['insurance_policy'] = $row->insurance_policy;
+			$truck['value'] = $row->value;
+			$truck['mileage_rate'] = $row->mileage_rate;
+			$truck['rental_rate'] = $row->rental_rate;
+			$truck['rental_rate_period'] = $row->rental_rate_period;
+			$truck['last_wet_service'] = $row->last_wet_service;
+			$truck['next_wet_service'] = $row->next_wet_service;
+			$truck['last_dry_service'] = $row->last_dry_service;
+			$truck['next_dry_service'] = $row->next_dry_service;
+			$truck['status'] = $row->status;
+			$truck['dropdown_status'] = $row->dropdown_status;
+			$truck['registration_link'] = $row->registration_link;
+			$truck['insurance_link'] = $row->insurance_link;
+			$truck['ifta_link'] = $row->ifta_link;
+			$truck['lease_agreement_link'] = $row->lease_agreement_link;
+			$truck['service_log_notes'] = $row->service_log_notes;
+			$truck['truck_notes'] = $row->truck_notes;
+			
+			$trucks[] = $truck;
+			
+		}// end foreach
+		
+		if (empty($truck))
+		{
+			return null;
+		}
+		else if($many == 'one')
+		{
+			return $truck;
+		}
+		else if($many == "many")
+		{
+			return $trucks;
+		}
+	}//end db_select_truck()
+
+	//UPDATE TRUCK
+	function db_update_truck($set,$where)
+	{
+		db_update_table("truck",$set,$where);
+		
+	}//end update truck	
+	
+	//DELETE TRUCK	
+	function db_delete_truck($where)
+	{
+		db_delete_from_table("truck",$where);
+		
+	}//end db_delete_truck()	
+
+
+
+
+
 	
 
 	

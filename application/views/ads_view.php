@@ -6,7 +6,7 @@
 		<link type="text/css" href="<?php echo base_url("css/jquery-ui.min.css"); ?>" rel="stylesheet" />
 		<script type="text/javascript" src="<?php echo base_url("js/jquery-1.11.3.min.js"); ?>" ></script>
 		<script type="text/javascript" src="<?php echo base_url("js/jquery-ui.min.js"); ?>" ></script>
-        <script type="text/javascript" src="<?php echo base_url("js/jquery.countdown.min.js"); ?>" ></script>
+      <script type="text/javascript" src="<?php echo base_url("js/jquery.countdown.min.js"); ?>" ></script>
 		<link rel="shortcut icon" href="<?php echo base_url('/favicon.ico/');?>" type="image/x-icon">
 		<link rel="icon" href="<?php echo base_url('/favicon.ico/');?>" type="image/x-icon">
 		<link href='http://fonts.googleapis.com/css?family=Roboto:300' rel='stylesheet' type='text/css'>
