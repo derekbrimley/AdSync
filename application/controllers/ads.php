@@ -84,6 +84,7 @@ class Ads extends MY_Controller {
 			$this->load->view('ads_view',$data);
 		}
 
+//		$this->load->view('construction_view');
 	}
 
 	function create_ad_request(){
@@ -1436,8 +1437,6 @@ class Ads extends MY_Controller {
 				$geopoint['speed'] = $row->speed;
 				$geopoint['power'] = $row->power;
 				$geopoint['odom'] = round($row->odometer);
-				
-//				echo "Truck: " . $truck['truck_number'] . " lat: " . $row->latitude . " lng: " . $row->longitude . "<br>";
 				
 				$geopoints[] = $geopoint;
 			}

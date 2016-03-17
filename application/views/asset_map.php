@@ -62,13 +62,12 @@
 						for(i=0; i<parsed_json.length; i++) {
 							var obj = parsed_json[i];
 							var latLng = {lat: Number(obj.lat), lng: Number(obj.long)};
-							var title = "Truck " + obj.truck_number;
 							var heading = obj.heading;
 							var power = obj.power;
 							var speed = obj.speed;
 							var odometer = Math.round(obj.odom);
 							var truck_number = obj.truck_number;
-							addMarker(latLng,title,heading,power,truck_number);
+							addMarker(latLng,heading,power,truck_number);
 						}
 					},
 					404: function(){
@@ -80,7 +79,7 @@
 				}
 			});//END AJAX
 			
-			function addMarker(location,title,heading,power,truck_number) {
+			function addMarker(location,heading,power,truck_number) {
 				var path;
 				var fillColor;
 				
@@ -95,7 +94,6 @@
 				var marker = new MarkerWithLabel({
 					position: location,
 					map: map,
-					title: title,
 					icon: {
 						scale: 5,
 						rotation:Number(heading),

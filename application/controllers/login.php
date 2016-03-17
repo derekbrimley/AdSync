@@ -7,6 +7,7 @@ class Login extends CI_Controller
 	function index(){
 		$data['title'] = "Login";
 		$this->load->view('adsync_login_view',$data);
+//		$this->load->view('construction_view');
 	}
 	
 	function activate(){

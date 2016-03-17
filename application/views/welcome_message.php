@@ -16,7 +16,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		<h1>Zonar Data</h1>
 		<div id="nav_container">
 			<button class="nav_btn" onClick="openMap()">
-				Map
+				<a style="text-decoration:none;color:#FFF;" href="<?=base_url('index.php/ads/load_asset_map')?>">Map</a>
 			</button>
 		</div>
 	</div>
